@@ -35,9 +35,14 @@ sys.path.insert(0, str(HERE / "_ext"))
 extensions = [
     "myst_parser",
     "sphinx_rtd_theme",
-    "sphinx.ext.intersphinx",
-    "khmer_assets",  # local extension in docs/source/_ext: copy button + print CSS
+    "khmer_assets",  # local extension in docs/source/_ext: copy button, i18n JS, print CSS
 ]
+# NOTE: sphinx.ext.intersphinx is deliberately NOT enabled. Every cross
+# reference in these pages uses MyST's {doc} role, which resolves against the
+# local toctree -- no page uses :py:, :func:, :class: or :ref:. Enabling
+# intersphinx would make the build fetch https://docs.python.org/3/objects.inv
+# on every run, adding a network dependency (and, under -W, a network failure
+# mode) for zero benefit.
 
 templates_path = [str(HERE / "_templates")]
 exclude_patterns = [
@@ -80,6 +85,15 @@ html_short_title = "PyTorch ខ្មែរ"
 html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
 
 html_static_path = [str(HERE / "_static")]
+
+# Files here are copied verbatim to the OUTPUT ROOT (not under _static/).
+#
+# google59471f16170f14f0.html is the Google Search Console ownership token and
+# must stay reachable at
+#     https://pytorch-documentation.readthedocs.io/google59471f16170f14f0.html
+# Google re-checks it periodically, so removing it can silently drop the site
+# from Search Console even after verification once succeeded. Do not delete it.
+html_extra_path = [str(HERE / "extra")]
 html_css_files = [
     # Custom palette is loaded after the theme CSS so it can win the cascade.
     "css/custom.css",
@@ -141,17 +155,6 @@ gettext_compact = False
 # ("torch", "DataLoader", "backward") searchable; Khmer phrases are matched
 # through the browser's in-page find as a fallback.
 html_search_language = "en"
-
-# ---------------------------------------------------------------------------
-# Intersphinx — resolve API names against the official Python docs
-# ---------------------------------------------------------------------------
-
-intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
-}
-intersphinx_timeout = 10
-# Offline / CI builds must not fail because an inventory could not be fetched.
-nitpicky = False
 
 # ---------------------------------------------------------------------------
 # Misc

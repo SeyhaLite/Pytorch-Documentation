@@ -16,6 +16,9 @@ Usage
 -----
     sphinx-build -b html docs/source docs/_build/html -q     # build first
     python tests/check_locale.py                             # exit 1 on drift
+
+On Read the Docs this runs in post_build, where the output lives under
+$READTHEDOCS_OUTPUT/html; _buildpath handles both locations.
 """
 
 from __future__ import annotations
@@ -25,8 +28,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-BUILT_SEARCHTOOLS = REPO / "docs" / "_build" / "html" / "_static" / "searchtools.js"
+from _buildpath import REPO, require_build_dir
 JS_CATALOG = REPO / "docs" / "source" / "_static" / "js" / "km-search-i18n.js"
 MO_FILE = REPO / "docs" / "source" / "locale" / "km" / "LC_MESSAGES" / "sphinx.mo"
 GENERATOR = REPO / "tools" / "build_locale.py"
@@ -65,10 +67,9 @@ def catalog_messages(path: Path) -> dict[str, str]:
 def main() -> int:
     problems: list[str] = []
 
-    if not BUILT_SEARCHTOOLS.exists():
-        print(f"missing {BUILT_SEARCHTOOLS.relative_to(REPO)}", file=sys.stderr)
-        print("build the site first:\n"
-              "  sphinx-build -b html docs/source docs/_build/html -q", file=sys.stderr)
+    built_searchtools = require_build_dir("check_locale") / "_static" / "searchtools.js"
+    if not built_searchtools.exists():
+        print(f"missing {built_searchtools}", file=sys.stderr)
         return 2
 
     for f in (JS_CATALOG, MO_FILE, GENERATOR):
@@ -78,7 +79,7 @@ def main() -> int:
         print("\n".join(problems))
         return 1
 
-    wanted = js_lookup_strings(BUILT_SEARCHTOOLS)
+    wanted = js_lookup_strings(built_searchtools)
     have = catalog_messages(JS_CATALOG)
 
     print(f"searchtools.js looks up {len(wanted)} string(s)")

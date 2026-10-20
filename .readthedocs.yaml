@@ -20,12 +20,16 @@ build:
       - python tests/check_examples_referenced.py
       - python tools/check_markdown.py
     post_build:
-      # Needs the built searchtools.js, so it can only run after the build.
-      # Verifies the committed Khmer JS catalog still covers every msgid the
-      # installed Sphinx version actually looks up, and that no theme/Sphinx UI
-      # string fell back to English.
+      # These need the built site, so they can only run after Sphinx. They read
+      # $READTHEDOCS_OUTPUT/html via tests/_buildpath.py, NOT docs/_build/html.
+      #   check_locale      - the committed Khmer JS catalog still covers every
+      #                       msgid the installed Sphinx actually looks up
+      #   check_ui_strings  - no theme/Sphinx UI string fell back to English
+      #   check_extra_files - the Google Search Console token is still served
+      #                       from the site root (it 404s silently otherwise)
       - python tests/check_locale.py
       - python tests/check_ui_strings.py
+      - python tests/check_extra_files.py
 
 sphinx:
   configuration: docs/source/conf.py

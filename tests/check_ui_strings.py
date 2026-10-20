@@ -16,6 +16,9 @@ Usage
 -----
     sphinx-build -b html docs/source docs/_build/html -q
     python tests/check_ui_strings.py            # exit 1 on any English UI string
+
+On Read the Docs this runs in post_build, where the output lives under
+$READTHEDOCS_OUTPUT/html; _buildpath handles both locations.
 """
 
 from __future__ import annotations
@@ -26,8 +29,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-BUILD = REPO / "docs" / "_build" / "html"
+from _buildpath import require_build_dir
 
 # Interface strings emitted by sphinx_rtd_theme and Sphinx itself.
 UI_STRINGS = [
@@ -89,11 +91,10 @@ def strip_non_ui(html: str) -> str:
 
 
 def main() -> int:
-    pages = sorted(glob.glob(str(BUILD / "*.html")))
+    build = require_build_dir("check_ui_strings")
+    pages = sorted(glob.glob(str(build / "*.html")))
     if not pages:
-        print(f"no built pages under {BUILD.relative_to(REPO)}", file=sys.stderr)
-        print("build first:\n  sphinx-build -b html docs/source docs/_build/html -q",
-              file=sys.stderr)
+        print(f"no built pages under {build}", file=sys.stderr)
         return 2
 
     english = collections.Counter()
