@@ -77,7 +77,7 @@ grep -E "^build succeeded|copying extra files" /tmp/rtd-cc-build-$$.log | sed 's
 [ "$rc" -eq 0 ] || { tail -12 /tmp/rtd-cc-build-$$.log | sed 's/^/       /'; fail=1; }
 
 step "post_build jobs"
-for t in check_locale check_ui_strings check_search_console; do
+for t in check_locale check_ui_strings check_search_console check_sitemap; do
   if python3 "tests/$t.py" > /tmp/rtd-cc-$t-$$.log 2>&1; then
     echo "  PASS $t"
   else

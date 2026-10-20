@@ -78,6 +78,9 @@ CPU threads   : 8
 * - Search Console verification
   - **meta tag 24/24 ទំព័រ · HTML file 1/1**
   - `python tests/check_search_console.py`
+* - Sitemap
+  - **22 URLs · well-formed · 0 would-be 404**
+  - `python tests/check_sitemap.py`
 * - Network fetches ក្នុង build
   - **0** (intersphinx ត្រូវបានដកចេញ)
   - `sphinx-build ... -v | grep -c objects.inv`
@@ -792,6 +795,85 @@ theme markup           : មិនត្រូវបានរំខាន (wy-gr
 សិទ្ធិចូលដំណើរការអ្វីទាំងអស់។ នេះខុសពី GitHub token ដែលត្រូវបានដោះស្រាយ
 ដោយឡែកហើយមិនដែលត្រូវបាន commit។
 ```
+
+## ៦d. Sitemap
+
+### ស្ថានភាពដើម
+
+Read the Docs បម្រើ `/sitemap.xml` និង `/robots.txt` របស់វាផ្ទាល់នៅ domain root។
+ការវាស់លើ site ពិតប្រាកដ៖
+
+```text
+/robots.txt    200 · 686 bytes · ចង្អុលទៅ /sitemap.xml
+/sitemap.xml   200 · 752 bytes · មានតែ <url> តែមួយគត់
+               -> https://pytorch-documentation.readthedocs.io/km/latest/
+/km/latest/sitemap.xml   404
+```
+
+ដូច្នេះ RTD sitemap បញ្ចេញតែ **version landing page** — ទំព័រមាតិកាទាំង ២២
+មិនត្រូវបានប្រាប់ crawler ទេ។
+
+### ការជួសជុល
+
+`docs/source/_ext/khmer_sitemap.py` (extension ក្នុងស្រុក គ្មាន dependency ថ្មី)
+សរសេរ `sitemap.xml` ទៅឫស build output ក្នុង `build-finished` hook ដូច្នេះវាបម្រើនៅ៖
+
+```text
+https://pytorch-documentation.readthedocs.io/km/latest/sitemap.xml
+```
+
+**ហេតុអ្វីមិនប្រើ `sphinx-sitemap`?** RTD កំណត់ `READTHEDOCS_CANONICAL_URL`
+(ដែល `conf.py` ផ្ដល់ទៅ `html_baseurl`) ទៅជា URL ដែល **មាន** language និង version
+segments រួចហើយ (`/km/latest/`)។ `sphinx-sitemap` បន្ថែម segment របស់វាទៀត
+ដូច្នេះវានឹងបង្កើត `/km/latest/km/latest/…`។ ការកំណត់ configuration ឱ្យត្រូវ
+ត្រូវការ `version=""` និង `language=""` ហើយពឹងលើវាមិនប្រែប្រួល។ សរសេរផ្ទាល់
+មានបរិមាណកូដប្រហាក់ប្រហែលគ្នា គ្មាន dependency ហើយ URL ដែលវាផលិតអាច
+assert បានក្នុង test។
+
+```{list-table} ការសម្រេចចិត្តរចនា
+:header-rows: 1
+:widths: 28 72
+
+* - ការសម្រេច
+  - ហេតុផល
+* - ទម្រង់ URL `<docname>.html` រួមទាំង `index`
+  - ត្រូវនឹង `rel="canonical"` ដែល Sphinx បញ្ចេញរួចហើយ។ ការលាយ `/km/latest/` និង `/km/latest/index.html` សម្រាប់ទំព័រតែមួយផ្ដល់ Google នូវ URL ពីរសម្រាប់ឯកសារតែមួយ
+* - **គ្មាន `<lastmod>`**
+  - សញ្ញាតែមួយគត់ដែលមានគឺ file mtime ហើយ git មិនរក្សា mtime ទេ — ឯកសារទាំងអស់ក្នុង clone ថ្មីមានពេលវេលា checkout។ ការបោះពុម្ពវាជាថ្ងៃកែប្រែគឺជាការកុហក ហើយ Google បោះបង់ទំនុកចិត្តលើ `lastmod` ពេលវាខុស
+* - គ្មាន `<changefreq>` / `<priority>`
+  - Google មិនអើពើទាំងពីរ
+* - ដកចេញ `search.html`, `genindex.html` និងឯកសារ verification
+  - `search` មិនបង្ហាញអ្វីទេមុន JS រត់ · `genindex` ជាសន្ទស្សន៍ស្វ័យប្រវត្តិដែលស្ទួនចំណងជើងទាំងអស់ · ឯកសារ verification គ្មានមាតិកា
+* - fallback `DEFAULT_BASEURL`
+  - ធ្វើឱ្យ local build ផលិត URL ពិតដែលអាចផ្ទៀងផ្ទាត់បាន ព្រោះ `READTHEDOCS_CANONICAL_URL` មិនមានក្នុងម៉ាស៊ីន
+```
+
+### ការផ្ទៀងផ្ទាត់
+
+```text
+urls             : 22 (unique 22)
+built pages      : 25
+indexable        : 22
+excluded         : genindex.html, google59471f16170f14f0.html, search.html
+every URL has a built page : True
+index listed               : True
+```
+
+`tests/check_sitemap.py` ផ្ទៀងផ្ទាត់ ៧ ចំណុច (well-formed XML, schema namespace,
+absolute https URLs ក្រោម `html_baseurl`, គ្រប់ `<loc>` មានទំព័រពិត, គ្រប់ទំព័រ
+indexable ត្រូវបានបញ្ចូល, គ្មាន duplicate, ការដកចេញនៅតែមានសុពលភាព)។
+
+Negative-tested — check នេះពិតជាបរាជ័យ៖
+
+```text
+URL ខូច (គ្មានទំព័រ)          -> exit 1
+បញ្ចូល search.html            -> exit 1
+XML ខូចទម្រង់                 -> exit 1
+ស្ដារឡើងវិញ                   -> exit 0
+```
+
+ជម្រើស `--live` ធ្វើ HEAD request លើរាល់ `<loc>` ដើម្បីបញ្ជាក់ថាវា resolve
+(មានប្រយោជន៍បន្ទាប់ពី deploy)។
 
 ## ៧. ឯកសារដែលបានបង្កើត
 

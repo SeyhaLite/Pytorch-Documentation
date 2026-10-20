@@ -27,9 +27,12 @@ build:
       #   check_ui_strings  - no theme/Sphinx UI string fell back to English
       #   check_search_console - both Google Search Console verification
       #                       methods are still present (they fail silently)
+      #   check_sitemap       - sitemap.xml is well-formed, lists every
+      #                       indexable page, and submits no URL that 404s
       - python tests/check_locale.py
       - python tests/check_ui_strings.py
       - python tests/check_search_console.py
+      - python tests/check_sitemap.py
 
 sphinx:
   configuration: docs/source/conf.py

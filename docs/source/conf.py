@@ -35,7 +35,8 @@ sys.path.insert(0, str(HERE / "_ext"))
 extensions = [
     "myst_parser",
     "sphinx_rtd_theme",
-    "khmer_assets",  # local extension in docs/source/_ext: copy button, i18n JS, print CSS
+    "khmer_assets",   # local: copy button, i18n JS catalog, print CSS
+    "khmer_sitemap",  # local: sitemap.xml in the output root
 ]
 # NOTE: sphinx.ext.intersphinx is deliberately NOT enabled. Every cross
 # reference in these pages uses MyST's {doc} role, which resolves against the
@@ -82,6 +83,11 @@ suppress_warnings = []
 html_theme = "sphinx_rtd_theme"
 html_title = "ឯកសារ PyTorch ជាភាសាខ្មែរ"
 html_short_title = "PyTorch ខ្មែរ"
+# Read the Docs sets READTHEDOCS_CANONICAL_URL to the canonical URL of the
+# version being built, e.g. https://pytorch-documentation.readthedocs.io/km/latest/
+# It already includes the language and version segments. khmer_sitemap uses it as
+# the base for every <loc>, and falls back to the production URL on a local build
+# so the generated sitemap still contains resolvable links.
 html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
 
 html_static_path = [str(HERE / "_static")]

@@ -67,6 +67,7 @@
 │   └── check_examples_referenced.py   # ការពារ orphan/stale references
 └── tools/
     ├── check_markdown.py          # Markdown fence linter (report-only)
+    ├── check_contrast.py          # WCAG AA verifier (១២០ គូពណ៌)
     ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js)
     ├── check_contrast.py          # WCAG AA verifier (១០៤ គូពណ៌)
     ├── make_preview.py            # បង្កើត offline preview HTML តែមួយ
@@ -207,6 +208,21 @@ Read the Docs mount build នៅ `/<language>/<version>/`។ គម្រោង�
 ````
 
 ឯកសារ HTML នៅតែត្រូវបានរក្សាទុក ព្រោះវាដំណើរការសម្រាប់ URL-prefix property។
+
+### Sitemap
+
+`_ext/khmer_sitemap.py` បង្កើត `sitemap.xml` នៅឫស build output ដូច្នេះវាបម្រើនៅ៖
+
+```text
+https://pytorch-documentation.readthedocs.io/km/latest/sitemap.xml
+```
+
+នេះជា URL ដែលត្រូវ **submit ក្នុង Google Search Console**។ RTD បម្រើ `/sitemap.xml`
+របស់វាផ្ទាល់នៅ domain root ប៉ុន្តែវាមានតែ **១ URL** (version landing page) —
+វាមិនបញ្ចេញទំព័រមាតិកាទាំង ២២ ទេ។
+
+`tests/check_sitemap.py` ផ្ទៀងផ្ទាត់ថាវា well-formed, គ្របដណ្ដប់គ្រប់ទំព័រដែល
+indexable និងមិន submit URL ណាដែល 404។
 
 `tests/check_search_console.py` ការពារវិធីទាំងពីរ — ព្រោះ Google ត្រួតពិនិត្យជាប្រចាំ
 ហើយបើឯកសារ ឬ tag បាត់ property នឹងត្រូវដកការផ្ទៀងផ្ទាត់ដោយស្ងាត់ ដោយគ្មាន
