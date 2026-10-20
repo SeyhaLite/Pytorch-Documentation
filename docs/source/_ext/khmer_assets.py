@@ -33,6 +33,7 @@ __version__ = "1.1.0"
 def _add_assets(app: Sphinx) -> None:
     # loading_method must be "async" or "defer"; anything else is dropped.
     app.add_js_file("js/copybutton.js", loading_method="defer")
+    app.add_js_file("js/km-search-i18n.js", loading_method="defer")
     app.add_css_file("css/print.css", media="print")
 
 
