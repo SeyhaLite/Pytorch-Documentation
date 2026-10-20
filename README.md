@@ -38,6 +38,7 @@
 | `api-quick-reference` | តារាងយោង API រហ័ស | ✅ | — |
 
 សរុប៖ ២២ ទំព័រ · ៤០ ឧទាហរណ៍ (៣៨ បានរត់ pass, ០ fail, ២ skip ព្រោះត្រូវការ GPU)។
+ការត្រួតពិនិត្យស្វ័យប្រវត្តិ ១០ ឆ្លងកាត់ទាំងអស់ — មើល `bash tools/verify.sh`។
 មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់របាយការណ៍ Build/Test ពេញលេញ។
 
 ## រចនាសម្ព័ន្ធ (Project structure)
@@ -65,9 +66,12 @@
 │   ├── run_examples.py            # សាកល្បងឧទាហរណ៍ទាំង ៤០ (subprocess ដាច់ដោយឡែក)
 │   └── check_examples_referenced.py   # ការពារ orphan/stale references
 └── tools/
-    ├── fix_myst_fences.py         # MyST fence linter + auto-repair
+    ├── check_markdown.py          # Markdown fence linter (report-only)
+    ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js)
     ├── check_contrast.py          # WCAG AA verifier (១០៤ គូពណ៌)
-    └── make_preview.py            # បង្កើត offline preview HTML តែមួយ
+    ├── make_preview.py            # បង្កើត offline preview HTML តែមួយ
+    ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js)
+    └── verify.sh                  # ដំណើរការគ្រប់ការត្រួតពិនិត្យក្នុងពាក្យបញ្ជាតែមួយ
 ```
 
 ### ហេតុអ្វីឈ្មោះឯកសារជាអង់គ្លេស?
@@ -128,10 +132,14 @@ python tests/run_examples.py
 python tests/check_examples_referenced.py
 
 # ២. MyST fence lint (ការរំលងនេះបំផ្លាញទំព័រទាំងមូល)
-python tools/fix_myst_fences.py --check
+python tools/check_markdown.py
 
 # ៣. Contrast (WCAG AA ≥ 4.5:1 សម្រាប់គ្រប់គូពណ៌)
 python tools/check_contrast.py
+
+# ៣b. UI ជាភាសាខ្មែរ (ត្រូវ build ជាមុន)
+python tests/check_locale.py
+python tests/check_ui_strings.py
 
 # ៤. Sphinx build (ត្រូវតែ 0 warnings)
 sphinx-build -b html docs/source docs/_build/html -q -W --keep-going
@@ -139,6 +147,12 @@ sphinx-build -b html docs/source docs/_build/html -q -W --keep-going
 # ៥. Offline preview សម្រាប់ត្រួតពិនិត្ថដោយភ្នែក
 python tools/make_preview.py --page style-guide.html
 open preview.html        # ឬ xdg-open / start
+```
+
+ឬដំណើរការទាំងអស់ក្នុងពាក្យបញ្ជាតែមួយ (ណែនាំមុន push)៖
+
+```bash
+bash tools/verify.sh      # ១០ ការត្រួតពិនិត្យ + build; exit 0 លុះត្រាតែឆ្លងទាំងអស់
 ```
 
 មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់លទ្ធផលដែលបានវាស់
@@ -149,7 +163,8 @@ open preview.html        # ឬ xdg-open / start
 គេហទំព័រនេះគាំទ្រពណ៌ទាំងពីរ៖
 
 - ដោយស្វ័យប្រវត្តិតាមប្រព័ន្ធ (`prefers-color-scheme`)
-- ឬចុចប៊ូតុង **ពណ៌ងងឹត / ពណ៌ភ្លឺ** នៅ Sidebar (ការជ្រើសរើសត្រូវបានរក្សាទុកក្នុង `localStorage`)
+- ឬជ្រើសរើសដោយផ្ទាល់តាមការគ្រប់គ្រង **ពណ៌បង្ហាញ → ងងឹត / ភ្លឺ** នៅ Sidebar
+  (ជម្រើសសកម្មត្រូវបានបំពេញពណ៌ ហើយការជ្រើសរើសត្រូវបានរក្សាទុកក្នុង `localStorage`)
 
 Palette ទាំងមូលស្ថិតនៅក្នុង `docs/source/_static/css/custom.css` ជា CSS custom properties
 (`--kh-page-bg`, `--kh-text` ។ល។) — ពណ៌ទាំងអស់ឆ្លងកាត់កម្រិត Contrast **≥ 4.5:1** (WCAG AA)។

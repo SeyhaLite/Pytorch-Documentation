@@ -162,12 +162,19 @@ def main() -> int:
         "code block": "class=\"highlight\"" in html,
         "admonition": "admonition" in html,
         "sidebar nav": "wy-menu-vertical" in html,
-        "theme control": "kh-theme-toggle" in html,
+        "theme segmented control": "kh-theme-seg" in html,
+        "theme option ងងឹត": "data-theme-value=\"dark\"" in html,
+        "search field + Khmer label": "ស្វែងរកឯកសារ" in html and "rtd-search-form" in html,
+        "no leftover EN 'Go' button": "value=\"Go\"" not in html,
+        "no leftover EN <h3>Search": "<h3 id=\"searchlabel\">Search<" not in html,
+        "Khmer search JS catalog": "km-search-i18n" in html,
         "copy button js": "kh-copy-btn" in html,
         "dark palette": "--kh-page-bg: #14161a" in html,
         "light palette": "--kh-page-bg: #ffffff" in html,
         "khmer font stack": "Kantumruy Pro" in html,
         "khmer prose": "ការបង្កើត" in html or "ខ្មែរ" in html,
+        "khmer UI: nav menu": "ម៉ឺនុយរុករក" in html,
+        "khmer UI: github link": "កែនៅលើ GitHub" in html,
     }
     print("\nelements present in the preview:")
     bad = 0

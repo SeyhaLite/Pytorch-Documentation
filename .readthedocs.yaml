@@ -12,8 +12,20 @@ build:
   # saves ~2 GB of downloads and several minutes of build time.
   jobs:
     pre_build:
-      # Fail the build early if a new example file is not referenced anywhere.
+      # Fail the build early on the two classes of bug that are cheap to catch
+      # here and expensive to notice later:
+      #   * an example file no page references (or a stale literalinclude path)
+      #   * a truncated Markdown fence, which turns the rest of a page into one
+      #     literal block and fails -W with a Pygments lexing warning
       - python tests/check_examples_referenced.py
+      - python tools/check_markdown.py
+    post_build:
+      # Needs the built searchtools.js, so it can only run after the build.
+      # Verifies the committed Khmer JS catalog still covers every msgid the
+      # installed Sphinx version actually looks up, and that no theme/Sphinx UI
+      # string fell back to English.
+      - python tests/check_locale.py
+      - python tests/check_ui_strings.py
 
 sphinx:
   configuration: docs/source/conf.py
