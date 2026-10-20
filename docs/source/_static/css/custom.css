@@ -51,6 +51,16 @@ html[data-theme="dark"] {
   --kh-chip-bg: #262b33;
   --kh-input-bg: #171a1e;
 
+  /* Sidebar header (search + theme control). The header is dark in both
+     themes, so these are dark-surface values. */
+  --kh-nav-caption: #b6bfca;
+  --kh-seg-bg: #232830;
+  --kh-seg-border: #3a414d;
+  --kh-seg-text: #c8cfd8;
+  --kh-seg-hover-bg: #2d333c;
+  --kh-seg-active-bg: #2f5a9c;   /* 6.86:1 with white text */
+  --kh-seg-active-text: #ffffff;
+
   /* text */
   --kh-text: #d9dde4;
   --kh-heading: #eef1f6;
@@ -117,6 +127,16 @@ html[data-theme="light"] {
   --kh-row-hover-bg: #eceff3;
   --kh-chip-bg: #eef1f5;
   --kh-input-bg: #ffffff;
+
+  /* The sidebar header stays dark blue in light mode, so the control inside
+     it keeps light-on-dark colours. */
+  --kh-nav-caption: #c9d4e0;
+  --kh-seg-bg: #3d566e;
+  --kh-seg-border: #52708c;
+  --kh-seg-text: #dbe4ee;
+  --kh-seg-hover-bg: #4a6580;
+  --kh-seg-active-bg: #ffffff;
+  --kh-seg-active-text: #1f2933;
 
   --kh-text: #24292f;
   --kh-heading: #1f2328;
@@ -363,12 +383,6 @@ html .wy-side-nav-search input[type="text"]:focus {
   outline-offset: 1px;
 }
 
-/* The theme's own sidebar search lives on a light background by default. */
-html #searchbox h3,
-html #searchlabel {
-  color: var(--kh-heading) !important;
-}
-
 /* Nav items — the base level */
 html .wy-menu-vertical {
   background: var(--kh-sidebar-bg) !important;
@@ -479,142 +493,143 @@ html .rst-versions .rst-other-versions a { color: var(--kh-link) !important; }
 html .rst-versions .rst-other-versions hr { border-color: var(--kh-border) !important; }
 html .rst-versions .rst-other-versions dd a:hover { background: var(--kh-row-hover-bg) !important; }
 
-/* --- 3b. The dark/light control: ONE plain-text element ------------------ */
-html button.kh-theme-toggle,
-html .wy-menu-vertical button.kh-theme-toggle {
+/* --- 3b. Sidebar controls: search + theme segmented control --------------
+   .wy-side-nav-search is centred by the theme (text-align:center), which is
+   what made the previous layout look scattered. Every child here is a
+   full-width flex row with an explicit alignment, so the block reads as a
+   stack of labelled controls instead of loose centred text.
+   ------------------------------------------------------------------------ */
+html .wy-side-nav-search {
+  text-align: left !important;
+  padding: 0.809em 0.9em 0.7em !important;
+}
+
+html .kh-nav-controls {
   display: block;
   width: 100%;
-  margin: 0.55em 0 0.2em;
-  padding: 0.35em 0.2em;
-  background: none !important;
-  border: 0 !important;
+  margin-top: 0.65em;
+}
+
+/* Search ---------------------------------------------------------------- */
+html .kh-search { display: block; width: 100%; }
+
+html .kh-search-label,
+html #kh-search-label {
+  display: block;
+  margin: 0 0 0.3em 0.15em;
+  color: var(--kh-nav-caption) !important;
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+html .wy-side-nav-search .wy-form,
+html #rtd-search-form {
+  margin: 0 !important;
+  width: 100%;
+}
+
+html .wy-side-nav-search input[type="text"],
+html #rtd-search-input {
+  display: block;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0.42em 0.75em !important;
+  background: var(--kh-input-bg) !important;
+  color: var(--kh-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 6px !important;   /* not 50px: a pill hides the field's width */
   box-shadow: none !important;
-  border-radius: 0 !important;
-  color: #aeb8c4 !important;
-  font-size: 0.85rem !important;
-  font-weight: 500 !important;
-  text-align: left !important;
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+  height: auto !important;
+}
+html .wy-side-nav-search input[type="text"]::placeholder,
+html #rtd-search-input::placeholder {
+  color: var(--kh-faint) !important;
+  opacity: 1 !important;
+}
+html .wy-side-nav-search input[type="text"]:focus,
+html #rtd-search-input:focus {
+  border-color: var(--kh-link) !important;
+  outline: 2px solid var(--kh-link) !important;
+  outline-offset: 1px;
+}
+
+/* Theme control --------------------------------------------------------- */
+html .kh-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+  width: 100%;
+  margin-top: 0.7em;
+  padding-top: 0.65em;
+  border-top: 1px solid var(--kh-seg-border);
+}
+
+html .kh-theme-caption {
+  color: var(--kh-nav-caption) !important;
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+html .kh-theme-seg {
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: 2px;
+  background: var(--kh-seg-bg) !important;
+  border: 1px solid var(--kh-seg-border) !important;
+  border-radius: 6px !important;
+}
+
+html .kh-theme-opt {
+  appearance: none;
+  margin: 0 !important;
+  padding: 0.2em 0.7em !important;
+  background: transparent !important;
+  color: var(--kh-seg-text) !important;
+  border: 0 !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  line-height: 1.6 !important;
+  white-space: nowrap;
   cursor: pointer;
-  letter-spacing: 0.01em;
+  text-shadow: none !important;
 }
-html button.kh-theme-toggle:hover,
-html button.kh-theme-toggle:focus-visible {
+html .kh-theme-opt:hover {
+  background: var(--kh-seg-hover-bg) !important;
   color: #ffffff !important;
-  background: none !important;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
-html button.kh-theme-toggle:focus-visible {
+html[data-theme="light"] .kh-theme-opt:hover { color: #ffffff !important; }
+
+/* The active option is filled, so the current mode is obvious at a glance. */
+html .kh-theme-opt.is-active,
+html .kh-theme-opt[aria-pressed="true"] {
+  background: var(--kh-seg-active-bg) !important;
+  color: var(--kh-seg-active-text) !important;
+}
+html .kh-theme-opt.is-active:hover,
+html .kh-theme-opt[aria-pressed="true"]:hover {
+  background: var(--kh-seg-active-bg) !important;
+  color: var(--kh-seg-active-text) !important;
+}
+html .kh-theme-opt:focus-visible {
   outline: 2px solid var(--kh-link) !important;
   outline-offset: 2px;
 }
 
-/* --- 3c. Light-mode chrome ------------------------------------------------
-   The sidebar rules above use dark hexes because sphinx_rtd_theme is a dark
-   sidebar theme by default.  In light mode the sidebar surface is pale, so the
-   nav text, captions, current-page marker and the theme control all need their
-   own dark-on-light values.  Every pair below is verified by
-   tools/check_contrast.py to reach at least 4.5:1.
-   ------------------------------------------------------------------------ */
-html[data-theme="light"] .wy-side-scroll,
-html[data-theme="light"] .wy-menu-vertical,
-html[data-theme="light"] .wy-menu-vertical li,
-html[data-theme="light"] .wy-menu-vertical a,
-html[data-theme="light"] .wy-menu-vertical li a {
-  background: var(--kh-sidebar-bg) !important;
-}
-html[data-theme="light"] .wy-menu-vertical a,
-html[data-theme="light"] .wy-menu-vertical li a {
-  color: #3d4753 !important;                       /* 10.4:1 on #f3f4f6 */
-}
-html[data-theme="light"] .wy-menu-vertical a:hover,
-html[data-theme="light"] .wy-menu-vertical li a:hover {
-  color: #10151b !important;
-  background: #e4e7eb !important;
-}
-html[data-theme="light"] .wy-menu-vertical li.current,
-html[data-theme="light"] .wy-menu-vertical li.current > a,
-html[data-theme="light"] .wy-menu-vertical li.current a,
-html[data-theme="light"] .wy-menu-vertical li.current li a,
-html[data-theme="light"] .wy-menu-vertical li.on a {
-  color: #24292f !important;
-  background: #e8ebef !important;
-}
-html[data-theme="light"] .wy-menu-vertical li.toctree-l2 a,
-html[data-theme="light"] .wy-menu-vertical li.toctree-l3 a,
-html[data-theme="light"] .wy-menu-vertical li.toctree-l4 a,
-html[data-theme="light"] .wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a,
-html[data-theme="light"] .wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
-  color: #4a5563 !important;
-  background: #eef0f3 !important;
-}
-html[data-theme="light"] .wy-menu-vertical li.toctree-l1.current > a,
-html[data-theme="light"] .wy-menu-vertical a.current {
-  color: #ffffff !important;
-  background: #0b5cad !important;
-  border-left: 3px solid #083d73 !important;
-  font-weight: 600 !important;
-}
-html[data-theme="light"] .wy-menu-vertical p.caption,
-html[data-theme="light"] .wy-menu-vertical .caption-text {
-  color: #57606a !important;
-  background: var(--kh-sidebar-bg) !important;
-}
-html[data-theme="light"] .wy-menu-vertical li.toctree-l1 {
-  border-top: 1px solid var(--kh-border-soft);
-}
-html[data-theme="light"] .wy-side-nav-search {
-  background: var(--kh-sidebar-header-bg) !important;
-}
-html[data-theme="light"] .wy-side-nav-search > a,
-html[data-theme="light"] .wy-side-nav-search .wy-dropdown > a {
-  color: #ffffff !important;
-}
-html[data-theme="light"] .wy-side-nav-search > div.version {
-  color: #c9d4e0 !important;
-}
-html[data-theme="light"] .wy-side-scroll {
-  scrollbar-color: #b8c0c8 var(--kh-sidebar-bg);
-}
-html[data-theme="light"] .wy-side-scroll::-webkit-scrollbar-track {
-  background: var(--kh-sidebar-bg);
-}
-html[data-theme="light"] .wy-side-scroll::-webkit-scrollbar-thumb {
-  background: #b8c0c8;
-  border-color: var(--kh-sidebar-bg);
-}
-html[data-theme="light"] button.kh-theme-toggle {
-  color: #4a5563 !important;
-}
-html[data-theme="light"] button.kh-theme-toggle:hover,
-html[data-theme="light"] button.kh-theme-toggle:focus-visible {
-  color: #0b2545 !important;
-}
-html[data-theme="light"] .wy-nav-top {
-  background: var(--kh-sidebar-header-bg) !important;
-}
-html[data-theme="light"] .rst-versions,
-html[data-theme="light"] .rst-versions .rst-current-version {
-  background: #e8ebef !important;
-  color: #24292f !important;
-  border-color: var(--kh-border) !important;
-}
-/* Light-mode table header (declared above via a literal, kept in one place). */
-html[data-theme="light"] .rst-content table.docutils th,
-html[data-theme="light"] .wy-table th,
-html[data-theme="light"] table th {
-  background: #e8ecf1 !important;
-}
-html[data-theme="light"] table thead tr:hover th { background: #e8ecf1 !important; }
-/* Light-mode console/text blocks. */
-html[data-theme="light"] .highlight-console,
-html[data-theme="light"] .highlight-text,
-html[data-theme="light"] .highlight-bash { background: #f0f3f6 !important; }
-/* Light-mode mark/highlighted search hits. */
-html[data-theme="light"] mark,
-html[data-theme="light"] span.highlighted {
-  color: #24292f !important;
-  background: var(--kh-mark-bg) !important;
+/* Narrow sidebars: stack the caption above the control instead of squeezing. */
+@media screen and (max-width: 340px) {
+  html .kh-theme-row { flex-direction: column; align-items: flex-start; gap: 0.35em; }
 }
 
 /* --- 4. Content: links, breadcrumbs, GitHub link ------------------------- */

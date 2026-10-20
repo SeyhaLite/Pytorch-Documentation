@@ -128,6 +128,18 @@ PYGMENTS_LIGHT = [
     ("operator", "#cf222e"), ("decorator", "#8250df"), ("tag", "#116329"),
 ]
 
+# Sidebar header controls (search field + theme segmented control).
+NAV_CONTROLS = [
+    ("nav caption on header", "--kh-nav-caption", "--kh-sidebar-header-bg"),
+    ("segment text on segment", "--kh-seg-text", "--kh-seg-bg"),
+    ("segment active text", "--kh-seg-active-text", "--kh-seg-active-bg"),
+    ("segment hover text", "#ffffff", "--kh-seg-hover-bg"),
+    ("search input text", "--kh-text", "--kh-input-bg"),
+    ("search placeholder", "--kh-faint", "--kh-input-bg"),
+    ("header title link", "#f2f5f9", "--kh-sidebar-header-bg"),
+    ("header version text", "#b6bfca", "--kh-sidebar-header-bg"),
+]
+
 ADMONITION_TITLE = [
     ("note title", "--kh-note-title-fg", "--kh-note-title-bg"),
     ("tip title", "--kh-tip-title-fg", "--kh-tip-title-bg"),
@@ -180,17 +192,18 @@ def main() -> int:
     fails += check("DARK — page palette", PAGE, dark, args.quiet)
     fails += check("DARK — chrome", CHROME_DARK, dark, args.quiet)
     fails += check("DARK — Pygments tokens", [(n, c, "--kh-code-bg") for n, c in PYGMENTS_DARK], dark, args.quiet)
+    fails += check("DARK — nav controls", NAV_CONTROLS, dark, args.quiet)
     fails += check("DARK — admonition titles", ADMONITION_TITLE, dark, args.quiet)
     fails += check("DARK — admonition bodies", ADMONITION_BODY, dark, args.quiet)
     fails += check("LIGHT — page palette", PAGE, light, args.quiet)
     fails += check("LIGHT — chrome", CHROME_LIGHT, light, args.quiet)
     fails += check("LIGHT — Pygments tokens", [(n, c, "--kh-code-bg") for n, c in PYGMENTS_LIGHT], light, args.quiet)
+    fails += check("LIGHT — nav controls", NAV_CONTROLS, light, args.quiet)
     fails += check("LIGHT — admonition titles", ADMONITION_TITLE, light, args.quiet)
     fails += check("LIGHT — admonition bodies", ADMONITION_BODY, light, args.quiet)
 
-    total = (len(PAGE) + len(CHROME_DARK) + len(PYGMENTS_DARK) + len(ADMONITION_TITLE)
-             + len(ADMONITION_BODY) + len(PAGE) + len(CHROME_LIGHT) + len(PYGMENTS_LIGHT)
-             + len(ADMONITION_TITLE) + len(ADMONITION_BODY))
+    total = 2 * (len(PAGE) + len(PYGMENTS_DARK) + len(ADMONITION_TITLE)
+                 + len(ADMONITION_BODY) + len(NAV_CONTROLS)) + len(CHROME_DARK) + len(CHROME_LIGHT)
     print()
     if fails:
         print(f"FAIL: {fails} of {total} pair(s) below {MIN_RATIO}:1")
