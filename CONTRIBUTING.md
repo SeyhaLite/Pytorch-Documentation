@@ -148,6 +148,13 @@ Palette ទាំងមូលស្ថិតនៅ `docs/source/_static/css/cust
 - **កុំ** ប្រើ `git push --force`, `git reset --hard` ឬ `git clean -fdx`
   លើ branch ដែលមានការងាររបស់អ្នកដទៃ។
 
+### ៩. កុំលុបឯកសារនៅ `docs/source/extra/`
+
+ឯកសារក្នុងថតនេះត្រូវបានចម្លងទៅ **ឫសគេហទំព័រ** (តាម `html_extra_path`)។
+បច្ចុប្បន្នមានតែ `google59471f16170f14f0.html` ដែលជា Google Search Console
+ownership token — ការលុបវានឹងធ្វើឱ្យគេហទំព័របាត់ការផ្ទៀងផ្ទាត់ដោយស្ងាត់។
+`tests/check_extra_files.py` ការពារចំណុចនេះ។
+
 ## ទម្រង់ Commit Message
 
 ប្រើ [Conventional Commits](https://www.conventionalcommits.org/) ជាភាសាអង់គ្លេស ខ្លី និងច្បាស់៖
@@ -161,6 +168,7 @@ test(examples): make training loop deterministic
 
 ## Pull Request Checklist
 
+- [ ] `bash tools/verify.sh` ឆ្លងកាត់ទាំង ១១ ការត្រួតពិនិត្យ
 - [ ] កូដឧទាហរណ៍ទាំងអស់ pass ដោយ `python tests/run_examples.py`
 - [ ] `sphinx-build -b html docs/source docs/_build/html -W --keep-going` exit 0 (zero warnings)
 - [ ] ឈ្មោះ API មិនត្រូវបានបកប្រែ

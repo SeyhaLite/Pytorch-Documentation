@@ -152,11 +152,25 @@ open preview.html        # ឬ xdg-open / start
 ឬដំណើរការទាំងអស់ក្នុងពាក្យបញ្ជាតែមួយ (ណែនាំមុន push)៖
 
 ```bash
-bash tools/verify.sh      # ១០ ការត្រួតពិនិត្យ + build; exit 0 លុះត្រាតែឆ្លងទាំងអស់
+bash tools/verify.sh      # ១១ ការត្រួតពិនិត្យ ជា ៣ ដំណាក់កាល; exit 0 លុះត្រាតែឆ្លងទាំងអស់
 ```
 
 មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់លទ្ធផលដែលបានវាស់
 និងដែនកំណត់ដែលគេស្គាល់។
+
+## ឯកសារនៅ site root (កុំលុប)
+
+`docs/source/extra/` មានឯកសារដែល `html_extra_path` ចម្លងទៅ **ឫសនៃ output**
+(មិនមែន `_static/`)៖
+
+```text
+docs/source/extra/google59471f16170f14f0.html
+  -> https://pytorch-documentation.readthedocs.io/google59471f16170f14f0.html
+```
+
+នេះជា **Google Search Console ownership token**។ Google ត្រួតពិនិត្យវាជាប្រចាំ
+ដូច្នេះបើវាបាត់ គេហទំព័រអាចត្រូវបានដកការផ្ទៀងផ្ទាត់ដោយស្ងាត់ ទោះបីការផ្ទៀងផ្ទាត់
+ធ្លាប់ជោគជ័យក៏ដោយ។ **កុំលុបវា** — `tests/check_extra_files.py` នឹងបរាជ័យបើវាបាត់។
 
 ## Light Mode និង Dark Mode
 
