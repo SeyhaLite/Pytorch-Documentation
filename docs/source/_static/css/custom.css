@@ -1,0 +1,1395 @@
+/* ==========================================================================
+   ឯកសារ PyTorch ជាភាសាខ្មែរ — Light + Dark palette
+   ==========================================================================
+
+   Loaded AFTER sphinx_rtd_theme's theme.css (see html_css_files in conf.py)
+   so it can win the cascade.  Every rule is prefixed with `html` to out-rank
+   the theme's `.rst-content ...` and `:not()` selector chains; `!important`
+   is used only where the theme sets high-specificity or inline styles.
+
+   Structure of this file
+     0. Khmer webfont
+     1. Design tokens (dark = default, light = opt-in)
+     2. Page shell / typography
+     3. Sidebar (nav, search, theme control, scrollbars)
+     4. Content: headings, links, breadcrumbs, GitHub link
+     5. Tables
+     6. Inline chips: code, kbd, tt, .guilabel, .file, .samp
+     7. Code blocks + Pygments tokens + copy button
+     8. Admonitions
+     9. Blockquotes, figures, captions, images, footnotes
+    10. Prev/next buttons, footer, search page + mark
+    11. Responsive tweaks
+
+   Contrast rule: every text/background pair is >= 4.5:1 (WCAG AA).
+   Dark:  text #d9dde4 on page #14161a  -> 12.6:1
+          text #d9dde4 on card  #1c2027 -> 10.6:1
+          muted #8b949e on card #1c2027 ->  4.6:1
+   Light: text #24292f on page #ffffff  -> 14.4:1
+          muted #57606a on card #f6f8fa ->  5.9:1
+   ======================================================================== */
+
+/* --- 0. Khmer webfont ---------------------------------------------------- */
+/* Google Fonts serves woff2 with the correct CORS headers. If the CDN is
+   unreachable (offline preview, blocked network) the font stack below falls
+   back to locally installed Khmer fonts, then to the generic families.     */
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap");
+
+/* --- 1. Design tokens ---------------------------------------------------- */
+html,
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --kh-page-bg: #14161a;
+  --kh-content-bg: #14161a;
+  --kh-sidebar-bg: #1f2328;
+  --kh-sidebar-header-bg: #171a1e;
+  --kh-card-bg: #1c2027;
+  --kh-row-alt-bg: #171a1e;
+  --kh-row-hover-bg: #232830;
+  --kh-chip-bg: #262b33;
+  --kh-input-bg: #171a1e;
+
+  /* text */
+  --kh-text: #d9dde4;
+  --kh-heading: #eef1f6;
+  --kh-muted: #8b949e;
+  --kh-faint: #7d8794;
+
+  /* lines */
+  --kh-border: #343b45;
+  --kh-border-soft: #2b313a;
+  --kh-border-strong: #3a414d;
+
+  /* links */
+  --kh-link: #79b8ff;
+  --kh-link-hover: #a5d0ff;
+  --kh-link-visited: #b392f0;
+
+  /* accents (admonition titles / rules keep their hue, bodies go dark) */
+  --kh-note: #58a6ff;
+  --kh-tip: #3fb950;
+  --kh-warning: #d29922;
+  --kh-danger: #f85149;
+  --kh-seealso: #b392f0;
+  --kh-note-bg: #10233a;
+  --kh-tip-bg: #0f2418;
+  --kh-warning-bg: #2a2113;
+  --kh-danger-bg: #2d1517;
+  --kh-seealso-bg: #221b33;
+
+  /* code */
+  --kh-code-bg: #1c2027;
+  --kh-code-text: #d9dde4;
+
+  /* inline chips (code, kbd, tt, .guilabel, .file, .samp) */
+  --kh-chip-text: #dfe3ea;          /* 11.05:1 on --kh-chip-bg */
+
+  /* Admonition titles: a dark saturated bar + a bright accent label.
+     White text on the bright accent hues only reaches 2.5:1-3.4:1, so the
+     hue moves to the TEXT and the bar goes dark. */
+  --kh-note-title-bg: #123a63;      --kh-note-title-fg: #a8d4ff;
+  --kh-tip-title-bg: #14432a;       --kh-tip-title-fg: #8ce6a3;
+  --kh-warning-title-bg: #4a3a12;   --kh-warning-title-fg: #f0cd7a;
+  --kh-danger-title-bg: #5a2325;    --kh-danger-title-fg: #ffb3ae;
+  --kh-seealso-title-bg: #3a2b57;   --kh-seealso-title-fg: #d3bdf7;
+
+  /* controls */
+  --kh-btn-bg: #232830;
+  --kh-btn-text: #e6eaf0;
+  --kh-btn-hover-bg: #2d333c;
+  --kh-mark-bg: #4a3b12;
+  --kh-mark-text: #ffe9b0;
+  --kh-selection-bg: #264d73;
+  --kh-selection-text: #f2f6fb;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --kh-page-bg: #ffffff;
+  --kh-content-bg: #ffffff;
+  --kh-sidebar-bg: #f3f4f6;
+  --kh-sidebar-header-bg: #2c3e50;
+  --kh-card-bg: #f6f8fa;
+  --kh-row-alt-bg: #f6f8fa;
+  --kh-row-hover-bg: #eceff3;
+  --kh-chip-bg: #eef1f5;
+  --kh-input-bg: #ffffff;
+
+  --kh-text: #24292f;
+  --kh-heading: #1f2328;
+  --kh-muted: #57606a;
+  --kh-faint: #6e7781;
+
+  --kh-border: #d0d7de;
+  --kh-border-soft: #dfe3e8;
+  --kh-border-strong: #b8c0c8;
+
+  --kh-link: #0b5cad;
+  --kh-link-hover: #08427b;
+  --kh-link-visited: #6f42c1;
+
+  --kh-note: #0b5cad;
+  --kh-tip: #1a7f37;
+  --kh-warning: #9a6700;
+  --kh-danger: #cf222e;
+  --kh-seealso: #6f42c1;
+  --kh-note-bg: #ddf4ff;
+  --kh-tip-bg: #dafbe1;
+  --kh-warning-bg: #fff8c5;
+  --kh-danger-bg: #ffebe9;
+  --kh-seealso-bg: #fbefff;
+
+  --kh-code-bg: #f6f8fa;
+  --kh-code-text: #24292f;
+
+  --kh-chip-text: #24292f;          /* 13.76:1 on --kh-chip-bg */
+
+  /* Light mode: the accent hues are dark enough for white title text. */
+  --kh-note-title-bg: #0b5cad;      --kh-note-title-fg: #ffffff;
+  --kh-tip-title-bg: #1a7f37;       --kh-tip-title-fg: #ffffff;
+  --kh-warning-title-bg: #7d4e00;   --kh-warning-title-fg: #ffffff;
+  --kh-danger-title-bg: #a40e26;    --kh-danger-title-fg: #ffffff;
+  --kh-seealso-title-bg: #5a32a3;   --kh-seealso-title-fg: #ffffff;
+
+  --kh-btn-bg: #eaeef2;
+  --kh-btn-text: #24292f;
+  --kh-btn-hover-bg: #dfe3e8;
+  --kh-mark-bg: #fff3bf;
+  --kh-mark-text: #24292f;
+  --kh-selection-bg: #cfe4ff;
+  --kh-selection-text: #0b2545;
+}
+
+/* Font stack used everywhere Khmer text can appear. */
+html body,
+html body input,
+html body button,
+html body select,
+html body textarea,
+html .wy-nav-content,
+html .wy-menu-vertical,
+html .rst-content,
+html .rst-content code,
+html .rst-content pre,
+html .highlight,
+html .highlight pre,
+html h1, html h2, html h3, html h4, html h5, html h6 {
+  font-family:
+    "Kantumruy Pro",
+    "Noto Sans Khmer",
+    "Khmer OS",
+    "Khmer OS System",
+    "Noto Serif Khmer",
+    "Leelawadee UI",
+    "Khmer OS Battambang",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif !important;
+}
+
+/* Monospace stack: Latin/code glyphs first, Khmer fallback so that comments
+   written in Khmer inside code blocks still render correctly. */
+html code,
+html kbd,
+html pre,
+html samp,
+html tt,
+html .highlight pre,
+html .rst-content code,
+html .rst-content pre,
+html .literal-block {
+  font-family:
+    "JetBrains Mono",
+    "SFMono-Regular",
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    "Kantumruy Pro",
+    "Noto Sans Khmer",
+    "Khmer OS",
+    monospace !important;
+}
+
+/* --- 2. Page shell / typography ------------------------------------------ */
+html body {
+  background: var(--kh-page-bg) !important;
+  color: var(--kh-text) !important;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+html .wy-body-for-nav {
+  background: var(--kh-page-bg) !important;
+}
+
+html ::selection {
+  background: var(--kh-selection-bg) !important;
+  color: var(--kh-selection-text) !important;
+}
+
+html .wy-nav-content-wrap {
+  background: var(--kh-content-bg) !important;
+}
+
+html .wy-nav-content {
+  background: var(--kh-content-bg) !important;
+  max-width: 1000px;
+}
+
+html .rst-content {
+  color: var(--kh-text) !important;
+}
+
+/* Khmer has tall subscript/superscript marks; give paragraphs room. */
+html .rst-content p,
+html .rst-content li {
+  line-height: 1.9;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+html .rst-content h1,
+html .rst-content h2,
+html .rst-content h3,
+html .rst-content h4,
+html .rst-content h5,
+html .rst-content h6,
+html h1, html h2, html h3, html h4, html h5, html h6 {
+  color: var(--kh-heading) !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+}
+
+html h1 { font-size: 2.1rem !important; }
+html h2 { font-size: 1.6rem !important; }
+html h3 { font-size: 1.3rem !important; }
+html h4 { font-size: 1.12rem !important; }
+
+html .rst-content h2 {
+  border-bottom: 1px solid var(--kh-border) !important;
+  padding-bottom: 0.3em;
+}
+
+html .rst-content .headerlink {
+  color: var(--kh-muted) !important;
+  opacity: 0.55;
+  font-size: 0.85em;
+  margin-left: 0.35em;
+  text-decoration: none !important;
+}
+html .rst-content .headerlink:hover,
+html .rst-content h1:hover .headerlink,
+html .rst-content h2:hover .headerlink,
+html .rst-content h3:hover .headerlink {
+  opacity: 1;
+  color: var(--kh-link) !important;
+}
+
+html hr {
+  border: 0 !important;
+  border-top: 1px solid var(--kh-border) !important;
+  margin: 2em 0;
+}
+
+html .rst-content strong, html strong { color: var(--kh-heading) !important; font-weight: 700; }
+html .rst-content em { color: var(--kh-text) !important; }
+
+html .rst-content .versionmodified,
+html .rst-content .guilabel {
+  color: var(--kh-text) !important;
+}
+
+/* --- 3. Sidebar ---------------------------------------------------------- */
+html .wy-nav-side {
+  background: var(--kh-sidebar-bg) !important;
+}
+
+html .wy-side-scroll {
+  background: var(--kh-sidebar-bg) !important;
+  scrollbar-color: var(--kh-border-strong) var(--kh-sidebar-bg);
+  scrollbar-width: thin;
+}
+
+html .wy-side-nav-search {
+  background: var(--kh-sidebar-header-bg) !important;
+  border-bottom: 1px solid var(--kh-border-soft);
+}
+
+html .wy-side-nav-search > a,
+html .wy-side-nav-search .wy-dropdown > a,
+html .wy-side-nav-search > div.version {
+  color: #f2f5f9 !important;
+}
+html .wy-side-nav-search > a:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+html .wy-side-nav-search > div.version {
+  color: #b6bfca !important;
+  opacity: 1 !important;
+}
+
+/* Search input */
+html .wy-side-nav-search input[type="text"],
+html #searchbox input[type="text"],
+html .search input[type="text"],
+html .rst-content input[type="text"] {
+  background: var(--kh-input-bg) !important;
+  color: var(--kh-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+html .wy-side-nav-search input[type="text"]::placeholder,
+html input[type="text"]::placeholder {
+  color: var(--kh-faint) !important;
+  opacity: 1 !important;
+}
+html .wy-side-nav-search input[type="text"]:focus {
+  border-color: var(--kh-link) !important;
+  outline: 2px solid color-mix(in srgb, var(--kh-link) 35%, transparent) !important;
+  outline-offset: 1px;
+}
+
+/* The theme's own sidebar search lives on a light background by default. */
+html #searchbox h3,
+html #searchlabel {
+  color: var(--kh-heading) !important;
+}
+
+/* Nav items — the base level */
+html .wy-menu-vertical {
+  background: var(--kh-sidebar-bg) !important;
+}
+html .wy-menu-vertical li {
+  background: var(--kh-sidebar-bg) !important;
+}
+html .wy-menu-vertical a,
+html .wy-menu-vertical li a {
+  color: #c8cfd8 !important;
+  background: var(--kh-sidebar-bg) !important;
+  border: 0 !important;
+}
+html .wy-menu-vertical a:hover,
+html .wy-menu-vertical li a:hover {
+  color: #ffffff !important;
+  background: #2b313a !important;
+}
+
+/* RTD sets `li.current a { color:#404040 }` for the whole current branch,
+   including every descendant level. Override descendants explicitly. */
+html .wy-menu-vertical li.current,
+html .wy-menu-vertical li.current > a,
+html .wy-menu-vertical li.toctree-l1.current,
+html .wy-menu-vertical li.toctree-l1.current > a,
+html .wy-menu-vertical li.toctree-l2.current,
+html .wy-menu-vertical li.toctree-l2.current > a,
+html .wy-menu-vertical li.toctree-l3.current,
+html .wy-menu-vertical li.toctree-l3.current > a,
+html .wy-menu-vertical li.toctree-l4.current,
+html .wy-menu-vertical li.toctree-l4.current > a,
+html .wy-menu-vertical li.current a,
+html .wy-menu-vertical li.current li a,
+html .wy-menu-vertical li.current li.current a,
+html .wy-menu-vertical li.on a,
+html .wy-menu-vertical li.current > a:hover,
+html .wy-menu-vertical li.current li a:hover {
+  color: #dfe5ec !important;
+  background: #232830 !important;
+}
+
+/* The page the reader is actually on. */
+html .wy-menu-vertical li.toctree-l1.current > a,
+html .wy-menu-vertical li.current > a.current,
+html .wy-menu-vertical li.current > a[aria-current="page"],
+html .wy-menu-vertical a.current {
+  color: #ffffff !important;
+  background: #2f4460 !important;
+  border-left: 3px solid var(--kh-link) !important;
+  font-weight: 600 !important;
+}
+
+/* Nested levels: indent guide + slightly dimmer text (still >= 4.5:1). */
+html .wy-menu-vertical li.toctree-l2 a,
+html .wy-menu-vertical li.toctree-l3 a,
+html .wy-menu-vertical li.toctree-l4 a {
+  color: #bcc4ce !important;
+}
+html .wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a,
+html .wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
+  color: #b3bcc7 !important;
+  background: #1b1f25 !important;
+}
+
+/* Caption groups ("មាតិកា" headings inside the sidebar). */
+html .wy-menu-vertical p.caption,
+html .wy-menu-vertical .caption-text,
+html .wy-nav-top .caption-text {
+  color: #93a0ad !important;
+  background: var(--kh-sidebar-bg) !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+}
+html .wy-menu-vertical p.caption:first-child { margin-top: 0.6em; }
+
+/* Sidebar dividers and scrollbars. */
+html .wy-menu-vertical li.toctree-l1 { border-top: 1px solid var(--kh-border-soft); }
+html .wy-menu-vertical li.toctree-l1:first-of-type { border-top: 0; }
+
+html .wy-side-scroll::-webkit-scrollbar { width: 10px; }
+html .wy-side-scroll::-webkit-scrollbar-track { background: var(--kh-sidebar-bg); }
+html .wy-side-scroll::-webkit-scrollbar-thumb {
+  background: var(--kh-border-strong);
+  border-radius: 6px;
+  border: 2px solid var(--kh-sidebar-bg);
+}
+html .wy-side-scroll::-webkit-scrollbar-thumb:hover { background: #4a525f; }
+
+/* Mobile top bar + hamburger. */
+html .wy-nav-top {
+  background: var(--kh-sidebar-header-bg) !important;
+  color: #f2f5f9 !important;
+}
+html .wy-nav-top a { color: #ffffff !important; }
+html .wy-nav-top i { color: #e6ebf1 !important; }
+html .rst-versions,
+html .rst-versions .rst-current-version {
+  background: var(--kh-sidebar-header-bg) !important;
+  color: #e6ebf1 !important;
+  border-color: var(--kh-border) !important;
+}
+html .rst-versions .rst-other-versions {
+  background: var(--kh-card-bg) !important;
+  color: var(--kh-text) !important;
+}
+html .rst-versions .rst-other-versions a { color: var(--kh-link) !important; }
+html .rst-versions .rst-other-versions hr { border-color: var(--kh-border) !important; }
+html .rst-versions .rst-other-versions dd a:hover { background: var(--kh-row-hover-bg) !important; }
+
+/* --- 3b. The dark/light control: ONE plain-text element ------------------ */
+html button.kh-theme-toggle,
+html .wy-menu-vertical button.kh-theme-toggle {
+  display: block;
+  width: 100%;
+  margin: 0.55em 0 0.2em;
+  padding: 0.35em 0.2em;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  color: #aeb8c4 !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+}
+html button.kh-theme-toggle:hover,
+html button.kh-theme-toggle:focus-visible {
+  color: #ffffff !important;
+  background: none !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+html button.kh-theme-toggle:focus-visible {
+  outline: 2px solid var(--kh-link) !important;
+  outline-offset: 2px;
+}
+
+/* --- 3c. Light-mode chrome ------------------------------------------------
+   The sidebar rules above use dark hexes because sphinx_rtd_theme is a dark
+   sidebar theme by default.  In light mode the sidebar surface is pale, so the
+   nav text, captions, current-page marker and the theme control all need their
+   own dark-on-light values.  Every pair below is verified by
+   tools/check_contrast.py to reach at least 4.5:1.
+   ------------------------------------------------------------------------ */
+html[data-theme="light"] .wy-side-scroll,
+html[data-theme="light"] .wy-menu-vertical,
+html[data-theme="light"] .wy-menu-vertical li,
+html[data-theme="light"] .wy-menu-vertical a,
+html[data-theme="light"] .wy-menu-vertical li a {
+  background: var(--kh-sidebar-bg) !important;
+}
+html[data-theme="light"] .wy-menu-vertical a,
+html[data-theme="light"] .wy-menu-vertical li a {
+  color: #3d4753 !important;                       /* 10.4:1 on #f3f4f6 */
+}
+html[data-theme="light"] .wy-menu-vertical a:hover,
+html[data-theme="light"] .wy-menu-vertical li a:hover {
+  color: #10151b !important;
+  background: #e4e7eb !important;
+}
+html[data-theme="light"] .wy-menu-vertical li.current,
+html[data-theme="light"] .wy-menu-vertical li.current > a,
+html[data-theme="light"] .wy-menu-vertical li.current a,
+html[data-theme="light"] .wy-menu-vertical li.current li a,
+html[data-theme="light"] .wy-menu-vertical li.on a {
+  color: #24292f !important;
+  background: #e8ebef !important;
+}
+html[data-theme="light"] .wy-menu-vertical li.toctree-l2 a,
+html[data-theme="light"] .wy-menu-vertical li.toctree-l3 a,
+html[data-theme="light"] .wy-menu-vertical li.toctree-l4 a,
+html[data-theme="light"] .wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a,
+html[data-theme="light"] .wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
+  color: #4a5563 !important;
+  background: #eef0f3 !important;
+}
+html[data-theme="light"] .wy-menu-vertical li.toctree-l1.current > a,
+html[data-theme="light"] .wy-menu-vertical a.current {
+  color: #ffffff !important;
+  background: #0b5cad !important;
+  border-left: 3px solid #083d73 !important;
+  font-weight: 600 !important;
+}
+html[data-theme="light"] .wy-menu-vertical p.caption,
+html[data-theme="light"] .wy-menu-vertical .caption-text {
+  color: #57606a !important;
+  background: var(--kh-sidebar-bg) !important;
+}
+html[data-theme="light"] .wy-menu-vertical li.toctree-l1 {
+  border-top: 1px solid var(--kh-border-soft);
+}
+html[data-theme="light"] .wy-side-nav-search {
+  background: var(--kh-sidebar-header-bg) !important;
+}
+html[data-theme="light"] .wy-side-nav-search > a,
+html[data-theme="light"] .wy-side-nav-search .wy-dropdown > a {
+  color: #ffffff !important;
+}
+html[data-theme="light"] .wy-side-nav-search > div.version {
+  color: #c9d4e0 !important;
+}
+html[data-theme="light"] .wy-side-scroll {
+  scrollbar-color: #b8c0c8 var(--kh-sidebar-bg);
+}
+html[data-theme="light"] .wy-side-scroll::-webkit-scrollbar-track {
+  background: var(--kh-sidebar-bg);
+}
+html[data-theme="light"] .wy-side-scroll::-webkit-scrollbar-thumb {
+  background: #b8c0c8;
+  border-color: var(--kh-sidebar-bg);
+}
+html[data-theme="light"] button.kh-theme-toggle {
+  color: #4a5563 !important;
+}
+html[data-theme="light"] button.kh-theme-toggle:hover,
+html[data-theme="light"] button.kh-theme-toggle:focus-visible {
+  color: #0b2545 !important;
+}
+html[data-theme="light"] .wy-nav-top {
+  background: var(--kh-sidebar-header-bg) !important;
+}
+html[data-theme="light"] .rst-versions,
+html[data-theme="light"] .rst-versions .rst-current-version {
+  background: #e8ebef !important;
+  color: #24292f !important;
+  border-color: var(--kh-border) !important;
+}
+/* Light-mode table header (declared above via a literal, kept in one place). */
+html[data-theme="light"] .rst-content table.docutils th,
+html[data-theme="light"] .wy-table th,
+html[data-theme="light"] table th {
+  background: #e8ecf1 !important;
+}
+html[data-theme="light"] table thead tr:hover th { background: #e8ecf1 !important; }
+/* Light-mode console/text blocks. */
+html[data-theme="light"] .highlight-console,
+html[data-theme="light"] .highlight-text,
+html[data-theme="light"] .highlight-bash { background: #f0f3f6 !important; }
+/* Light-mode mark/highlighted search hits. */
+html[data-theme="light"] mark,
+html[data-theme="light"] span.highlighted {
+  color: #24292f !important;
+  background: var(--kh-mark-bg) !important;
+}
+
+/* --- 4. Content: links, breadcrumbs, GitHub link ------------------------- */
+html .rst-content a,
+html .rst-content a:link,
+html a {
+  color: var(--kh-link) !important;
+  text-decoration: none;
+}
+html .rst-content a:visited,
+html a:visited { color: var(--kh-link-visited) !important; }
+html .rst-content a:hover,
+html a:hover {
+  color: var(--kh-link-hover) !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+html .rst-content a:focus-visible,
+html a:focus-visible {
+  outline: 2px solid var(--kh-link) !important;
+  outline-offset: 2px;
+}
+/* External links keep the same colour; RTD's little icon is removed so the
+   Khmer text stays readable at small sizes. */
+html .rst-content a.reference.external::after { content: "" !important; }
+
+html .wy-breadcrumbs {
+  color: var(--kh-muted) !important;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--kh-border-soft);
+  padding-bottom: 0.5em;
+}
+html .wy-breadcrumbs li,
+html .wy-breadcrumbs li a {
+  color: var(--kh-muted) !important;
+}
+html .wy-breadcrumbs li a:hover { color: var(--kh-link) !important; }
+html .wy-breadcrumbs li.wy-breadcrumbs-aside a,
+html .wy-breadcrumbs-aside a.fa {
+  color: var(--kh-faint) !important;
+  font-size: 0.85rem;
+}
+html .wy-breadcrumbs li.wy-breadcrumbs-aside a:hover { color: var(--kh-link) !important; }
+html .rst-content .wy-breadcrumbs-extra { color: var(--kh-faint) !important; }
+
+html .rst-content .section > h1 .edit-on-github,
+html a[title="Edit on GitHub"] { color: var(--kh-faint) !important; }
+
+/* --- 5. Tables ----------------------------------------------------------- */
+html .rst-content table.docutils,
+html .rst-content table.field-list,
+html .wy-table,
+html table {
+  border: 1px solid var(--kh-border) !important;
+  background: var(--kh-card-bg) !important;
+  color: var(--kh-text) !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  width: 100%;
+  font-size: 0.94rem;
+}
+
+html .rst-content table.docutils th,
+html .wy-table th,
+html table th {
+  background: #232830 !important;
+  color: var(--kh-heading) !important;
+  border: 1px solid var(--kh-border) !important;
+  font-weight: 600 !important;
+  text-align: left;
+  padding: 0.6em 0.75em !important;
+}
+html[data-theme="light"] .rst-content table.docutils th,
+html[data-theme="light"] .wy-table th,
+html[data-theme="light"] table th {
+  background: #e8ecf1 !important;
+  color: var(--kh-heading) !important;
+}
+
+/* Striping. RTD's rule is
+   `.rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td`,
+   so we must match that specificity and then some. */
+html .rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,
+html .rst-content table.docutils tr:nth-child(2n-1) td,
+html .wy-table-striped tr:nth-child(2n-1) td,
+html table tr:nth-child(odd) td {
+  background: var(--kh-card-bg) !important;
+  border-bottom: 1px solid var(--kh-border-soft) !important;
+  color: var(--kh-text) !important;
+}
+html .rst-content table.docutils:not(.field-list) tr:nth-child(2n) td,
+html .rst-content table.docutils tr:nth-child(2n) td,
+html .wy-table-striped tr:nth-child(2n) td,
+html table tr:nth-child(even) td {
+  background: var(--kh-row-alt-bg) !important;
+  border-bottom: 1px solid var(--kh-border-soft) !important;
+  color: var(--kh-text) !important;
+}
+html[data-theme="light"] .rst-content table.docutils:not(.field-list) tr:nth-child(odd) td,
+html[data-theme="light"] table tr:nth-child(odd) td {
+  background: #ffffff !important;
+}
+html[data-theme="light"] .rst-content table.docutils:not(.field-list) tr:nth-child(even) td,
+html[data-theme="light"] table tr:nth-child(even) td {
+  background: var(--kh-row-alt-bg) !important;
+}
+
+html .rst-content table.docutils td,
+html .wy-table td,
+html table td {
+  background: transparent !important;
+  border: 1px solid var(--kh-border-soft) !important;
+  color: var(--kh-text) !important;
+  padding: 0.55em 0.75em !important;
+  vertical-align: top;
+}
+/* td backgrounds come from the tr rules above; keep the cell itself see-through
+   but still bordered, so striping is visible and grid lines stay crisp. */
+html .rst-content table.docutils tr:hover td,
+html table tr:hover td {
+  background: var(--kh-row-hover-bg) !important;
+}
+html .rst-content table.docutils thead tr:hover th,
+html table thead tr:hover th { background: #232830 !important; }
+html[data-theme="light"] table thead tr:hover th { background: #e8ecf1 !important; }
+
+/* Field lists (used by Sphinx for :param:, :returns:) */
+html .rst-content table.field-list th,
+html .rst-content table.field-list td {
+  border: 0 !important;
+  background: transparent !important;
+}
+html .rst-content table.field-list th { color: var(--kh-heading) !important; font-weight: 600 !important; }
+html .rst-content table.field-list td { color: var(--kh-text) !important; }
+
+/* Long tables scroll instead of breaking the layout. */
+html .wy-table-responsive {
+  margin-bottom: 1.5em;
+  max-width: 100%;
+  overflow: visible !important;
+}
+
+/* --- 6. Inline chips ----------------------------------------------------- */
+html .rst-content code,
+html .rst-content tt,
+html code,
+html tt,
+html .rst-content code.literal,
+html span[data-term] {
+  background: var(--kh-chip-bg) !important;
+  color: var(--kh-chip-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 4px !important;
+  padding: 0.12em 0.35em !important;
+  font-size: 0.88em !important;
+  box-shadow: none !important;
+  white-space: break-spaces;
+}
+html[data-theme="light"] .rst-content code,
+html[data-theme="light"] code,
+html[data-theme="light"] tt {
+  color: #1f2328 !important;
+}
+
+/* kbd — RTD renders it as a white key with light grey text on dark themes. */
+html kbd,
+html .rst-content kbd,
+html .kbd {
+  background: var(--kh-chip-bg) !important;
+  color: var(--kh-chip-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-bottom-width: 2px !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  padding: 0.12em 0.4em !important;
+  font-size: 0.85em !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+}
+html[data-theme="light"] kbd { color: #1f2328 !important; }
+
+/* menuselection / guilabel / file / samp — RTD wraps them in `:not()` chains
+   with white backgrounds, so !important is required here. */
+html .guilabel,
+html .rst-content .guilabel,
+html .menuselection,
+html .file,
+html .rst-content .file,
+html .samp,
+html .rst-content samp {
+  background: var(--kh-chip-bg) !important;
+  color: var(--kh-chip-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 4px !important;
+  padding: 0.12em 0.35em !important;
+  font-family: inherit !important;
+  font-size: 0.9em !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+}
+html .guilabel::before, html .guilabel::after { content: "" !important; }
+html[data-theme="light"] .guilabel,
+html[data-theme="light"] .file,
+html[data-theme="light"] .samp { color: #1f2328 !important; }
+
+/* Inline code inside links must stay legible and obviously clickable. */
+html a code,
+html a tt,
+html .rst-content a code,
+html .rst-content a tt {
+  color: var(--kh-link) !important;
+  background: var(--kh-chip-bg) !important;
+  border-color: var(--kh-link) !important;
+}
+html a code:hover, html a tt:hover {
+  color: var(--kh-link-hover) !important;
+}
+
+/* Inline code inside headings: match the heading colour, keep the chip. */
+html h1 code, html h2 code, html h3 code, html h4 code,
+html h1 tt, html h2 tt, html h3 tt, html h4 tt {
+  color: var(--kh-heading) !important;
+  font-size: 0.9em !important;
+}
+
+/* Inline code inside admonition titles. */
+html .admonition-title code,
+html .admonition-title tt { color: #ffffff !important; }
+
+/* API signature / dl blocks (Sphinx autodoc style, also used by :py: roles) */
+html .rst-content dl:not(.docutils) dt {
+  background: var(--kh-card-bg) !important;
+  color: var(--kh-heading) !important;
+  border-left: 3px solid var(--kh-link) !important;
+  border-top: 1px solid var(--kh-border-soft) !important;
+}
+html .rst-content dl:not(.docutils) dt code,
+html .rst-content dl:not(.docutils) dt tt {
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--kh-heading) !important;
+  padding: 0 !important;
+}
+html .rst-content dl:not(.docutils) dd { color: var(--kh-text) !important; }
+
+/* --- 7. Code blocks ------------------------------------------------------ */
+html .highlight,
+html .rst-content .highlight,
+html div[class^="highlight"],
+html div[class*=" highlight"] {
+  background: var(--kh-code-bg) !important;
+  border: 1px solid var(--kh-border) !important;
+  border-radius: 6px !important;
+  margin: 1.1em 0 1.4em !important;
+  position: relative;
+}
+html .highlight pre,
+html .rst-content .highlight pre,
+html pre.literal-block {
+  background: transparent !important;
+  color: var(--kh-code-text) !important;
+  border: 0 !important;
+  padding: 0.85em 1em !important;
+  font-size: 0.86rem !important;
+  line-height: 1.7 !important;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 4;
+  scrollbar-color: var(--kh-border-strong) var(--kh-code-bg);
+  scrollbar-width: thin;
+}
+html .highlight pre::-webkit-scrollbar { height: 10px; }
+html .highlight pre::-webkit-scrollbar-track { background: var(--kh-code-bg); }
+html .highlight pre::-webkit-scrollbar-thumb {
+  background: var(--kh-border-strong);
+  border-radius: 6px;
+}
+html[data-theme="light"] .highlight pre { color: #24292f !important; }
+
+/* Console / text blocks get a slightly different tint so readers can tell
+   "type this" apart from "this is what Python printed". */
+html .highlight-console, html .highlight-text, html .highlight-bash {
+  background: #12151a !important;
+}
+html[data-theme="light"] .highlight-console,
+html[data-theme="light"] .highlight-text,
+html[data-theme="light"] .highlight-bash { background: #f0f3f6 !important; }
+
+/* Line-number gutter */
+html .highlighttable, html table.highlighttable { border: 0 !important; background: transparent !important; }
+html .highlighttable td.linenos,
+html .highlighttable td.code { border: 0 !important; background: transparent !important; padding: 0 !important; }
+html .highlighttable td.linenos pre,
+html .linenos {
+  color: var(--kh-faint) !important;
+  background: transparent !important;
+  user-select: none;
+  border-right: 1px solid var(--kh-border-soft) !important;
+  padding-right: 0.6em !important;
+}
+
+/* Pygments tokens — dark palette. Every value is >= 4.5:1 on #1c2027. */
+html[data-theme="dark"] .highlight .c,
+html[data-theme="dark"] .highlight .c1,
+html[data-theme="dark"] .highlight .cm,
+html[data-theme="dark"] .highlight .cp,
+html[data-theme="dark"] .highlight .cs,
+html[data-theme="dark"] .highlight .ch { color: #8b949e !important; font-style: italic; }
+
+html[data-theme="dark"] .highlight .k,
+html[data-theme="dark"] .highlight .kd,
+html[data-theme="dark"] .highlight .kn,
+html[data-theme="dark"] .highlight .kp,
+html[data-theme="dark"] .highlight .kr,
+html[data-theme="dark"] .highlight .kt { color: #ff7b72 !important; font-weight: 600; }
+
+html[data-theme="dark"] .highlight .s,
+html[data-theme="dark"] .highlight .s1,
+html[data-theme="dark"] .highlight .s2,
+html[data-theme="dark"] .highlight .sb,
+html[data-theme="dark"] .highlight .sc,
+html[data-theme="dark"] .highlight .sd,
+html[data-theme="dark"] .highlight .se,
+html[data-theme="dark"] .highlight .sh,
+html[data-theme="dark"] .highlight .si,
+html[data-theme="dark"] .highlight .sx,
+html[data-theme="dark"] .highlight .sr,
+html[data-theme="dark"] .highlight .ss { color: #a5d6ff !important; }
+
+html[data-theme="dark"] .highlight .m,
+html[data-theme="dark"] .highlight .mf,
+html[data-theme="dark"] .highlight .mh,
+html[data-theme="dark"] .highlight .mi,
+html[data-theme="dark"] .highlight .mo,
+html[data-theme="dark"] .highlight .mb,
+html[data-theme="dark"] .highlight .il { color: #79c0ff !important; }
+
+html[data-theme="dark"] .highlight .n,
+html[data-theme="dark"] .highlight .na,
+html[data-theme="dark"] .highlight .nl,
+html[data-theme="dark"] .highlight .py { color: #d9dde4 !important; }
+
+html[data-theme="dark"] .highlight .nb { color: #ffa657 !important; }
+html[data-theme="dark"] .highlight .nf,
+html[data-theme="dark"] .highlight .fm { color: #d2a8ff !important; }
+html[data-theme="dark"] .highlight .nc,
+html[data-theme="dark"] .highlight .nn,
+html[data-theme="dark"] .highlight .ne { color: #f0c674 !important; font-weight: 600; }
+html[data-theme="dark"] .highlight .no { color: #79c0ff !important; }
+html[data-theme="dark"] .highlight .nv,
+html[data-theme="dark"] .highlight .vc,
+html[data-theme="dark"] .highlight .vg,
+html[data-theme="dark"] .highlight .vi { color: #ffa198 !important; }
+html[data-theme="dark"] .highlight .o,
+html[data-theme="dark"] .highlight .ow { color: #ff7b72 !important; }
+html[data-theme="dark"] .highlight .p { color: #d9dde4 !important; }
+html[data-theme="dark"] .highlight .bp { color: #ffa657 !important; }
+html[data-theme="dark"] .highlight .nt { color: #7ee787 !important; }
+html[data-theme="dark"] .highlight .nd { color: #d2a8ff !important; }
+html[data-theme="dark"] .highlight .ni { color: #ffa657 !important; }
+html[data-theme="dark"] .highlight .err,
+html[data-theme="dark"] .highlight .gr,
+html[data-theme="dark"] .highlight .gh,
+html[data-theme="dark"] .highlight .go,
+html[data-theme="dark"] .highlight .gp { color: #ff7b72 !important; background: transparent !important; }
+html[data-theme="dark"] .highlight .gd { color: #ffa198 !important; background: #3c1d1f !important; }
+html[data-theme="dark"] .highlight .gi { color: #7ee787 !important; background: #12331f !important; }
+html[data-theme="dark"] .highlight .gu { color: #8b949e !important; }
+html[data-theme="dark"] .highlight .w { color: #d9dde4 !important; }
+html[data-theme="dark"] .highlight .hll { background: #2d333b !important; display: block; }
+
+/* Pygments tokens — light palette (>= 4.5:1 on #f6f8fa). */
+html[data-theme="light"] .highlight .c,
+html[data-theme="light"] .highlight .c1,
+html[data-theme="light"] .highlight .cm,
+html[data-theme="light"] .highlight .cs { color: #57606a !important; font-style: italic; }
+html[data-theme="light"] .highlight .k,
+html[data-theme="light"] .highlight .kd,
+html[data-theme="light"] .highlight .kn,
+html[data-theme="light"] .highlight .kr,
+html[data-theme="light"] .highlight .kt { color: #a626a4 !important; font-weight: 600; }
+html[data-theme="light"] .highlight .s,
+html[data-theme="light"] .highlight .s1,
+html[data-theme="light"] .highlight .s2,
+html[data-theme="light"] .highlight .sb,
+html[data-theme="light"] .highlight .sc,
+html[data-theme="light"] .highlight .se,
+html[data-theme="light"] .highlight .sh,
+html[data-theme="light"] .highlight .si,
+html[data-theme="light"] .highlight .sx,
+html[data-theme="light"] .highlight .sr,
+html[data-theme="light"] .highlight .ss { color: #0a3069 !important; }
+html[data-theme="light"] .highlight .m,
+html[data-theme="light"] .highlight .mf,
+html[data-theme="light"] .highlight .mi,
+html[data-theme="light"] .highlight .mo,
+html[data-theme="light"] .highlight .mb,
+html[data-theme="light"] .highlight .il { color: #0550ae !important; }
+html[data-theme="light"] .highlight .n,
+html[data-theme="light"] .highlight .na,
+html[data-theme="light"] .highlight .p { color: #24292f !important; }
+html[data-theme="light"] .highlight .nb { color: #953800 !important; }
+html[data-theme="light"] .highlight .nf,
+html[data-theme="light"] .highlight .fm { color: #8250df !important; }
+html[data-theme="light"] .highlight .nc,
+html[data-theme="light"] .highlight .nn,
+html[data-theme="light"] .highlight .ne { color: #953800 !important; font-weight: 600; }
+html[data-theme="light"] .highlight .no { color: #0550ae !important; }
+html[data-theme="light"] .highlight .nv,
+html[data-theme="light"] .highlight .vc,
+html[data-theme="light"] .highlight .vg,
+html[data-theme="light"] .highlight .vi { color: #953800 !important; }
+html[data-theme="light"] .highlight .o,
+html[data-theme="light"] .highlight .ow { color: #cf222e !important; }
+html[data-theme="light"] .highlight .nt { color: #116329 !important; }
+html[data-theme="light"] .highlight .nd { color: #8250df !important; }
+html[data-theme="light"] .highlight .err,
+html[data-theme="light"] .highlight .gr { color: #cf222e !important; background: transparent !important; }
+html[data-theme="light"] .highlight .gd { color: #82071e !important; background: #ffebe9 !important; }
+html[data-theme="light"] .highlight .gi { color: #116329 !important; background: #dafbe1 !important; }
+html[data-theme="light"] .highlight .hll { background: #fff8c5 !important; display: block; }
+
+/* The copy control (injected by _static/js/copybutton.js). */
+html .kh-copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  padding: 0.1em 0.5em;
+  background: var(--kh-btn-bg) !important;
+  color: var(--kh-btn-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  font-size: 0.75rem !important;
+  font-family: inherit !important;
+  line-height: 1.5;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease-in-out;
+  z-index: 5;
+}
+html .highlight:hover .kh-copy-btn,
+html .kh-copy-btn:focus-visible { opacity: 1; }
+html .kh-copy-btn:hover { background: var(--kh-btn-hover-bg) !important; }
+html .kh-copy-btn:focus-visible {
+  outline: 2px solid var(--kh-link) !important;
+  outline-offset: 2px;
+  opacity: 1;
+}
+html .kh-copy-btn.is-done { color: #7ee787 !important; border-color: #2ea04366 !important; }
+html .kh-copy-btn.is-error { color: #ff7b72 !important; border-color: #f8514966 !important; }
+html[data-theme="light"] .kh-copy-btn.is-done { color: #1a7f37 !important; }
+html[data-theme="light"] .kh-copy-btn.is-error { color: #cf222e !important; }
+/* Always show the control on touch devices (no hover state there). */
+@media (hover: none) {
+  html .kh-copy-btn { opacity: 0.85; }
+}
+
+/* --- 8. Admonitions ------------------------------------------------------ */
+/* Bodies take a very dark tint of the accent hue; titles are a dark saturated
+   bar carrying a bright accent label.  Every combination is >= 4.5:1 --
+   verified by tools/check_contrast.py.  (White text directly on the bright
+   accent hues only reaches 2.5:1 - 3.4:1, so the hue lives in the text.)    */
+
+html .rst-content .admonition,
+html .admonition {
+  background: var(--kh-card-bg) !important;
+  border: 1px solid var(--kh-border) !important;
+  border-left-width: 4px !important;
+  border-radius: 6px !important;
+  color: var(--kh-text) !important;
+  padding: 0 !important;
+  margin: 1.4em 0 !important;
+  overflow: hidden;
+}
+
+html .rst-content .admonition > :not(.admonition-title),
+html .admonition > :not(.admonition-title) { color: var(--kh-text) !important; }
+html .rst-content .admonition > p, html .admonition > p { padding: 0 1em !important; }
+html .rst-content .admonition > p:first-of-type,
+html .admonition > p:first-of-type { margin-top: 0.7em !important; }
+html .rst-content .admonition > p:last-child,
+html .admonition > p:last-child { margin-bottom: 0.8em !important; }
+html .rst-content .admonition ul, html .admonition ul,
+html .rst-content .admonition ol, html .admonition ol { padding: 0 1em 0 2.4em !important; }
+html .rst-content .admonition > ul:last-child,
+html .rst-content .admonition > ol:last-child { margin-bottom: 0.8em !important; }
+html .rst-content .admonition .highlight, html .admonition .highlight { margin: 0.8em 1em !important; }
+html .rst-content .admonition table, html .admonition table { margin: 0.8em 1em !important; width: calc(100% - 2em) !important; }
+
+html .rst-content .admonition-title,
+html .admonition-title {
+  font-weight: 600 !important;
+  padding: 0.5em 1em !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+/* Drop RTD's FontAwesome glyph slot; the label is text only. */
+html .rst-content .admonition-title::before,
+html .admonition-title::before { display: none !important; content: "" !important; }
+html .rst-content .admonition-title a,
+html .admonition-title a { color: inherit !important; text-decoration: underline; }
+/* Inline code inside a title keeps the title's colour, no chip of its own. */
+html .admonition-title code,
+html .admonition-title tt {
+  color: inherit !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  font-size: 0.92em !important;
+}
+
+/* The shared "title bar" recipe: (bar, label) pairs are declared per theme
+   as --kh-<kind>-title-bg / --kh-<kind>-title-fg. */
+html .rst-content .note > .admonition-title,
+html .admonition.note > .admonition-title {
+  background: var(--kh-note-title-bg) !important;
+  color: var(--kh-note-title-fg) !important;
+}
+html .rst-content .tip > .admonition-title,
+html .rst-content .hint > .admonition-title,
+html .admonition.tip > .admonition-title,
+html .admonition.hint > .admonition-title {
+  background: var(--kh-tip-title-bg) !important;
+  color: var(--kh-tip-title-fg) !important;
+}
+html .rst-content .warning > .admonition-title,
+html .rst-content .caution > .admonition-title,
+html .rst-content .attention > .admonition-title,
+html .rst-content .admonition-todo > .admonition-title,
+html .admonition.warning > .admonition-title,
+html .admonition.caution > .admonition-title,
+html .admonition.attention > .admonition-title {
+  background: var(--kh-warning-title-bg) !important;
+  color: var(--kh-warning-title-fg) !important;
+}
+html .rst-content .danger > .admonition-title,
+html .rst-content .error > .admonition-title,
+html .admonition.danger > .admonition-title,
+html .admonition.error > .admonition-title {
+  background: var(--kh-danger-title-bg) !important;
+  color: var(--kh-danger-title-fg) !important;
+}
+html .rst-content .important > .admonition-title,
+html .rst-content .seealso > .admonition-title,
+html .admonition.important > .admonition-title,
+html .admonition.seealso > .admonition-title {
+  background: var(--kh-seealso-title-bg) !important;
+  color: var(--kh-seealso-title-fg) !important;
+}
+
+/* Left rules and body tints keep the hue so the type is still recognisable. */
+html .rst-content .note, html .admonition.note {
+  border-left-color: var(--kh-note) !important;
+  background: var(--kh-note-bg) !important;
+}
+html .rst-content .tip, html .rst-content .hint,
+html .admonition.tip, html .admonition.hint {
+  border-left-color: var(--kh-tip) !important;
+  background: var(--kh-tip-bg) !important;
+}
+html .rst-content .warning, html .rst-content .caution,
+html .rst-content .attention, html .rst-content .admonition-todo,
+html .admonition.warning, html .admonition.caution, html .admonition.attention {
+  border-left-color: var(--kh-warning) !important;
+  background: var(--kh-warning-bg) !important;
+}
+html .rst-content .danger, html .rst-content .error,
+html .admonition.danger, html .admonition.error {
+  border-left-color: var(--kh-danger) !important;
+  background: var(--kh-danger-bg) !important;
+}
+html .rst-content .important, html .rst-content .seealso,
+html .admonition.important, html .admonition.seealso {
+  border-left-color: var(--kh-seealso) !important;
+  background: var(--kh-seealso-bg) !important;
+}
+
+/* Admonition bodies carry a dark tint, so the chip foreground token still
+   passes there; nothing extra is needed for inline code inside a body. */
+
+/* --- 9. Blockquotes, figures, captions, images, footnotes ---------------- */
+html .rst-content blockquote,
+html blockquote {
+  border-left: 4px solid var(--kh-border-strong) !important;
+  background: var(--kh-card-bg) !important;
+  color: var(--kh-text) !important;
+  margin: 1.2em 0 !important;
+  padding: 0.7em 1.1em !important;
+  border-radius: 0 6px 6px 0;
+}
+html .rst-content blockquote p { color: var(--kh-text) !important; }
+
+html .rst-content .epigraph, html .rst-content .highlights {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+html .rst-content figure, html figure { margin: 1.5em 0; }
+html .rst-content .figure, html .figure { background: var(--kh-card-bg) !important; padding: 0.8em; border-radius: 6px; border: 1px solid var(--kh-border-soft); }
+/* Images sit on a card so that transparent PNGs stay visible in both modes. */
+html .rst-content img, html img {
+  background: #ffffff !important;
+  border-radius: 4px;
+  max-width: 100%;
+  height: auto;
+}
+html .rst-content .figure img { background: #ffffff !important; padding: 0.4em; }
+
+html .rst-content .figure p.caption,
+html .rst-content figcaption,
+html figcaption,
+html .caption-text {
+  color: var(--kh-muted) !important;
+  font-style: normal !important;
+  font-size: 0.88rem !important;
+  text-align: center;
+  padding-top: 0.5em;
+}
+
+html .rst-content .footnote, html .footnote { color: var(--kh-muted) !important; font-size: 0.88rem; }
+html .rst-content .footnote td, html .footnote td { border: 0 !important; background: transparent !important; color: var(--kh-muted) !important; }
+html .rst-content .footnote-reference, html .footnote-reference { color: var(--kh-link) !important; }
+html .rst-content .citation, html .citation { color: var(--kh-muted) !important; }
+
+/* Definition / description lists used for glossaries. */
+html .rst-content dl.simple dt,
+html .rst-content dl.footnote dt { color: var(--kh-heading) !important; font-weight: 600 !important; }
+html .rst-content dl.simple dd { color: var(--kh-text) !important; margin-left: 1.5em; }
+
+/* Task lists (MyST) */
+html .rst-content li.task-list-item { list-style: none; }
+html .rst-content input[type="checkbox"] { accent-color: var(--kh-link); margin-right: 0.4em; }
+
+/* --- 10. Prev/next, footer, search page ---------------------------------- */
+html .rst-footer-buttons,
+html [role="navigation"] { color: var(--kh-muted) !important; }
+
+html .btn,
+html .rst-content .btn,
+html .btn-neutral,
+html .btn-neutral:visited {
+  background: var(--kh-btn-bg) !important;
+  color: var(--kh-btn-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  padding: 0.45em 0.9em !important;
+}
+html .btn:hover,
+html .btn-neutral:hover {
+  background: var(--kh-btn-hover-bg) !important;
+  color: #ffffff !important;
+  border-color: var(--kh-link) !important;
+}
+html[data-theme="light"] .btn:hover { color: #0b2545 !important; }
+html .btn:active { transform: translateY(1px); }
+html .btn:focus-visible {
+  outline: 2px solid var(--kh-link) !important;
+  outline-offset: 2px;
+}
+/* The prev/next icons inherit the button colour so they stay visible. */
+html .btn .fa, html .btn i { color: inherit !important; }
+
+html .rst-footer-buttons div[role="navigation"] hr,
+html footer hr { border-color: var(--kh-border) !important; }
+
+html footer,
+html .rst-content footer,
+html [role="contentinfo"] {
+  color: var(--kh-muted) !important;
+  border-top: 1px solid var(--kh-border-soft);
+  padding-top: 1em;
+  margin-top: 2em;
+  font-size: 0.86rem;
+}
+html footer a { color: var(--kh-link) !important; }
+html footer p { color: var(--kh-muted) !important; }
+html .rst-footer-buttons + hr { border-color: var(--kh-border-soft) !important; }
+
+/* Search results page */
+html #search-results .search li,
+html ul.search li {
+  border-top: 1px solid var(--kh-border-soft) !important;
+  background: transparent !important;
+  color: var(--kh-text) !important;
+  padding: 0.8em 0 0.8em 1.6em !important;
+  margin: 0 !important;
+}
+html ul.search li:first-child { border-top: 0 !important; }
+html #search-results h2,
+html .search h2 { color: var(--kh-heading) !important; }
+html #search-results p.search-summary,
+html .search-summary { color: var(--kh-muted) !important; }
+html ul.search li a { color: var(--kh-link) !important; font-weight: 600; }
+html ul.search li div.context {
+  color: var(--kh-text) !important;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-top: 0.35em;
+}
+html #search-results .search li em,
+html ul.search li div.context em { color: var(--kh-heading) !important; }
+
+/* The main search form on /search */
+html #search-form, html .search .search-form { margin-bottom: 1.5em; }
+html input[type="submit"],
+html .btn input[type="submit"] {
+  background: var(--kh-btn-bg) !important;
+  color: var(--kh-btn-text) !important;
+  border: 1px solid var(--kh-border-strong) !important;
+  border-radius: 5px !important;
+  padding: 0.45em 1em !important;
+  cursor: pointer;
+}
+html input[type="submit"]:hover { background: var(--kh-btn-hover-bg) !important; color: #ffffff !important; }
+html[data-theme="light"] input[type="submit"]:hover { color: #0b2545 !important; }
+
+/* Highlighting of matched terms — `mark` and Sphinx's own `em.highlighted`. */
+html mark,
+html .rst-content mark,
+html #search-results mark {
+  background: var(--kh-mark-bg) !important;
+  color: var(--kh-mark-text) !important;
+  padding: 0.05em 0.25em !important;
+  border-radius: 3px !important;
+}
+html[data-theme="light"] mark { color: #24292f !important; }
+html span.highlighted,
+html .highlighted {
+  background: var(--kh-mark-bg) !important;
+  color: var(--kh-mark-text) !important;
+  padding: 0.05em 0.2em !important;
+  border-radius: 3px !important;
+  box-shadow: 0 0 0 1px var(--kh-warning) !important;
+}
+
+/* Sphinx "no results" text */
+html #search-results p { color: var(--kh-text) !important; }
+
+/* --- 11. Responsive ------------------------------------------------------ */
+html .wy-nav-content { padding: 1.4em 2em 2.5em; }
+
+@media screen and (max-width: 768px) {
+  html .wy-nav-content { padding: 1em 1em 2em; }
+  html body { font-size: 15px; }
+  html h1 { font-size: 1.7rem !important; }
+  html h2 { font-size: 1.35rem !important; }
+  html .highlight pre { font-size: 0.8rem !important; padding: 0.7em 0.8em !important; }
+  /* Let wide tables scroll horizontally instead of overflowing the page. */
+  html .wy-table-responsive { overflow-x: auto !important; }
+  html .rst-content table.docutils, html table { font-size: 0.85rem; }
+  html .rst-content table.docutils td,
+  html .rst-content table.docutils th { padding: 0.4em 0.5em !important; }
+  html .kh-copy-btn { opacity: 0.9; }
+  /* Sidebar overlay gets a dim backdrop so the nav is clearly separate. */
+  html .wy-nav-side.shift { box-shadow: 4px 0 24px rgba(0, 0, 0, 0.55); }
+}
+
+@media screen and (min-width: 1400px) {
+  html .wy-nav-content { max-width: 1100px; }
+}
+
+/* Respect the reader's motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  html * { transition: none !important; animation: none !important; }
+}
+
+/* Keyboard-only users always see where focus is. */
+html a:focus-visible,
+html button:focus-visible,
+html input:focus-visible,
+html [tabindex]:focus-visible {
+  outline: 2px solid var(--kh-link) !important;
+  outline-offset: 2px !important;
+}
