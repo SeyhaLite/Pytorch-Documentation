@@ -1,0 +1,81 @@
+{#-
+  Dark / Light mode control.
+
+  Design constraints this template has to respect:
+    * ONE plain-text element only: no icon, no box, no border.
+    * Its <script> is inline and placed *immediately after* the element, so the
+      behaviour never depends on html_js_files ordering (Sphinx renders those
+      inside <head>, i.e. before the markup they would have to patch).
+    * Stock sphinx_rtd_theme markup is untouched: we only override the
+      sidebar search block, which is where a nav control belongs.
+
+  The palette itself lives in _static/css/custom.css as CSS custom properties
+  on <html> / <html data-theme="...">.
+-#}
+{%- if khmer_theme_toggle|default(True) %}
+<button type="button" id="kh-theme-toggle" class="kh-theme-toggle"
+        aria-pressed="false" aria-label="ប្ដូរពណ៌ងងឹត / ពណ៌ភ្លឺ"
+        title="ប្ដូររវាងពណ៌ងងឹត និងពណ៌ភ្លឺ"
+        data-label-dark="ពណ៌ងងឹត" data-label-light="ពណ៌ភ្លឺ">ពណ៌ងងឹត</button>
+<script>
+(function () {
+  "use strict";
+  var KEY = "kh-docs-theme";           /* "dark" | "light" */
+  var btn = document.getElementById("kh-theme-toggle");
+  var root = document.documentElement;
+
+  function systemTheme() {
+    return (window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ? "dark" : "light";
+  }
+
+  function paint(t) {
+    root.setAttribute("data-theme", t);
+    if (!btn) { return; }
+    /* The label always names the mode the reader is looking at right now. */
+    btn.textContent = (t === "dark")
+      ? btn.getAttribute("data-label-dark")
+      : btn.getAttribute("data-label-light");
+    btn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
+  }
+
+  var stored = null;
+  try { stored = window.localStorage.getItem(KEY); } catch (e) { stored = null; }
+  paint(stored === "dark" || stored === "light" ? stored : systemTheme());
+
+  if (btn) {
+    btn.addEventListener("click", function () {
+      var next = (root.getAttribute("data-theme") === "dark") ? "light" : "dark";
+      paint(next);
+      try { window.localStorage.setItem(KEY, next); } catch (e) { /* private mode */ }
+    });
+  }
+
+  /* Follow the OS while the reader has not made an explicit choice. */
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var onChange = function (e) {
+      var s = null;
+      try { s = window.localStorage.getItem(KEY); } catch (err) { s = null; }
+      if (!s) { paint(e.matches ? "dark" : "light"); }
+    };
+    if (mq.addEventListener) { mq.addEventListener("change", onChange); }
+    else if (mq.addListener) { mq.addListener(onChange); }
+  }
+})();
+</script>
+{%- endif %}
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Search</h3>
+  <div class="searchformwrapper">
+    <form class="search" action="{{ pathto('search') }}" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel"
+             autocomplete="off" autocorrect="off" autocapitalize="off"
+             spellcheck="false" placeholder="ស្វែងរក… (torch, Tensor, DataLoader)" />
+      <input type="submit" value="Go" />
+    </form>
+  </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block";</script>
