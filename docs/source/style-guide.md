@@ -455,16 +455,118 @@ print(x.mean(dim=1, keepdim=True).shape)   # torch.Size([4, 1])
 
 ## ៛. Sidebar និង Navigation
 
-Sidebar (នៅខាងឆ្វេងលើ desktop, ឬបើកដោយប៊ូតុង hamburger លើទូរស័ព្ទ) មាន៖
+ផ្នែកខាងលើនៃ sidebar (`.wy-side-nav-search`) មានផ្ទៃងងឹតក្នុង **theme ទាំងពីរ**
+ដូច្នេះធាតុខាងក្នុងប្រើពណ៌ light-on-dark ជានិច្ច។ វាត្រូវបានរៀបជាជួរ
+ដែលមានស្លាកច្បាស់លាស់ មិនមែនជាអត្ថបទអណ្ដែតកណ្ដាលទេ៖
 
-- ចំណងជើងគម្រោង និងកំណែ
-- ប៊ូតុង **ពណ៌ងងឹត / ពណ៌ភ្លឺ** (ធាតុអត្ថបទធម្មតាតែមួយ គ្មាន icon គ្មាន border)
-- ប្រអប់ស្វែងរក
-- មាតិកាដែលមាន caption groups និង nested items ដល់កម្រិត ៤
-- Flyout កំណែ នៅផ្នែកខាងក្រោមឆ្វេង
+```text
+┌─────────────────────────────────────┐
+│  ឯកសារ PyTorch ជាភាសាខ្មែរ              │  ចំណងជើងគម្រោង
+│  1.0.0                              │  កំណែ
+│                                     │
+│  ស្វែងរកឯកសារ                          │  <label> ភ្ជាប់ទៅ input
+│  ┌───────────────────────────────┐  │
+│  │ torch, Tensor, DataLoader…    │  │  ទទឹងពេញ  border-radius 6px
+│  └───────────────────────────────┘  │
+│  ─────────────────────────────────  │  បន្ទាត់បំបែក
+│  ពណ៌បង្ហាញ            ┌─────────────┐ │
+│                       │ ងងឹត │ ភ្លឺ │ │  segmented control
+│                       └─────────────┘ │
+└─────────────────────────────────────┘
+```
 
-ប៊ូតុង **មុន / បន្ទាប់** ស្ថិតនៅផ្នែកខាងក្រោមនៃទំព័រ។
-Breadcrumbs ស្ថិតនៅផ្នែកខាងលើ ជាមួយតំណ "Edit on GitHub" នៅខាងស្ដាំ។
+```{list-table} ធាតុនិង class
+:header-rows: 1
+:widths: 30 70
+
+* - Class
+  - តួនាទី
+* - `.kh-nav-controls`
+  - កុងតឺន័រសម្រាប់ធាតុទាំងពីរ ជំនួស `text-align: center` របស់ theme ដោយ `text-align: left`
+* - `.kh-search` / `.kh-search-label`
+  - ប្រអប់ស្វែងរក និងស្លាកភាសាខ្មែរដែលភ្ជាប់តាម `for`/`id`
+* - `#rtd-search-form` / `.wy-form`
+  - id និង class ដែល CSS និង JS របស់ theme រំពឹងទុក — ត្រូវរក្សាទុក
+* - `.kh-theme-row`
+  - flex row៖ ស្លាកខាងឆ្វេង ការគ្រប់គ្រងខាងស្ដាំ ជាមួយ `border-top` ជាបន្ទាត់បំបែក
+* - `.kh-theme-caption`
+  - ស្លាក «ពណ៌បង្ហាញ»
+* - `.kh-theme-seg`
+  - ក្រុមប៊ូតុង (`role="group"`, `aria-labelledby`)
+* - `.kh-theme-opt`
+  - ប៊ូតុង «ងងឹត» / «ភ្លឺ»។ ជម្រើសសកម្មមាន `aria-pressed="true"` និង class `is-active` ដូច្នេះស្ថានភាពបច្ចុប្បន្នអានបានដោយមិនចាំបាច់ hover
+```
+
+ប៊ូតុង **មុន / បន្ទាប់** ស្ថិតនៅផ្នែកខាងក្រោមនៃទំព័រ។ Breadcrumbs ស្ថិតនៅផ្នែក
+ខាងលើ ជាមួយតំណ "កែនៅលើ GitHub" នៅខាងស្ដាំ។
+
+### Tokens សម្រាប់ផ្នែក Sidebar header
+
+```{list-table}
+:header-rows: 1
+:widths: 28 20 20 32
+
+* - Token
+  - Dark
+  - Light
+  - Contrast (fg/bg)
+* - `--kh-nav-caption`
+  - `#b6bfca`
+  - `#c9d4e0`
+  - 9.39:1 / 7.31:1
+* - `--kh-seg-bg`
+  - `#232830`
+  - `#3d566e`
+  - —
+* - `--kh-seg-text`
+  - `#c8cfd8`
+  - `#dbe4ee`
+  - 9.43:1 / 5.93:1
+* - `--kh-seg-active-bg`
+  - `#2f5a9c`
+  - `#ffffff`
+  - —
+* - `--kh-seg-active-text`
+  - `#ffffff`
+  - `#1f2933`
+  - 6.86:1 / 14.76:1
+* - `--kh-seg-border`
+  - `#3a414d`
+  - `#52708c`
+  - —
+```
+
+### ភាសានៃចំណុចប្រទាក់
+
+អក្សរ UI ទាំងអស់ (ប៊ូតុង មុន/បន្ទាប់, តំណ GitHub, footer, ទំព័រស្វែងរក) ត្រូវបាន
+បកប្រែជាភាសាខ្មែរតាមរយៈ catalog។ មានឆានែលពីរ ហើយត្រូវការឯកសារពីរ៖
+
+```{list-table}
+:header-rows: 1
+:widths: 26 34 40
+
+* - ឆានែល
+  - អ្នកប្រើប្រាស់
+  - ឯកសារ
+* - Python/template
+  - `_()` ក្នុង template
+  - `locale/km/LC_MESSAGES/sphinx.mo`
+* - JavaScript
+  - `Documentation.gettext()` ក្នុង `searchtools.js`
+  - `_static/js/km-search-i18n.js`
+```
+
+ទាំងពីរត្រូវបានបង្កើតពីតារាង `ENTRIES` តែមួយក្នុង `tools/build_locale.py`៖
+
+```bash
+python tools/build_locale.py      # សរសេរ .po, .mo និង .js
+python tests/check_locale.py      # ផ្ទៀងផ្ទាត់ JS msgids និងភាពទាន់សម័យ
+python tests/check_ui_strings.py  # ផ្ទៀងផ្ទាត់គ្មាន English UI string នៅសល់
+```
+
+Sphinx បង្កើត JS catalog សម្រាប់តែ locale ដែលវាមានស្រាប់ប៉ុណ្ណោះ។ ដោយសារ `km`
+មិនមានក្នុងបញ្ជី `Documentation.TRANSLATIONS` នឹងនៅទទេ ហើយ UI ស្វែងរកនឹង
+បង្ហាញជាអង់គ្លេស — នេះជាមូលហេតុដែលត្រូវការឯកសារ JS ដាច់ដោយឡែក។
 
 ## ៜ. ការឆ្លើយតប (Responsive)
 
