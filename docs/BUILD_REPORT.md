@@ -3,7 +3,7 @@
 ឯកសារនេះកត់ត្រាលទ្ធផល **ដែលបានវាស់ពិត** ពី environment បង្កើតឯកសារ។
 លេខទាំងអស់អាចបង្កើតឡើងវិញបានដោយពាក្យបញ្ជាដែលបានបញ្ជាក់។
 
-```{admonition} Environment ដែលបានប្រើ
+````{admonition} Environment ដែលបានប្រើ
 :class: note
 ```text
 OS            : Linux (sandboxed container)
@@ -16,7 +16,7 @@ myst-parser   : 3.x
 CUDA available: False   ← គ្មាន GPU ក្នុង environment នេះ
 CPU threads   : 8
 ```
-```
+````
 
 ## ១. សង្ខេប
 
@@ -54,18 +54,24 @@ CPU threads   : 8
 * - បន្ទាត់ឯកសារ Markdown សរុប
   - **8,007** (22 ទំព័រ)
   - មើលតារាងផ្នែក ៣
-* - Contrast pairs ផ្ទៀងផ្ទាត់
-  - **104 · ទាំងអស់ ≥ 4.5:1**
-  - `python tools/check_contrast.py`
-* - MyST fence problems
-  - **0**
-  - `python tools/fix_myst_fences.py --check`
 * - តំណខាងក្នុង
   - **780+ · 0 បាក់**
   - ស្គ្រីបក្នុងផ្នែក ៤
 * - JS syntax (`node --check`)
-  - **pass** ទាំង ២ (copybutton.js + inline theme script)
-  - `node --check docs/source/_static/js/copybutton.js`
+  - **pass** ទាំង ៣ (copybutton, inline theme script, km-search-i18n)
+  - `node --check docs/source/_static/js/*.js`
+* - Contrast pairs ផ្ទៀងផ្ទាត់
+  - **120 · ទាំងអស់ ≥ 4.5:1**
+  - `python tools/check_contrast.py`
+* - Markdown fence problems
+  - **0** (25 ឯកសារ)
+  - `python tools/check_markdown.py`
+* - English UI strings នៅសល់
+  - **0**
+  - `python tests/check_ui_strings.py`
+* - JS-side search msgids បានបកប្រែ
+  - **6/6**
+  - `python tests/check_locale.py`
 * - Search index
   - **22 docnames · 3,291 terms**
   - មើលផ្នែក ៥
@@ -366,9 +372,11 @@ broken               : 0
 * - ការជ្រើសរើសដំបូង
   - `localStorage` → `prefers-color-scheme` → dark
 * - ការគ្រប់គ្រង
-  - ធាតុអត្ថបទធម្មតាតែមួយ (`<button id="kh-theme-toggle">`) គ្មាន icon គ្មាន box គ្មាន border
+  - segmented control «ងងឹត / ភ្លឺ» (`role="group"`) ជាមួយស្លាក «ពណ៌បង្ហាញ»។ ជម្រើសសកម្មមាន `aria-pressed="true"` + class `is-active` ដូច្នេះស្ថានភាពអានបានដោយមិនចាំបាច់ hover
+* - ការរៀបចំ
+  - `.wy-side-nav-search` ត្រូវបានកំណត់ `text-align:left`; កូនទាំងអស់ជា full-width flex rows ដែលមានស្លាក ហើយ `.kh-theme-row` មាន `border-top` ជាបន្ទាត់បំបែក
 * - ទីតាំង `<script>`
-  - **inline ភ្លាមៗបន្ទាប់ពីធាតុ** — ផ្ទៀងផ្ទាត់ថាគ្មានអ្វីនៅចន្លោះ `</button>` និង `<script>`
+  - **inline ភ្លាមៗបន្ទាប់ពីការគ្រប់គ្រង** — មិនពឹងលើ `html_js_files` ordering
 * - ភាពឯករាជ្យពី `html_js_files`
   - `conf.py` មិនមាន `html_js_files` ទេ។ ស្គ្រីប copy ប្រើ `loading_method="defer"`
 * - `color-scheme`
@@ -377,55 +385,69 @@ broken               : 0
 
 ### Contrast (WCAG AA)
 
-`tools/check_contrast.py` ផ្ទៀងផ្ទាត់ **១០៤ គូ** ក្នុង theme ទាំងពីរ៖
+`tools/check_contrast.py` ផ្ទៀងផ្ទាត់ **១២០ គូ** ក្នុង theme ទាំងពីរ។ លេខខាងក្រោម
+គឺជា **អតិបរមានៃភាពទាប** (minimum ratio) ក្នុងក្រុមនីមួយៗ វាស់ពី token ពិត៖
 
 ```{list-table}
 :header-rows: 1
-:widths: 40 20 40
+:widths: 44 14 42
 
 * - ក្រុម
   - ចំនួនគូ
   - លទ្ធផល
 * - Dark — page palette
   - 15
-  - ✅ ទាំងអស់ ≥ 4.5:1 (តិចបំផុត 5.31:1)
-* - Dark — chrome (sidebar, table header, toggle)
+  - ✅ min 5.31:1
+* - Dark — chrome (sidebar, table header, breadcrumbs, footer)
   - 14
-  - ✅ ទាំងអស់ ≥ 4.5:1 (តិចបំផុត 5.92:1)
+  - ✅ min 4.79:1
 * - Dark — Pygments tokens
   - 12
-  - ✅ ទាំងអស់ ≥ 4.5:1 (តិចបំផុត 5.31:1 comment)
+  - ✅ min 5.31:1
+* - Dark — nav controls (search field + theme segmented control)
+  - 8
+  - ✅ min 4.79:1
 * - Dark — admonition titles
   - 5
-  - ✅ ទាំងអស់ ≥ 4.5:1
+  - ✅ min 7.20:1
 * - Dark — admonition bodies
   - 9
-  - ✅ ទាំងអស់ ≥ 4.5:1
+  - ✅ min 5.15:1
 * - Light — page palette
   - 15
-  - ✅ ទាំងអស់ ≥ 4.5:1 (តិចបំផុត 6.00:1)
+  - ✅ min 6.00:1
 * - Light — chrome
   - 8
-  - ✅ ទាំងអស់ ≥ 4.5:1
+  - ✅ min 5.81:1
 * - Light — Pygments tokens
   - 12
-  - ✅ ទាំងអស់ ≥ 4.5:1
+  - ✅ min 4.74:1
+* - Light — nav controls
+  - 8
+  - ✅ min 4.55:1
 * - Light — admonition titles
   - 5
-  - ✅ ទាំងអស់ ≥ 4.5:1
+  - ✅ min 5.08:1
 * - Light — admonition bodies
   - 9
+  - ✅ min 5.86:1
+* - **សរុប**
+  - **120**
   - ✅ ទាំងអស់ ≥ 4.5:1
 ```
 
 ឧទាហរណ៍លេខដែលបានវាស់៖
 
 ```text
-DARK  body text  #d9dde4 on #14161a  = 13.29:1  PASS
-DARK  muted      #8b949e on #1c2027  =  5.31:1  PASS
-DARK  chip text  #dfe3ea on #262b33  = 11.05:1  PASS
-LIGHT body text  #24292f on #ffffff  = 14.65:1  PASS
-LIGHT link       #0b5cad on #f6f8fa  =  6.27:1  PASS
+DARK  body text        #d9dde4 on #14161a  = 13.29:1  PASS
+DARK  muted on card    #8b949e on #1c2027  =  5.31:1  PASS
+DARK  chip text        #dfe3ea on #262b33  = 11.05:1  PASS
+DARK  seg active       #ffffff on #2f5a9c  =  6.86:1  PASS
+DARK  nav caption      #b6bfca on #171a1e  =  9.39:1  PASS
+LIGHT body text        #24292f on #ffffff  = 14.65:1  PASS
+LIGHT link on card     #0b5cad on #f6f8fa  =  6.27:1  PASS
+LIGHT seg text         #dbe4ee on #3d566e  =  5.93:1  PASS
+LIGHT placeholder      #6e7781 on #ffffff  =  4.55:1  PASS  (តិចបំផុតក្នុងឯកសារ)
 ```
 
 ## ៥. ដែនកំណត់ដែលគេស្គាល់
@@ -503,7 +525,7 @@ LIGHT link       #0b5cad on #f6f8fa  =  6.27:1  PASS
 * - បញ្ហា
   - ការដោះស្រាយ
 * - admonition ដែលមាន nested code block បំផ្លាញទំព័រទាំងមូល
-  - CommonMark បិទ fence ដោយ backtick ចំនួនដូចគ្នា។ ដំណោះស្រាយ៖ outer directive ប្រើ ៤ backticks។ សរសេរ `tools/fix_myst_fences.py` ដើម្បី lint + repair ដោយស្វ័យប្រវត្តិ និងបន្ថែមច្បាប់ទៅ `CONTRIBUTING.md`
+  - CommonMark បិទ fence ដោយ backtick ចំនួនដូចគ្នា។ ដំណោះស្រាយ៖ outer directive ប្រើ ៤ backticks។ សរសេរ `tools/check_markdown.py` ដើម្បី lint (report-only) និងបន្ថែមច្បាប់ទៅ `CONTRIBUTING.md`
 * - backtick ក្នុង admonition title ធ្វើឱ្យ fence state machine ខូច
   - ដក backtick ចេញពីចំណងជើងទាំងអស់ (API names នៅដដែល គ្រាន់តែគ្មាន code markup)
 * - `add_js_file(..., body="end")` មិនមែនជាប៉ារ៉ាម៉ែត្រពិតរបស់ Sphinx
@@ -516,6 +538,34 @@ LIGHT link       #0b5cad on #f6f8fa  =  6.27:1  PASS
   - ជំនួសដោយ `<mark>` HTML inline (MyST អនុញ្ញាត)
 * - nested fence repair script ដំបូងបានបំផ្លាញ nested fence closes
   - សរសេរ linter ឡើងវិញដោយប្រើ stack parser ត្រឹមត្រូវ (CommonMark: closing fence ត្រូវមានប្រវែង ≥ opening)
+```
+
+### បញ្ហាដែលរកឃើញក្នុងជុំកែលម្អ UI
+
+```{list-table}
+:header-rows: 1
+:widths: 34 66
+
+* - បញ្ហា
+  - ការជួសជុល
+* - `searchbox.html` override បានចម្លង markup ពី Sphinx **basic** theme មិនមែនពី sphinx_rtd_theme ទេ → បន្ថែម `<h3>Search</h3>`, ប៊ូតុង submit `Go`, និង `style="display:none"` ដែល theme មិនមាន
+  - សរសេរឡើងវិញដោយផ្អែកលើ `searchbox.html` របស់ RTD ដោយរក្សា `id="rtd-search-form"`, class `.wy-form` និង hidden inputs ដែល CSS/JS របស់ theme រំពឹងទុក
+* - `.wy-side-nav-search` មាន `text-align:center` ពី theme → ប៊ូតុងអណ្ដែតកណ្ដាលគ្មានរចនាសម្ព័ន្ធ
+  - កំណត់ `text-align:left` ហើយធ្វើឱ្យកូនទាំងអស់ជា full-width flex rows ដែលមានស្លាក
+* - ប៊ូតុងប្ដូរ mode តែមួយបង្ហាញ **mode បច្ចុប្បន្ន** ធ្វើឱ្យមិនច្បាស់ថាចុចរួចនឹងទៅណា
+  - ជំនួសដោយ segmented control «ងងឹត / ភ្លឺ» ដែលជម្រើសសកម្មត្រូវបានបំពេញពណ៌ + `aria-pressed`
+* - `aria-label="Search docs"` (អង់គ្លេស) បាន override ស្លាកខ្មែរដែលមើលឃើញ
+  - ដក aria-label ចេញ ពឹងលើ `<label for>` ដែលផ្ដល់ឈ្មោះជាភាសាខ្មែរ
+* - `Documentation.TRANSLATIONS` នៅទទេ ព្រោះ Sphinx បង្កើត JS catalog សម្រាប់តែ locale ដែលវាមានស្រាប់
+  - បន្ថែម `_static/js/km-search-i18n.js` ដែលហៅ `Documentation.addTranslations()` បង្កើតពី `tools/build_locale.py`
+* - ខ្ញុំបានធ្លាក់ msgid «Please activate JavaScript…» ពេលសរសេរ generator ឡើងវិញ — build នៅតែជោគជ័យ គ្មាន warning
+  - បន្ថែម `tests/check_ui_strings.py` ជា test អចិន្ត្រៃយ៍ ដើម្បីកុំឱ្យ regression នេះកើតឡើងម្ដងទៀត
+* - msgid សម្រាប់ចំនួនលទ្ធផលស្វែងរកគឺ `${resultCount}` ជាអក្សរ មិនមែន `%s`
+  - កែ msgid ឱ្យត្រូវ និងបន្ថែម `tests/check_locale.py` ដែលផ្ទៀងផ្ទាត់ជាមួយ `searchtools.js` ពិត
+* - Auto-repair នៃ fence បានសរសេរជាន់ nested closer ជំនួស outer closer ពីរដង ធ្វើឱ្យឯកសារខូចដោយស្ងាត់
+  - ដក auto-repair ចេញទាំងស្រុង។ `tools/check_markdown.py` ឥឡូវ report-only ជាមួយសារណែនាំជាក់លាក់
+* - `--kh-seg-active-bg: #4a7fc4` ជាមួយអក្សរស = **4.10:1** ក្រោម 4.5:1
+  - ប្ដូរទៅ `#2f5a9c` = 6.86:1
 ```
 
 ### បញ្ហារចនាដែល check_contrast.py រកឃើញ
@@ -567,9 +617,18 @@ LIGHT link       #0b5cad on #f6f8fa  =  6.27:1  PASS
 * - `docs/source/_ext/khmer_assets.py`
   - 46
   - ចុះឈ្មោះ assets ជាមួយ `loading_method="defer"`
-* - `tools/fix_myst_fences.py`
-  - 168
-  - MyST fence linter + auto-repair (CI `--check`)
+* - `tools/check_markdown.py`
+  - 190
+  - Markdown fence linter (report-only, គ្រប់ `.md` ក្នុង repo)
+* - `tools/build_locale.py`
+  - 175
+  - បង្កើត Khmer UI catalog ទាំង `.mo` និង `.js` ពីតារាងតែមួយ
+* - `tests/check_locale.py`
+  - 120
+  - ផ្ទៀងផ្ទាត់ JS msgids ត្រូវនឹង `searchtools.js` និង catalog មិនទាន់ហួសសម័យ
+* - `tests/check_ui_strings.py`
+  - 125
+  - ផ្ទៀងផ្ទាត់គ្មាន English UI string នៅសល់ក្នុង HTML ដែលបាន build
 * - `tools/check_contrast.py`
   - 203
   - WCAG AA contrast verifier (១០៤ គូ)
@@ -594,9 +653,8 @@ python tests/run_examples.py --json report.json      # របាយការណ�
 # ២. ពិនិត្យថាគ្រប់ឧទាហរណ៍ត្រូវបានយោង
 python tests/check_examples_referenced.py
 
-# ៣. Lint MyST fences
-python tools/fix_myst_fences.py --check              # exit 1 បើមានបញ្ហា
-python tools/fix_myst_fences.py                      # repair ដោយស្វ័យប្រវត្តិ
+# ៣. Lint Markdown fences
+python tools/check_markdown.py                       # exit 1 បើមានបញ្ហា
 
 # ៤. ផ្ទៀងផ្ទាត់ contrast
 python tools/check_contrast.py                       # exit 1 បើ < 4.5:1

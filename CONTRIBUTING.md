@@ -61,50 +61,77 @@
 
 ឯកសារប្រវត្តិការផ្លាស់ប្ដូររបស់ PyTorch ត្រូវរក្សាទុកដូចដើម។ កុំបកប្រែ កុំកែ។
 
-### ៦. វិធាន MyST Markdown (សំខាន់ណាស់!)
+### ៦. វិធាន Markdown fence (សំខាន់ណាស់!)
 
-ឯកសារទាំងអស់ជា MyST Markdown។ ច្បាប់ពីរដែលបើរំលង នឹងធ្វើឱ្យ **ទំព័រទាំងមូលខូច**៖
+ឯកសារទាំងអស់ជា Markdown (MyST សម្រាប់ `docs/source/`, CommonMark សម្រាប់ GitHub)។
+ច្បាប់ទាំងបីខាងក្រោម បើរំលង នឹងធ្វើឱ្យ **ទំព័រទាំងមូលខូច** — ផ្នែកដែលនៅសល់
+ទាំងអស់នឹងក្លាយជា code block តែមួយ។
 
-**ច្បាប់ ១៖ directive ដែលមាន fence ខាងក្នុង ត្រូវប្រើ backtick ៤។**
-CommonMark បិទ fence ដោយ backtick ចំនួនដូចគ្នា។ បើអ្នកបើក admonition ដោយ ៣
-ហើយដាក់ code block ៣ ខាងក្នុង admonition នឹងបិទត្រង់ code block នោះ
-ហើយផ្នែកដែលនៅសល់នៃទំព័រទាំងមូលនឹងក្លាយជា code block តែមួយ។
+**ច្បាប់ ១៖ fence ខាងក្រៅត្រូវតែវែងជាង fence ខាងក្នុងដែលវាខ្ចប់។**
 
-````markdown
+CommonMark បិទ fence ដោយបន្ទាត់ដែលមាន backtick **ចំនួនដូចគ្នា ឬច្រើនជាង**។
+ដូច្នេះ admonition ដែលបើកដោយ ៣ ហើយខ្ចប់ code block ៣ នឹងបិទត្រង់ code block
+នោះ មិនមែនត្រង់ចុង admonition ទេ។
+
+ដើម្បីខ្ចប់ code block ក្នុង admonition ប្រើ **៤ backticks** ខាងក្រៅ៖
+
+`````markdown
 ✅ ត្រូវ៖
+
 ````{admonition} ចំណងជើង
 :class: tip
 ```python
 x = 1
 ```
 ````
-````
+`````
 
-```markdown
+`````markdown
 ❌ ខុស (នឹងបំផ្លាញទំព័រទាំងមូល):
+
 ```{admonition} ចំណងជើង
 :class: tip
 ```python
 x = 1
 ```
 ```
-```
+`````
 
 **ច្បាប់ ២៖ កុំដាក់ backtick ក្នុងចំណងជើង admonition។**
-MyST វិភាគចំណងជើងជា inline markup ហើយ backtick នឹងធ្វើឱ្យ fence
-state machine ខូច។ សរសេរឈ្មោះ API ដោយផ្ទាល់៖
+
+MyST វិភាគចំណងជើងជា inline markup ហើយ backtick នឹងធ្វើឱ្យ fence state
+machine ខូច។ សរសេរឈ្មោះ API ដោយផ្ទាល់ (គ្មាន code markup)៖
 
 ```markdown
-✅ ត្រូវ៖ ```{admonition} ប្រើ torch.softmax() ជានិច្ច
-❌ ខុស៖  ```{admonition} ប្រើ `torch.softmax()` ជានិច្ច
+✅ ត្រូវ៖  ```{admonition} ប្រើ torch.softmax() ជានិច្ច
+❌ ខុស៖   ```{admonition} ប្រើ `torch.softmax()` ជានិច្ច
 ```
 
-**ពិនិត្យដោយស្វ័យប្រវត្តិមុន commit៖**
+**ច្បាប់ ៣៖ ពេល *បង្ហាញ* fence ជាឧទាហរណ៍ ប្រើ fence វែងជាងមួយកម្រិតទៀត។**
+
+នេះជាច្បាប់ដែលងាយបំពានបំផុត ព្រោះឯកសារអំពី fence ត្រូវតែមាន fence ខ្លួនឯង។
+ដូចឧទាហរណ៍ខាងលើ៖ មាតិកាមាន ៤ backticks ដូច្នេះឯកសារខាងក្រៅត្រូវការ **៥**។
+
+| មាតិកាខាងក្នុងមាន | fence ខាងក្រៅត្រូវការ |
+| --- | --- |
+| ៣ backticks | ៤ |
+| ៤ backticks | ៥ |
+
+ជម្រើសដែលសុវត្ថិភាពបំផុតគឺ **indented code block** (ចូល ៤ ចន្លោះ) ព្រោះវាគ្មាន
+fence delimiter សោះ ដូច្នេះអាចផ្ទុក backtick ចំនួនណាក៏បាន។
+
+**ពិនិត្យដោយស្វ័យប្រវត្តិមុន commit — ចាំបាច់៖**
 
 ```bash
-python tools/fix_myst_fences.py --check   # exit 1 បើមានបញ្ហា
-python tools/fix_myst_fences.py           # ជួសជុលដោយស្វ័យប្រវត្តិ
+python tools/check_markdown.py            # exit 1 បើមានបញ្ហា (គ្រប់ .md ក្នុង repo)
+python tools/check_markdown.py --quiet    # បង្ហាញតែឈ្មោះឯកសារដែលខូច
 ```
+
+ឧបករណ៍នេះស្កេន **គ្រប់ឯកសារ `.md` ក្នុង repository** — ទាំង `docs/source/`
+(ដែល Sphinx/MyST render) និង `README.md` / `CONTRIBUTING.md` (ដែល GitHub render)។
+វា **រាយការណ៍តែប៉ុណ្ណោះ មិនកែដោយស្វ័យប្រវត្តិទេ** ព្រោះពេល fence ត្រូវបានកាត់
+ឧបករណ៍មិនអាចដឹងថាតើ bare fence មួយណាជាចុងដែលអ្នកនិពន្ធចង់បានទេ —
+ការស្មាននឹងសរសេរជាន់បន្ទាត់ខុស ហើយធ្វើឱ្យឯកសារខូចដោយស្ងាត់។
 
 ### ៧. គុណភាព Contrast
 

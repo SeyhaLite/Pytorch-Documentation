@@ -1,39 +1,71 @@
-# អាជ្ញាបណ្ណ និងការប្រគល់កិត្តិយស (License & Attribution)
+This project is dual-licensed. The documentation text is under CC BY 4.0 and
+the example code is under the BSD 3-Clause License. Both grants, the required
+attribution, and the trademark notice are set out below.
 
-គម្រោងនេះមានអាជ្ញាបណ្ណពីរផ្នែក៖
+A Khmer-language explanation of this file is in the documentation itself:
+    docs/source/license.md
+    https://pytorch-documentation.readthedocs.io/  (see "License" in the sidebar)
 
----
+This file is intentionally plain text. GitHub renders a file named LICENSE
+without Markdown processing, so no Markdown syntax is used here.
 
-## ១. ខ្លឹមសារឯកសារ (Documentation text) — CC BY 4.0
 
-ខ្លឹមសារអត្ថបទទាំងអស់នៅក្នុង `docs/source/` (លើកលែងតែកូដឧទាហរណ៍)
-ត្រូវបានផ្ដល់អាជ្ញាបណ្ណក្រោម
-**Creative Commons Attribution 4.0 International (CC BY 4.0)**។
+===============================================================================
+1. DOCUMENTATION TEXT -- Creative Commons Attribution 4.0 International
+===============================================================================
 
-មើលអត្ថបទអាជ្ញាបណ្ណពេញលេញ៖ <https://creativecommons.org/licenses/by/4.0/legalcode>
+All prose in docs/source/ (everything except the Python example code) is
+licensed under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0).
 
-### ការប្រគល់កិត្តិយស (Attribution)
+    Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
 
-ខ្លឹមសារមួយចំនួនត្រូវបានបកប្រែ និងសម្រួលចេញពីឯកសារផ្លូវការ PyTorch៖
+You are free to share and adapt the material for any purpose, even
+commercially, provided you give appropriate credit, provide a link to the
+license, and indicate if changes were made.
 
-> PyTorch Documentation — <https://docs.pytorch.org/docs/stable/>
-> Copyright © PyTorch Contributors.
-> Licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
-> Source repository: <https://github.com/pytorch/pytorch/tree/main/docs/source>
-> License text: <https://github.com/pytorch/pytorch/blob/main/docs/source_licenses/LICENSE>
 
-ការបកប្រែជាភាសាខ្មែរនេះគឺជាការងារដាច់ដោយឡែក (derivative work)
-ហើយមិនត្រូវបាន PyTorch Foundation ធានា ពិនិត្យ ឬអនុម័តឡើយ។
+Required attribution
+--------------------
 
----
+Portions of this documentation are translated and adapted from the official
+PyTorch documentation:
 
-## ២. កូដឧទាហរណ៍ (Example code) — BSD 3-Clause
+    PyTorch Documentation
+    https://docs.pytorch.org/docs/stable/
+    Copyright (c) PyTorch Contributors.
+    Licensed under the Creative Commons Attribution 4.0 International License.
+    Source repository: https://github.com/pytorch/pytorch/tree/main/docs/source
+    License text: https://github.com/pytorch/pytorch/blob/main/docs/source_licenses/LICENSE
 
-ឯកសារកូដ Python ទាំងអស់នៅក្នុង `docs/source/examples/` និង `tests/`
-ត្រូវបានផ្ដល់អាជ្ញាបណ្ណក្រោម BSD 3-Clause (ដូច PyTorch)៖
+This Khmer translation is an independent derivative work. It is not endorsed,
+reviewed, or sponsored by the PyTorch Foundation or Meta Platforms, Inc.
 
-```text
-BSD 3-Clause License
+Scope note: this project is NOT a full translation of the official PyTorch
+documentation. It is an independent Khmer-language study guide covering 22
+topics. For the complete and current API reference, consult the official
+documentation. The PyTorch Changelog and Release Notes were deliberately
+excluded from this project -- they were not copied, translated, or modified.
+
+
+Suggested credit when reusing content from this project
+-------------------------------------------------------
+
+    Adapted from "PyTorch Documentation in Khmer"
+    by the PyTorch-Documentation (Khmer) contributors.
+    Licensed under CC BY 4.0.
+    https://github.com/SeyhaLite/Pytorch-Documentation
+
+    Original material based on the PyTorch Documentation
+    (https://docs.pytorch.org/docs/stable/), CC BY 4.0,
+    Copyright (c) PyTorch Contributors.
+
+
+===============================================================================
+2. EXAMPLE CODE -- BSD 3-Clause License
+===============================================================================
+
+Applies to every Python file under docs/source/examples/ and tests/.
 
 Copyright (c) PyTorch-Documentation (Khmer) contributors.
 All rights reserved.
@@ -62,24 +94,40 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-```
 
----
 
-## ៣. ស្លាកសញ្ញា និងម៉ាក (Trademarks)
+===============================================================================
+3. TRADEMARKS
+===============================================================================
 
-**PyTorch**, រូបសញ្ញា PyTorch និងឈ្មោះ API (`torch`, `torch.nn`, `torch.optim` ។ល។)
-គឺជាស្លាកសញ្ញា ឬម៉ាកពាណិជ្ជកម្មរបស់ **PyTorch Foundation** ឬម្ចាស់រៀងៗខ្លួន។
-គម្រោងនេះប្រើឈ្មោះទាំងនោះក្នុងគោលបំណងពិពណ៌នាបច្ចេកទេសតែប៉ុណ្ណោះ
-ហើយមិនមានទំនាក់ទំនងផ្លូវការជាមួយ PyTorch Foundation ឡើយ។
+PyTorch, the PyTorch logo, and the API names used throughout this
+documentation (torch, torch.nn, torch.optim, torch.autograd, Tensor,
+backward(), requires_grad, DataLoader, and similar) are trademarks or
+registered trademarks of the PyTorch Foundation and/or its licensors.
 
-## ៤. Dependencies ភាគីទីបី (Third-party)
+They are used here for nominative purposes only -- to describe the software
+being documented. No affiliation with, or endorsement by, the PyTorch
+Foundation is implied or should be inferred.
 
-- Sphinx — BSD 2-Clause
-- sphinx-rtd-theme — MIT
-- MyST-Parser — MIT
-- Kantumruy Pro (ពុម្ពអក្សរខ្មែរ) — SIL Open Font License 1.1, © Tep Sovichet / Cadson Demak
+Consistent with both trademark practice and technical necessity, API names are
+never translated: they are kept verbatim in English so that readers can copy
+them directly into their code.
 
-គម្រោងនេះ **មិនបានចម្លង** ឯកសារពុម្ពអក្សរទៅក្នុង repository ទេ —
-វាផ្ទុកពី Google Fonts CDN ដោយមាន fallback ទៅពុម្ពអក្សរខ្មែរក្នុងម៉ាស៊ីន។
-មើល `docs/source/_static/css/custom.css`។
+
+===============================================================================
+4. THIRD-PARTY DEPENDENCIES
+===============================================================================
+
+Sphinx                     BSD-2-Clause      documentation generator
+sphinx-rtd-theme           MIT               HTML theme
+MyST-Parser                MIT               Markdown parser for Sphinx
+PyTorch                    BSD-3-Clause      subject of the docs; runs examples
+Kantumruy Pro              SIL OFL 1.1       Khmer webfont (Google Fonts CDN)
+Noto Sans Khmer            SIL OFL 1.1       Khmer webfont fallback (CDN)
+
+Font files are NOT vendored into this repository. They are loaded from the
+Google Fonts CDN by docs/source/_static/css/custom.css, with a local fallback
+stack (Khmer OS, Noto Sans Khmer, Leelawadee UI, system UI fonts) so the text
+remains readable when the CDN is unreachable. See the SIL Open Font License
+1.1 for the terms that apply if you choose to vendor them:
+    https://openfontlicense.org/
