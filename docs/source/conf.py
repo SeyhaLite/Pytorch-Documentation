@@ -121,7 +121,28 @@ html_theme_options = {
     # The GitHub flyout link is configured through html_context below instead.
 }
 
+# Google Search Console ownership token for
+#   https://pytorch-documentation.readthedocs.io/
+# Rendered into <head> on every page by _templates/layout.html.
+#
+# This value is PUBLIC BY DESIGN: Google reads it from the served HTML, so it
+# must be committed. It is not a credential and grants no access -- leaking it
+# would only let someone else claim verification of a domain they already
+# control. Do not "rotate" it as if it were a secret.
+#
+# Why a meta tag rather than the HTML-file method: Read the Docs mounts the
+# build under /<language>/<version>/, so nothing Sphinx emits can ever be served
+# at the domain root. The file Google asks for at
+#   https://pytorch-documentation.readthedocs.io/google59471f16170f14f0.html
+# 404s no matter what html_extra_path contains; the same file IS served at
+#   .../km/latest/google59471f16170f14f0.html
+# The file is kept because it works for a URL-prefix property registered at
+# /km/latest/, but the meta tag is what verifies the bare domain.
+google_site_verification = "L2d5Vp4txgR8OhRYpJvFenCBS0BqDfbfMYt0SG7rGHw"
+
 html_context = {
+    # Consumed by _templates/layout.html.
+    "google_site_verification": google_site_verification,
     "display_github": True,
     "github_user": "SeyhaLite",
     "github_repo": "Pytorch-Documentation",

@@ -25,11 +25,11 @@ build:
       #   check_locale      - the committed Khmer JS catalog still covers every
       #                       msgid the installed Sphinx actually looks up
       #   check_ui_strings  - no theme/Sphinx UI string fell back to English
-      #   check_extra_files - the Google Search Console token is still served
-      #                       from the site root (it 404s silently otherwise)
+      #   check_search_console - both Google Search Console verification
+      #                       methods are still present (they fail silently)
       - python tests/check_locale.py
       - python tests/check_ui_strings.py
-      - python tests/check_extra_files.py
+      - python tests/check_search_console.py
 
 sphinx:
   configuration: docs/source/conf.py

@@ -1,0 +1,29 @@
+{#-
+  Override of sphinx_rtd_theme's layout.html.
+
+  The ONLY change from the stock template is one <meta> tag added to
+  {% block extrahead %}.  Everything else -- nav, breadcrumbs, sidebar, versions
+  flyout, footer, script order -- is the unmodified theme markup, because we
+  extend the theme template rather than copy it.
+
+  Why a template instead of MyST `html_meta` front matter on index.md:
+  Google Search Console verifies the property by fetching the site's home page,
+  and on Read the Docs the root URL redirects to /km/latest/.  Emitting the tag
+  on every page means verification still succeeds whichever page Google lands
+  on, and it survives a future change to which document is the master doc.
+
+  The value comes from conf.py so removing verification is a one-line change
+  there rather than an edit to a theme template.
+
+  NOTE: a google-site-verification token is *public by design* -- it has to
+  appear in the served HTML for Google to read it.  Committing it is correct
+  and is not a credential leak.
+-#}
+{%- extends "!layout.html" %}
+
+{%- block extrahead %}
+  {{ super() }}
+  {%- if google_site_verification %}
+  <meta name="google-site-verification" content="{{ google_site_verification }}" />
+  {%- endif %}
+{%- endblock %}

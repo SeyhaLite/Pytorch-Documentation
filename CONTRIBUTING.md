@@ -153,7 +153,7 @@ Palette ទាំងមូលស្ថិតនៅ `docs/source/_static/css/cust
 ឯកសារក្នុងថតនេះត្រូវបានចម្លងទៅ **ឫសគេហទំព័រ** (តាម `html_extra_path`)។
 បច្ចុប្បន្នមានតែ `google59471f16170f14f0.html` ដែលជា Google Search Console
 ownership token — ការលុបវានឹងធ្វើឱ្យគេហទំព័របាត់ការផ្ទៀងផ្ទាត់ដោយស្ងាត់។
-`tests/check_extra_files.py` ការពារចំណុចនេះ។
+`tests/check_search_console.py` ការពារចំណុចនេះ។
 
 ## ទម្រង់ Commit Message
 

@@ -69,7 +69,7 @@ echo
 echo "============ stage 3: post-build checks ============"
 run "locale catalog"              python3 tests/check_locale.py
 run "no English UI strings"       python3 tests/check_ui_strings.py
-run "root files (search console)" python3 tests/check_extra_files.py
+run "search console verification" python3 tests/check_search_console.py
 
 echo "==================================================="
 echo "passed $pass · failed $fail"

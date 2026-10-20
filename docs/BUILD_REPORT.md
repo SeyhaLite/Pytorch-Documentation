@@ -75,9 +75,9 @@ CPU threads   : 8
 * - English UI strings នៅសល់
   - **0**
   - `python tests/check_ui_strings.py`
-* - Root files (Search Console token)
-  - **1/1 · byte-identical**
-  - `python tests/check_extra_files.py`
+* - Search Console verification
+  - **meta tag 24/24 ទំព័រ · HTML file 1/1**
+  - `python tests/check_search_console.py`
 * - Network fetches ក្នុង build
   - **0** (intersphinx ត្រូវបានដកចេញ)
   - `sphinx-build ... -v | grep -c objects.inv`
@@ -729,18 +729,69 @@ post_build : check_locale exit=0 · check_ui_strings exit=0 · check_extra_files
 
 ## ៦c. Google Search Console verification
 
-`docs/source/extra/google59471f16170f14f0.html` ត្រូវបានចម្លងទៅឫសនៃ output
-តាម `html_extra_path` ដូច្នេះវាអាចចូលដំណើរការបាននៅ៖
+### ការធ្វើរោគវិនិច្ឆ័យលើ site ដែលកំពុងបម្រើ
+
+វិធី HTML-file បានបរាជ័យ។ ការវាស់លើ URL ពិតប្រាកដ៖
 
 ```text
+https://pytorch-documentation.readthedocs.io/
+  -> 200, redirect ទៅ /km/latest/   (ព្រោះ conf.py កំណត់ language = "km")
 https://pytorch-documentation.readthedocs.io/google59471f16170f14f0.html
+  -> 404                             ← មូលហេតុនៃការបរាជ័យ
+https://pytorch-documentation.readthedocs.io/km/latest/google59471f16170f14f0.html
+  -> 200, 53 bytes, មាតិកាត្រឹមត្រូវ
+https://pytorch-documentation.readthedocs.io/en/latest/
+  -> 404                             (ភាសាគឺ km មិនមែន en)
 ```
 
-Google ត្រួតពិនិត្យឯកសារនេះជាប្រចាំ ដូច្នេះការលុបវានឹងធ្វើឱ្យ property បាត់
-ការផ្ទៀងផ្ទាត់ដោយស្ងាត់ — ហើយគ្មានអ្វីក្នុង build ធម្មតាបង្ហាញថាមានបញ្ហាទេ។
-`tests/check_extra_files.py` ត្រួតពិនិត្យច្រវាក់ទាំងមូល៖ ឯកសារមានក្នុង source,
-`conf.py` ចុះឈ្មោះ `html_extra_path`, និងលទ្ធផលនៅឫស output ដូចគ្នាបីត
-(byte-identical) ហើយមិនត្រូវបានច្រឡំដាក់ក្នុង `_static/`។
+### ឫសគល់
+
+**Read the Docs mount build នៅ `/<language>/<version>/`**។ ដូច្នេះគ្មានអ្វីដែល
+Sphinx បង្កើត — រួមទាំងអ្វីដែល `html_extra_path` ចម្លងទៅឫស output — អាចបម្រើ
+នៅ domain root បានទេ។
+
+ការសន្មត់មុនរបស់ខ្ញុំខុស៖ ខ្ញុំបានផ្ទៀងផ្ទាត់ថាឯកសារទៅដល់ **ឫសនៃ build output**
+(ពិត) ប៉ុន្តែមិនបានផ្ទៀងផ្ទាត់ថា RTD បម្រើ build output root នៅ **domain root**
+(មិនពិត)។ `tests/check_extra_files.py` ដូច្នេះបានឆ្លងកាត់ខណៈដែលវិធីផ្ទៀងផ្ទាត់
+ពិតបរាជ័យ។
+
+### ការជួសជុល
+
+```{list-table}
+:header-rows: 1
+:widths: 30 70
+
+* - ការផ្លាស់ប្ដូរ
+  - ហេតុអ្វី
+* - បន្ថែម meta tag លើ **គ្រប់ទំព័រ**
+  - `_templates/layout.html` extends theme layout ហើយបន្ថែមតែ `{% block extrahead %}` — markup ដើមមិនត្រូវបានប៉ះ។ តម្លៃមកពី `google_site_verification` ក្នុង `conf.py` ដូច្នេះការដកចេញគឺជាការកែមួយបន្ទាត់
+* - ហេតុអ្វីគ្រប់ទំព័រ មិនមែនតែ index
+  - domain root redirect ទៅ `/km/latest/`។ ការដាក់លើគ្រប់ទំព័រធ្វើឱ្យការផ្ទៀងផ្ទាត់ជោគជ័យមិនថា Google ចុះចតទំព័រណា ហើយមិនខូចបើ master doc ផ្លាស់ប្ដូរ
+* - រក្សាទុកឯកសារ HTML ផង
+  - វាដំណើរការបើ property ត្រូវបានចុះឈ្មោះជា URL-prefix នៅ `/km/latest/`
+* - `tests/check_extra_files.py` → `check_search_console.py`
+  - ឈ្មោះចាស់គ្របដណ្ដប់តែយន្តការ `html_extra_path`។ test ថ្មីផ្ទៀងផ្ទាត់វិធី **ទាំងពីរ** និងទាមទារឱ្យ tag ស្ថិតក្នុង `<head>` មុន `<body>` ម្ដងគត់ក្នុងមួយទំព័រ
+```
+
+### ការផ្ទៀងផ្ទាត់
+
+```text
+pages checked          : 24
+meta tag in <head>     : 24   (មុន <body>, ម្ដងគត់ក្នុងមួយទំព័រ)
+token matches Google's : True
+exact tag emitted      : <meta name="google-site-verification" content="L2d5…GHw" />
+verification file      : នៅតែត្រូវបានចម្លងទៅ output root
+theme markup           : មិនត្រូវបានរំខាន (wy-grid-for-nav, rst-footer-buttons,
+                          kh-theme-seg, copybutton, custom.css, versions flyout)
+```
+
+```{admonition} google-site-verification token មិនមែនជា secret
+:class: note
+តម្លៃនេះត្រូវតែលេចឡើងក្នុង HTML ដែលបម្រើ ព្រោះ Google អានវាពីទីនោះ។
+ការ commit វាគឺត្រឹមត្រូវ ហើយមិនមែនជាការលេចធ្លាយ credential ទេ — វាមិនផ្ដល់
+សិទ្ធិចូលដំណើរការអ្វីទាំងអស់។ នេះខុសពី GitHub token ដែលត្រូវបានដោះស្រាយ
+ដោយឡែកហើយមិនដែលត្រូវបាន commit។
+```
 
 ## ៧. ឯកសារដែលបានបង្កើត
 

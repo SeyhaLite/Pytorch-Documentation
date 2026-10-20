@@ -171,21 +171,55 @@ build directory និង mtime ជាស្រេច — នេះជាមូ�
 មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់លទ្ធផលដែលបានវាស់
 និងដែនកំណត់ដែលគេស្គាល់។
 
-## ឯកសារនៅ site root (កុំលុប)
+## Google Search Console verification (កុំលុប)
 
-`docs/source/extra/` មានឯកសារដែល `html_extra_path` ចម្លងទៅ **ឫសនៃ output**
-(មិនមែន `_static/`)៖
+គេហទំព័រនេះផ្ទៀងផ្ទាត់ម្ចាស់កម្មសិទ្ធិតាម **ពីរវិធី** ក្នុងពេលតែមួយ៖
 
-```text
-docs/source/extra/google59471f16170f14f0.html
-  -> https://pytorch-documentation.readthedocs.io/google59471f16170f14f0.html
+```{list-table}
+:header-rows: 1
+:widths: 20 44 36
+
+* - វិធី
+  - ឯកសារ
+  - URL ដែលបម្រើជាក់ស្ដែង
+* - **Meta tag** (វិធីដែលដំណើរការ)
+  - `_templates/layout.html` បញ្ចេញ `<meta name="google-site-verification">` លើ **គ្រប់ទំព័រ** ដោយអានតម្លៃពី `google_site_verification` ក្នុង `conf.py`
+  - `https://pytorch-documentation.readthedocs.io/` → redirect → `/km/latest/` ដែលមាន tag
+* - **HTML file**
+  - `docs/source/extra/google59471f16170f14f0.html` ចម្លងដោយ `html_extra_path`
+  - ⚠️ `/km/latest/google59471f16170f14f0.html` តែប៉ុណ្ណោះ — **មិនមែន** domain root
 ```
 
-នេះជា **Google Search Console ownership token**។ Google ត្រួតពិនិត្យវាជាប្រចាំ
-ដូច្នេះបើវាបាត់ គេហទំព័រអាចត្រូវបានដកការផ្ទៀងផ្ទាត់ដោយស្ងាត់ ទោះបីការផ្ទៀងផ្ទាត់
-ធ្លាប់ជោគជ័យក៏ដោយ។ **កុំលុបវា** — `tests/check_extra_files.py` នឹងបរាជ័យបើវាបាត់។
+````{admonition} ហេតុអ្វី HTML-file method បរាជ័យលើ Read the Docs
+:class: important
+Read the Docs mount build នៅ `/<language>/<version>/`។ គម្រោងនេះកំណត់
+`language = "km"` ដូច្នេះ site ស្ថិតនៅ `/km/latest/`។ **គ្មានអ្វីដែល Sphinx បង្កើត
+អាចបម្រើនៅ domain root បានទេ** មិនថា `html_extra_path` មានអ្វីក៏ដោយ៖
 
-## Light Mode និង Dark Mode
+```text
+/google59471f16170f14f0.html            -> 404
+/km/latest/google59471f16170f14f0.html  -> 200 (53 bytes)
+/en/latest/                             -> 404 (ភាសាគឺ km មិនមែន en)
+```
+
+ដូច្នេះ Google ត្រូវផ្ទៀងផ្ទាត់ដោយ **meta tag** ឬអ្នកត្រូវចុះឈ្មោះ property
+ជា URL-prefix `https://pytorch-documentation.readthedocs.io/km/latest/`។
+````
+
+ឯកសារ HTML នៅតែត្រូវបានរក្សាទុក ព្រោះវាដំណើរការសម្រាប់ URL-prefix property។
+
+`tests/check_search_console.py` ការពារវិធីទាំងពីរ — ព្រោះ Google ត្រួតពិនិត្យជាប្រចាំ
+ហើយបើឯកសារ ឬ tag បាត់ property នឹងត្រូវដកការផ្ទៀងផ្ទាត់ដោយស្ងាត់ ដោយគ្មាន
+អ្វីក្នុង build បង្ហាញថាមានបញ្ហា (Sphinx នៅតែ exit 0)។
+
+```{admonition} google-site-verification token មិនមែនជា secret ទេ
+:class: note
+តម្លៃនេះត្រូវតែលេចឡើងក្នុង HTML ដែលបម្រើ ព្រោះ Google អានវាពីទីនោះ។
+ការ commit វាគឺត្រឹមត្រូវ ហើយមិនមែនជាការលេចធ្លាយ credential ទេ — វាមិនផ្ដល់
+សិទ្ធិចូលដំណើរការអ្វីទាំងអស់។ កុំ "rotate" វាដូចជា secret។
+```
+
+## Light Mode និង Dark Mode## Light Mode និង Dark Mode
 
 គេហទំព័រនេះគាំទ្រពណ៌ទាំងពីរ៖
 
