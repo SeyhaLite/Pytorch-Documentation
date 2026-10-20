@@ -70,8 +70,9 @@
     ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js)
     ├── check_contrast.py          # WCAG AA verifier (១០៤ គូពណ៌)
     ├── make_preview.py            # បង្កើត offline preview HTML តែមួយ
-    ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js)
-    └── verify.sh                  # ដំណើរការគ្រប់ការត្រួតពិនិត្យក្នុងពាក្យបញ្ជាតែមួយ
+    ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js) ដោយ deterministic
+    ├── verify.sh                  # ដំណើរការគ្រប់ការត្រួតពិនិត្យក្នុងពាក្យបញ្ជាតែមួយ
+    └── verify_clean_clone.sh      # simulate RTD build លើ clone ស្អាតពី GitHub
 ```
 
 ### ហេតុអ្វីឈ្មោះឯកសារជាអង់គ្លេស?
@@ -154,6 +155,18 @@ open preview.html        # ឬ xdg-open / start
 ```bash
 bash tools/verify.sh      # ១១ ការត្រួតពិនិត្យ ជា ៣ ដំណាក់កាល; exit 0 លុះត្រាតែឆ្លងទាំងអស់
 ```
+
+មុន push ទៅ Read the Docs សូមរត់ការពិនិត្យលើ **clone ស្អាត** ផងដែរ៖
+
+```bash
+bash tools/verify_clean_clone.sh
+```
+
+វា clone ពី GitHub ហើយដំណើរការលំដាប់ RTD ពិតប្រាកដ (pre_build → sphinx ជាមួយ
+flags របស់ RTD → post_build ជាមួយ `$READTHEDOCS_OUTPUT`)។ `verify.sh` មិនអាចចាប់យក
+ការត្រួតពិនិត្យដែលពឹងលើស្ថានភាពម៉ាស៊ីនបានទេ ព្រោះវារត់លើ working tree ដែលមាន
+build directory និង mtime ជាស្រេច — នេះជាមូលហេតុដែល RTD build ពីរលើកជាប់គ្នា
+បានបរាជ័យដោយសារ check ដែលឆ្លងកាត់ក្នុងម៉ាស៊ីន។
 
 មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់លទ្ធផលដែលបានវាស់
 និងដែនកំណត់ដែលគេស្គាល់។
