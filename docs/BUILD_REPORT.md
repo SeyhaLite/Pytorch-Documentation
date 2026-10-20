@@ -81,9 +81,9 @@ CPU threads   : 8
 * - Network fetches ក្នុង build
   - **0** (intersphinx ត្រូវបានដកចេញ)
   - `sphinx-build ... -v | grep -c objects.inv`
-* - RTD build (simulated, exact flags)
-  - **exit 0 · 0 warnings**
-  - មើលផ្នែក ៦b
+* - RTD build (simulated on a fresh clone from GitHub)
+  - **exit 0 · 0 warnings · post_build 3/3**
+  - មើលផ្នែក ៦b និង ៦b-2
 * - Search index
   - **22 docnames · 3,291 terms**
   - មើលផ្នែក ៥
@@ -659,6 +659,72 @@ python -m sphinx -T -W --keep-going -j auto -b html \
 pre_build  : check_examples_referenced PASS · check_markdown PASS
 sphinx     : exit 0 · 0 warnings · 0 errors · 25 pages
 post_build : check_locale PASS · check_ui_strings PASS · check_extra_files PASS
+```
+
+## ៦b-2. Read the Docs build បរាជ័យលើកទីពីរ — mtime staleness check
+
+Build #35269960 (commit `ab3d0475`) បរាជ័យម្ដងទៀត នៅ `post_build` ដដែល៖
+
+```text
+python tests/check_locale.py
+searchtools.js looks up 6 string(s)
+km-search-i18n.js provides 6          ← ការបកប្រែត្រឹមត្រូវទាំងស្រុង
+docs/source/_static/js/km-search-i18n.js is older than tools/build_locale.py
+  — regenerate with: python tools/build_locale.py
+```
+
+Sphinx ខ្លួនឯងជោគជ័យដូចលើកមុន (`build succeeded`, `copying extra files... done`)។
+អ្វីដែលបរាជ័យគឺ **ការត្រួតពិនិត្យ staleness របស់ខ្ញុំ**។
+
+### មូលហេតុ
+
+វាប្រៀបធៀប **mtime** របស់ឯកសារ។ ប៉ុន្តែ **git មិនរក្សា mtime ទេ** — ពេល clone
+ឯកសារទាំងអស់ទទួលបានពេលវេលា checkout ហើយលំដាប់ដែល git សរសេរពួកវាគឺតាម index។
+ដូច្នេះឯកសារណាមើលទៅ "ថ្មីជាង" គឺជាលទ្ធផលនៃលំដាប់ checkout មិនមែនអ្វីមានន័យទេ។
+
+បានផ្ទៀងផ្ទាត់លើ fresh clone៖
+
+```text
+13:17:59 docs/source/_static/js/km-search-i18n.js
+13:17:59 docs/source/locale/km/LC_MESSAGES/sphinx.mo
+13:17:59 tools/build_locale.py
+```
+
+mtime **ដូចគ្នាទាំងអស់**។ ការត្រួតពិនិត្យនេះឆ្លងកាត់លើម៉ាស៊ីនខ្ញុំតែព្រោះ
+`build_locale.py` ត្រូវបានរត់បន្ទាប់ពីការកែ generator លើកចុងក្រោយ។
+
+នេះគឺជាថ្នាក់បញ្ហាដូចគ្នានឹង build #35266806 — ការត្រួតពិនិត្យដែលដំណើរការ
+តែលើម៉ាស៊ីនរបស់អ្នកនិពន្ធ។
+
+### ការជួសជុល
+
+```{list-table}
+:header-rows: 1
+:widths: 32 68
+
+* - ការផ្លាស់ប្ដូរ
+  - ហេតុអ្វី
+* - ប្រៀបធៀប **ខ្លឹមសារ** មិនមែន mtime
+  - បង្កើត bytes រំពឹងទុកក្នុង memory ពី `ENTRIES` ហើយប្រៀបធៀបជាមួយឯកសារដែលបាន commit។ deterministic គ្រប់ម៉ាស៊ីន
+* - `tools/build_locale.py` បំបែកជា pure renderers
+  - `render_js()`, `render_po()`, `render_mo()` មិនប៉ះ filesystem ដូច្នេះ test អាចហៅវាបាន។ Babel import ធ្វើខាងក្នុងអនុគមន៍
+* - ខ្ទាស់ catalog dates (`FIXED_DATE`)
+  - Babel ដាក់ `POT-Creation-Date` ជា "now" តាមលំនាំដើម ដែលធ្វើឱ្យរាល់ការ regenerate បង្កើត diff ក្លែងក្លាយ។ ការខ្ទាស់ធ្វើឱ្យ generation deterministic — បានផ្ទៀងផ្ទាត់ md5 ដូចគ្នារាល់ run
+* - ផ្ទុក `.mo` តាម stdlib `gettext` ហើយដោះស្រាយរាល់ entry
+  - ការប្រៀបធៀប byte តែមួយមុខនឹងទទួលយកឯកសារដែលកាត់ខ្លី បើ generator ក៏ផលិតវាកាត់ខ្លីដែរ
+* - Negative test
+  - បានផ្ទៀងផ្ទាត់ថាការកែ `ENTRIES` ដោយមិន regenerate → exit 1 និងការកាត់ `.mo` → exit 1។ ការត្រួតពិនិត្យដែលមិនអាចបរាជ័យ មិនមែនជាការត្រួតពិនិត្យទេ
+```
+
+### ការផ្ទៀងផ្ទាត់លើ fresh clone ពី GitHub
+
+```text
+git clone https://github.com/SeyhaLite/Pytorch-Documentation.git   (commit 20f0f27)
+
+pre_build  : check_examples_referenced exit=0 · check_markdown exit=0
+sphinx     : exit=0 · build succeeded · copying extra files... done · 25 pages
+             google59471f16170f14f0.html PRESENT នៅ output root
+post_build : check_locale exit=0 · check_ui_strings exit=0 · check_extra_files exit=0
 ```
 
 ## ៦c. Google Search Console verification
