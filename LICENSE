@@ -1,0 +1,85 @@
+# អាជ្ញាបណ្ណ និងការប្រគល់កិត្តិយស (License & Attribution)
+
+គម្រោងនេះមានអាជ្ញាបណ្ណពីរផ្នែក៖
+
+---
+
+## ១. ខ្លឹមសារឯកសារ (Documentation text) — CC BY 4.0
+
+ខ្លឹមសារអត្ថបទទាំងអស់នៅក្នុង `docs/source/` (លើកលែងតែកូដឧទាហរណ៍)
+ត្រូវបានផ្ដល់អាជ្ញាបណ្ណក្រោម
+**Creative Commons Attribution 4.0 International (CC BY 4.0)**។
+
+មើលអត្ថបទអាជ្ញាបណ្ណពេញលេញ៖ <https://creativecommons.org/licenses/by/4.0/legalcode>
+
+### ការប្រគល់កិត្តិយស (Attribution)
+
+ខ្លឹមសារមួយចំនួនត្រូវបានបកប្រែ និងសម្រួលចេញពីឯកសារផ្លូវការ PyTorch៖
+
+> PyTorch Documentation — <https://docs.pytorch.org/docs/stable/>
+> Copyright © PyTorch Contributors.
+> Licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+> Source repository: <https://github.com/pytorch/pytorch/tree/main/docs/source>
+> License text: <https://github.com/pytorch/pytorch/blob/main/docs/source_licenses/LICENSE>
+
+ការបកប្រែជាភាសាខ្មែរនេះគឺជាការងារដាច់ដោយឡែក (derivative work)
+ហើយមិនត្រូវបាន PyTorch Foundation ធានា ពិនិត្យ ឬអនុម័តឡើយ។
+
+---
+
+## ២. កូដឧទាហរណ៍ (Example code) — BSD 3-Clause
+
+ឯកសារកូដ Python ទាំងអស់នៅក្នុង `docs/source/examples/` និង `tests/`
+ត្រូវបានផ្ដល់អាជ្ញាបណ្ណក្រោម BSD 3-Clause (ដូច PyTorch)៖
+
+```text
+BSD 3-Clause License
+
+Copyright (c) PyTorch-Documentation (Khmer) contributors.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
+
+---
+
+## ៣. ស្លាកសញ្ញា និងម៉ាក (Trademarks)
+
+**PyTorch**, រូបសញ្ញា PyTorch និងឈ្មោះ API (`torch`, `torch.nn`, `torch.optim` ។ល។)
+គឺជាស្លាកសញ្ញា ឬម៉ាកពាណិជ្ជកម្មរបស់ **PyTorch Foundation** ឬម្ចាស់រៀងៗខ្លួន។
+គម្រោងនេះប្រើឈ្មោះទាំងនោះក្នុងគោលបំណងពិពណ៌នាបច្ចេកទេសតែប៉ុណ្ណោះ
+ហើយមិនមានទំនាក់ទំនងផ្លូវការជាមួយ PyTorch Foundation ឡើយ។
+
+## ៤. Dependencies ភាគីទីបី (Third-party)
+
+- Sphinx — BSD 2-Clause
+- sphinx-rtd-theme — MIT
+- MyST-Parser — MIT
+- Kantumruy Pro (ពុម្ពអក្សរខ្មែរ) — SIL Open Font License 1.1, © Tep Sovichet / Cadson Demak
+
+គម្រោងនេះ **មិនបានចម្លង** ឯកសារពុម្ពអក្សរទៅក្នុង repository ទេ —
+វាផ្ទុកពី Google Fonts CDN ដោយមាន fallback ទៅពុម្ពអក្សរខ្មែរក្នុងម៉ាស៊ីន។
+មើល `docs/source/_static/css/custom.css`។
