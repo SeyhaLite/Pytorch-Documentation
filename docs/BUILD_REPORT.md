@@ -72,6 +72,18 @@ CPU threads   : 8
 * - JS-side search msgids បានបកប្រែ
   - **6/6**
   - `python tests/check_locale.py`
+* - English UI strings នៅសល់
+  - **0**
+  - `python tests/check_ui_strings.py`
+* - Root files (Search Console token)
+  - **1/1 · byte-identical**
+  - `python tests/check_extra_files.py`
+* - Network fetches ក្នុង build
+  - **0** (intersphinx ត្រូវបានដកចេញ)
+  - `sphinx-build ... -v | grep -c objects.inv`
+* - RTD build (simulated, exact flags)
+  - **exit 0 · 0 warnings**
+  - មើលផ្នែក ៦b
 * - Search index
   - **22 docnames · 3,291 terms**
   - មើលផ្នែក ៥
@@ -589,6 +601,80 @@ LIGHT placeholder      #6e7781 on #ffffff  =  4.55:1  PASS  (តិចបំផ�
 ```
 
 បន្ទាប់ពីជួសជុល៖ **១០៤/១០៤ គូ pass**។
+
+## ៦b. Read the Docs build បរាជ័យលើកដំបូង — និងការជួសជុល
+
+Build #35266806 (branch `latest`, commit `1f44fc15`) បរាជ័យក្នុងរយៈពេល 29s។
+Sphinx ខ្លួនឯង **ជោគជ័យ** — អ្វីដែលបរាជ័យគឺ `post_build` job របស់ខ្ញុំ៖
+
+```text
+python tests/check_locale.py
+missing docs/_build/html/_static/searchtools.js
+build the site first:
+  sphinx-build -b html docs/source docs/_build/html -q
+```
+
+### មូលហេតុ
+
+`tests/check_locale.py` បាន hardcode ផ្លូវ build របស់ម៉ាស៊ីនខ្ញុំ។ ប៉ុន្តែ Read the Docs
+ប្រើពាក្យបញ្ជាខុសគ្នា៖
+
+```text
+python -m sphinx -T -W --keep-going -j auto -b html \
+       -d _build/doctrees -D language=km . $READTHEDOCS_OUTPUT/html
+```
+
+លទ្ធផលទៅកាន់ `$READTHEDOCS_OUTPUT/html` មិនមែន `docs/_build/html` ទេ។
+ដូច្នេះ check នេះមិនបានរកឃើញ `searchtools.js` ហើយបានបរាជ័យ build ទាំងមូល
+ទោះបីជាគេហទំព័រត្រូវបានសាងសង់ដោយជោគជ័យក៏ដោយ។
+
+### ការជួសជុល
+
+```{list-table}
+:header-rows: 1
+:widths: 30 70
+
+* - ការផ្លាស់ប្ដូរ
+  - ហេតុអ្វី
+* - `tests/_buildpath.py` (ថ្មី)
+  - ដោះស្រាយ output dir តែមួយកន្លែង៖ `$READTHEDOCS_OUTPUT/html` បើ env var មាន មិនដូច្នោះទេ `docs/_build/html`។ ចែករំលែកដោយ check ទាំងបី ដូច្នេះពួកវាមិនអាចខ្វែងគ្នាបានទេ
+* - គ្មាន fallback ពេល `READTHEDOCS_OUTPUT` ត្រូវបានកំណត់
+  - ការធ្លាក់ទៅ build ចាស់ក្នុងម៉ាស៊ីននឹងធ្វើឱ្យ RTD build ដែលខូចឆ្លងកាត់ការត្រួតពិនិត្យរបស់ខ្លួនឯង
+* - ដក `sphinx.ext.intersphinx` ចេញ
+  - វាទាញយក `https://docs.python.org/3/objects.inv` រាល់ build ប៉ុន្តែ **គ្មានទំព័រណាប្រើវាទេ** — cross-reference ទាំងអស់ជា `{doc}` ដែល resolve ក្នុងស្រុក។ ក្រោម `-W` នេះគឺជា network failure mode ឥតប្រយោជន៍។ បានផ្ទៀងផ្ទាត់៖ 0 network fetches ក្នុង build
+* - `tools/verify.sh` រៀបជា ៣ ដំណាក់កាល
+  - ការត្រួតពិនិត្យ post-build ពីមុនរត់ **មុន** build។ វាហាក់ដូចជាឆ្លងកាត់ព្រោះ build ចាស់នៅមាន — ប៉ុន្តែនឹងបរាជ័យលើ checkout ស្អាត។ ឥឡូវ៖ source checks → build → post-build checks
+* - `docs/requirements.txt` បញ្ជាក់កំណែដែលបានសាកល្បង
+  - `myst-parser>=4.0,<5.0` (ពីមុន `>=3.0`) ហើយកត់ត្រាការផ្សំដែលបានផ្ទៀងផ្ទាត់ និង constraint របស់ dependency នីមួយៗ
+```
+
+### ការផ្ទៀងផ្ទាត់
+
+បានដំណើរការពាក្យបញ្ជា RTD ពិតប្រាកដក្នុង environment ដែលបានក្លែងធ្វើ
+(cwd `docs/source`, `-T -W --keep-going -j auto -D language=km`, output ទៅ
+`$READTHEDOCS_OUTPUT/html`) ហើយបន្ទាប់មក `post_build` jobs ទាំងបីជាមួយ
+`READTHEDOCS_OUTPUT` ត្រូវបានកំណត់៖
+
+```text
+pre_build  : check_examples_referenced PASS · check_markdown PASS
+sphinx     : exit 0 · 0 warnings · 0 errors · 25 pages
+post_build : check_locale PASS · check_ui_strings PASS · check_extra_files PASS
+```
+
+## ៦c. Google Search Console verification
+
+`docs/source/extra/google59471f16170f14f0.html` ត្រូវបានចម្លងទៅឫសនៃ output
+តាម `html_extra_path` ដូច្នេះវាអាចចូលដំណើរការបាននៅ៖
+
+```text
+https://pytorch-documentation.readthedocs.io/google59471f16170f14f0.html
+```
+
+Google ត្រួតពិនិត្យឯកសារនេះជាប្រចាំ ដូច្នេះការលុបវានឹងធ្វើឱ្យ property បាត់
+ការផ្ទៀងផ្ទាត់ដោយស្ងាត់ — ហើយគ្មានអ្វីក្នុង build ធម្មតាបង្ហាញថាមានបញ្ហាទេ។
+`tests/check_extra_files.py` ត្រួតពិនិត្យច្រវាក់ទាំងមូល៖ ឯកសារមានក្នុង source,
+`conf.py` ចុះឈ្មោះ `html_extra_path`, និងលទ្ធផលនៅឫស output ដូចគ្នាបីត
+(byte-identical) ហើយមិនត្រូវបានច្រឡំដាក់ក្នុង `_static/`។
 
 ## ៧. ឯកសារដែលបានបង្កើត
 
