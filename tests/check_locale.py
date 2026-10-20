@@ -8,7 +8,12 @@ Two things can silently break the Khmer interface:
 2.  Someone edits `build_locale.py` but forgets to regenerate the `.mo` and the
     JS catalog, so the committed artefacts disagree with the source of truth.
 
-This script catches both.  It parses the *built* `searchtools.js` (so it checks
+This script catches both. Staleness is detected by regenerating the expected
+bytes in memory and comparing them with the committed artefacts -- never by
+comparing file mtimes. git does not preserve mtimes: a clone gives every file
+the checkout timestamp in index order, so an mtime comparison reports drift that
+does not exist. That is exactly how Read the Docs build #35269960 failed while
+the same check passed locally.  It parses the *built* `searchtools.js` (so it checks
 against the Sphinx version actually in use) and compares it with the committed
 `km-search-i18n.js`.
 
@@ -30,7 +35,9 @@ from pathlib import Path
 
 from _buildpath import REPO, require_build_dir
 JS_CATALOG = REPO / "docs" / "source" / "_static" / "js" / "km-search-i18n.js"
-MO_FILE = REPO / "docs" / "source" / "locale" / "km" / "LC_MESSAGES" / "sphinx.mo"
+LOCALE_DIR = REPO / "docs" / "source" / "locale" / "km" / "LC_MESSAGES"
+MO_FILE = LOCALE_DIR / "sphinx.mo"
+PO_FILE = LOCALE_DIR / "sphinx.po"
 GENERATOR = REPO / "tools" / "build_locale.py"
 
 # Strings Sphinx looks up in JS. Some are read with `_()`, one with an explicit
@@ -72,7 +79,7 @@ def main() -> int:
         print(f"missing {built_searchtools}", file=sys.stderr)
         return 2
 
-    for f in (JS_CATALOG, MO_FILE, GENERATOR):
+    for f in (JS_CATALOG, MO_FILE, PO_FILE, GENERATOR):
         if not f.exists():
             problems.append(f"missing {f.relative_to(REPO)}")
     if problems:
@@ -98,17 +105,55 @@ def main() -> int:
         for u in unused:
             print(f"    {u[:70]!r}")
 
-    # Verify the committed .mo is newer than the generator, i.e. not stale.
-    if MO_FILE.stat().st_mtime < GENERATOR.stat().st_mtime:
-        problems.append(
-            f"{MO_FILE.relative_to(REPO)} is older than {GENERATOR.relative_to(REPO)} "
-            f"— regenerate with: python tools/build_locale.py"
-        )
-    if JS_CATALOG.stat().st_mtime < GENERATOR.stat().st_mtime:
-        problems.append(
-            f"{JS_CATALOG.relative_to(REPO)} is older than {GENERATOR.relative_to(REPO)} "
-            f"— regenerate with: python tools/build_locale.py"
-        )
+    # Staleness: compare CONTENT, never mtimes.
+    #
+    # git does not preserve modification times -- a fresh clone gives every file
+    # the checkout timestamp, in index order. An mtime comparison therefore
+    # passed on the author's machine and failed on Read the Docs for no real
+    # reason (build #35269960). Regenerating the expected bytes in memory and
+    # comparing them is deterministic on any machine, and works because
+    # tools/build_locale.py pins the catalog dates.
+    try:
+        sys.path.insert(0, str(REPO / "tools"))
+        import build_locale
+
+        for path, expected in (
+            (JS_CATALOG, build_locale.render_js().encode("utf-8")),
+            (PO_FILE, build_locale.render_po()),
+            (MO_FILE, build_locale.render_mo()),
+        ):
+            actual = path.read_bytes()
+            if actual != expected:
+                problems.append(
+                    f"{path.relative_to(REPO)} does not match what "
+                    f"{GENERATOR.relative_to(REPO)} generates now "
+                    f"({len(actual)} bytes on disk vs {len(expected)} expected).\n"
+                    f"    Someone edited ENTRIES without regenerating. Run:\n"
+                    f"      python tools/build_locale.py"
+                )
+            else:
+                print(f"  byte-identical to the generator: {path.name}")
+
+        # Byte equality proves the file is up to date; loading it proves it is a
+        # usable catalog. Both matter -- a truncated .mo can still compare equal
+        # to a truncated render.
+        import gettext
+
+        with open(MO_FILE, "rb") as fh:
+            km = gettext.GNUTranslations(fh)
+        unresolved = [m for m, k in build_locale.ENTRIES if km.gettext(m) != k]
+        if unresolved:
+            sample = ", ".join(repr(x[:28]) for x in unresolved[:3])
+            problems.append(
+                f"{MO_FILE.relative_to(REPO)} loads but {len(unresolved)} of "
+                f"{len(build_locale.ENTRIES)} entries do not resolve ({sample}…)"
+            )
+        else:
+            print(f"  loads via gettext: all {len(build_locale.ENTRIES)} entries resolve")
+    except ImportError as exc:
+        # Never fail the build because Babel is absent; the msgid coverage check
+        # above is the one that protects readers.
+        print(f"note: skipping the staleness check ({exc})")
 
     # Every Khmer msgstr must actually contain Khmer, otherwise the entry is a
     # no-op that looks translated.

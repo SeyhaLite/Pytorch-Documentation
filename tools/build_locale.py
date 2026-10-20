@@ -16,7 +16,10 @@ completely differently:
     calls `Documentation.addTranslations(...)`.
 
 Both outputs are generated from the single `ENTRIES` table below, so they cannot
-drift apart.  `tests/check_locale.py` verifies that every msgid searchtools.js
+drift apart. Generation is deterministic -- the catalog dates are pinned -- so
+re-running this script on unchanged input writes byte-identical files, which is
+what lets tests/check_locale.py verify the committed artefacts by content
+instead of by mtime (git does not preserve mtimes).  `tests/check_locale.py` verifies that every msgid searchtools.js
 actually looks up is present.
 
 Usage
@@ -30,11 +33,8 @@ committed: Read the Docs does not need Babel to build.
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
-
-from babel.messages.catalog import Catalog
-from babel.messages.mofile import write_mo
-from babel.messages.pofile import write_po
 
 REPO = Path(__file__).resolve().parent.parent
 LOCALE_DIR = REPO / "docs" / "source" / "locale" / "km" / "LC_MESSAGES"
@@ -126,27 +126,14 @@ ENTRIES: list[tuple[str, str]] = [
 ]
 
 
-def build_mo() -> Path:
-    """Compile the Python-side catalog."""
-    catalog = Catalog(
-        locale="km",
-        project="ឯកសារ PyTorch ជាភាសាខ្មែរ",
-        copyright_holder="PyTorch-Documentation (Khmer) contributors",
-    )
-    for msgid, msgstr in ENTRIES:
-        catalog.add(msgid, string=msgstr, auto_comments=["UI string"])
+def render_js() -> str:
+    """Return the exact bytes that km-search-i18n.js must contain.
 
-    LOCALE_DIR.mkdir(parents=True, exist_ok=True)
-    with open(LOCALE_DIR / "sphinx.po", "wb") as fh:
-        write_po(fh, catalog, width=78, sort_output=False)
-    mo = LOCALE_DIR / "sphinx.mo"
-    with open(mo, "wb") as fh:
-        write_mo(fh, catalog)
-    return mo
-
-
-def build_js() -> Path:
-    """Emit the JS-side catalog for searchtools.js."""
+    Pure function -- no filesystem access, no Babel.  tests/check_locale.py
+    calls this to verify the committed artefact matches the ENTRIES table,
+    which works on any machine (unlike comparing mtimes, which is meaningless
+    after a git clone because git does not preserve them).
+    """
     table = dict(ENTRIES)
     missing = sorted(JS_MSGIDS - table.keys())
     if missing:
@@ -158,7 +145,10 @@ def build_js() -> Path:
     body = json.dumps({"locale": "km", "messages": messages,
                        "plural_expr": "n === 1 ? 0 : 1"},
                       ensure_ascii=False, indent=2)
-    js = f"""/* Khmer translations for the strings searchtools.js resolves at runtime.
+    return JS_TEMPLATE.replace("__CATALOG_JSON__", body)
+
+
+JS_TEMPLATE = """/* Khmer translations for the strings searchtools.js resolves at runtime.
  *
  * GENERATED FILE -- do not edit by hand.
  * Regenerate with:  python tools/build_locale.py
@@ -170,27 +160,85 @@ def build_js() -> Path:
  * Source of truth: the ENTRIES table in tools/build_locale.py, which also
  * produces docs/source/locale/km/LC_MESSAGES/sphinx.mo.
  */
-(function () {{
+(function () {
   "use strict";
-  var CATALOG = {body};
+  var CATALOG = __CATALOG_JSON__;
 
-  function apply() {{
-    if (typeof Documentation !== "undefined" && Documentation.addTranslations) {{
+  function apply() {
+    if (typeof Documentation !== "undefined" && Documentation.addTranslations) {
       Documentation.addTranslations(CATALOG);
-    }}
-  }}
+    }
+  }
 
   /* doctools.js defines Documentation; searchtools.js only looks strings up
      when it renders results, which is strictly after DOMContentLoaded. */
-  if (document.readyState === "loading") {{
+  if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", apply);
-  }} else {{
+  } else {
     apply();
-  }}
-}})();
+  }
+})();
 """
+
+
+# Pinned so that regenerating produces byte-identical files. Babel stamps
+# POT-Creation-Date with "now" by default, which would make every run of this
+# script show up as a diff in two committed artefacts -- and would make a
+# content-based staleness check impossible.
+FIXED_DATE = datetime(2026, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+
+
+def build_catalog():
+    """Return the Babel catalog. Pure: touches no files."""
+    from babel.messages.catalog import Catalog
+
+    catalog = Catalog(
+        locale="km",
+        project="ឯកសារ PyTorch ជាភាសាខ្មែរ",
+        copyright_holder="PyTorch-Documentation (Khmer) contributors",
+        creation_date=FIXED_DATE,
+        revision_date=FIXED_DATE,
+    )
+    for msgid, msgstr in ENTRIES:
+        catalog.add(msgid, string=msgstr, auto_comments=["UI string"])
+    return catalog
+
+
+def render_po() -> bytes:
+    """Exact bytes of sphinx.po. Pure, so tests can compare against the file."""
+    import io
+
+    from babel.messages.pofile import write_po
+
+    buf = io.BytesIO()
+    write_po(buf, build_catalog(), width=78, sort_output=False)
+    return buf.getvalue()
+
+
+def render_mo() -> bytes:
+    """Exact bytes of sphinx.mo. Pure, so tests can compare against the file."""
+    import io
+
+    from babel.messages.mofile import write_mo
+
+    buf = io.BytesIO()
+    write_mo(buf, build_catalog())
+    return buf.getvalue()
+
+
+def build_mo() -> Path:
+    """Write sphinx.po and sphinx.mo, and return the path of the .mo."""
+    LOCALE_DIR.mkdir(parents=True, exist_ok=True)
+    (LOCALE_DIR / "sphinx.po").write_bytes(render_po())
+    mo = LOCALE_DIR / "sphinx.mo"
+    mo.write_bytes(render_mo())
+    return mo
+
+
+def build_js() -> Path:
+    """Write the JS-side catalog for searchtools.js."""
     JS_OUT.parent.mkdir(parents=True, exist_ok=True)
-    JS_OUT.write_text(js, encoding="utf-8")
+    JS_OUT.write_text(render_js(), encoding="utf-8")
     return JS_OUT
 
 
