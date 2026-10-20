@@ -1,0 +1,15 @@
+# Sphinx build dependencies for Read the Docs.
+#
+# NOTE: PyTorch and NumPy are deliberately NOT listed here.
+# They are only required to *execute* the code examples (tests/run_examples.py),
+# never to render them. Excluding them keeps the Read the Docs build small
+# (the CPU PyTorch wheel alone is ~200 MB) and fast.
+#
+# To run the examples locally, install PyTorch separately, e.g. CPU-only:
+#     pip install torch --index-url https://download.pytorch.org/whl/cpu
+#     pip install numpy
+
+sphinx>=7.4,<8.0
+sphinx-rtd-theme>=3.0,<4.0
+myst-parser>=3.0,<5.0
+docutils>=0.20,<0.22

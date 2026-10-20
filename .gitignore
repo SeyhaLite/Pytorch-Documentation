@@ -1,0 +1,33 @@
+# Sphinx build output
+docs/_build/
+docs/source/_build/
+
+# Generated test artifacts
+docs/TEST_RESULTS.json
+
+# Offline preview bundle (regenerate with tools/make_preview.py)
+preview/
+preview.html
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Never commit credentials
+.env
+.env.*
+*.pem
+*.key
