@@ -1,258 +1,204 @@
-# ឯកសារ PyTorch ជាភាសាខ្មែរ (PyTorch Documentation in Khmer)
+# ឯកសារ PyTorch ជាភាសាខ្មែរ
 
-សៀវភៅណែនាំ PyTorch ជាភាសាខ្មែរ សម្រាប់អ្នកចាប់ផ្ដើមដំបូង រហូតដល់អ្នកសិក្សា Deep Learning កម្រិតមធ្យម។
-ឯកសារនេះសាងសង់ដោយ [Sphinx](https://www.sphinx-doc.org/) + [sphinx_rtd_theme](https://sphinx-rtd-theme.readthedocs.io/)
-ហើយត្រូវបានបង្ហោះលើ [Read the Docs](https://app.readthedocs.org/)។
+សៀវភៅណែនាំ **PyTorch ជាភាសាខ្មែរ** សម្រាប់អ្នកដែលចង់រៀនពីមូលដ្ឋាន Tensor រហូតដល់ការបណ្ដុះបណ្ដាល និងប្រើប្រាស់ Deep Learning model។
 
-> **ចំណាំសំខាន់** — នេះ **មិនមែន**ជាការបកប្រែឯកសារ PyTorch ផ្លូវការទាំងស្រុងទេ។
-> វាគឺជាឯកសារសិក្សាដាច់ដោយឡែក (independent Khmer study guide) ដែលយោងតាម
-> PyTorch ផ្លូវការ និង API ពិតប្រាកដ។ ខ្លឹមសារបកប្រែយោងតាម
-> [PyTorch Documentation](https://docs.pytorch.org/docs/stable/) ដែលមានអាជ្ញាបណ្ណ
-> [CC BY 4.0](https://github.com/pytorch/pytorch/blob/main/docs/source_licenses/LICENSE)។
-> មើល [LICENSE](LICENSE) និង [docs/source/license.md](docs/source/license.md) សម្រាប់ Attribution ពេញលេញ។
+<https://pytorch-documentation.readthedocs.io/km/latest/>
 
-## ស្ថានភាពមាតិកា (Content status)
+> **ចំណាំ៖** នេះជាឯកសារសិក្សាដាច់ដោយឡែកដែលរៀបចំជាភាសាខ្មែរ មិនមែនជាការបកប្រែឯកសារ PyTorch ផ្លូវការទាំងស្រុងទេ។ ខ្លឹមសារយោងតាម [PyTorch Documentation](https://docs.pytorch.org/docs/stable/)។ សូមមើល [LICENSE](LICENSE) សម្រាប់អាជ្ញាបណ្ណ និងការទទួលស្គាល់ប្រភព។
 
-| ទំព័រ | ប្រធានបទ | ស្ថានភាព | កូដឧទាហរណ៍ |
-| --- | --- | --- | --- |
-| `index` | ទំព័រដើម / មាតិកា | ✅ រួចរាល់ | — |
-| `installation` | ដំឡើង PyTorch និង Environment | ✅ | បានសាកល្បង |
-| `getting-started` | ចាប់ផ្ដើមដំបូង | ✅ | បានសាកល្បង |
-| `tensors` | Tensor Creation និង Operations | ✅ | បានសាកល្បង |
-| `shapes-and-broadcasting` | Shapes, Dimensions និង Broadcasting | ✅ | បានសាកល្បង |
-| `devices` | CPU និង GPU | ✅ | បានសាកល្បងលើ CPU (ផ្នែក GPU គ្រាន់តែបង្ហាញកូដ) |
-| `autograd` | Autograd / Automatic Differentiation | ✅ | បានសាកល្បង |
-| `neural-networks` | Neural Networks និង `torch.nn` | ✅ | បានសាកល្បង |
-| `loss-and-optimizers` | Loss Functions និង Optimizers | ✅ | បានសាកល្បង |
-| `data-and-dataloader` | Dataset និង DataLoader | ✅ | បានសាកល្បង |
-| `training-loop` | Training Loop | ✅ | បានសាកល្បង |
-| `evaluation-and-inference` | Model Evaluation និង Inference | ✅ | បានសាកល្បង |
-| `saving-and-loading` | រក្សាទុក និងផ្ទុក Model | ✅ | បានសាកល្បង |
-| `checkpoints` | Checkpoints | ✅ | បានសាកល្បង |
-| `reproducibility` | Random Seeds និង Reproducibility | ✅ | បានសាកល្បង |
-| `performance` | Performance Optimization | ✅ | បានសាកល្បង |
-| `mixed-precision` | Mixed Precision | ✅ | សាកល្បងបានតែផ្នែក CPU (គ្មាន GPU) |
-| `distributed-training` | Distributed Training | ⚠️ ទ្រឹស្ដី (មិនបានសាកល្បង multi-node) | មិនបាន Run |
-| `debugging` | Debugging និង Common Errors | ✅ | បានសាកល្បង |
-| `style-guide` | មគ្គុទ្ទេសក៍រចនា (palette, typography, ធាតុទាំងអស់) | ✅ | បានសាកល្បង |
-| `api-quick-reference` | តារាងយោង API រហ័ស | ✅ | — |
+## តំណសំខាន់ៗ
 
-សរុប៖ ២២ ទំព័រ · ៤០ ឧទាហរណ៍ (៣៨ បានរត់ pass, ០ fail, ២ skip ព្រោះត្រូវការ GPU)។
-ការត្រួតពិនិត្យស្វ័យប្រវត្តិ ១០ ឆ្លងកាត់ទាំងអស់ — មើល `bash tools/verify.sh`។
-មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់របាយការណ៍ Build/Test ពេញលេញ។
+- **[អានមេរៀនតាមគេហទំព័រ](https://pytorch-documentation.readthedocs.io/km/latest/)**
+- [របាយការណ៍ Build និង Test](docs/BUILD_REPORT.md)
+- [របៀបចូលរួមកែលម្អឯកសារ](CONTRIBUTING.md)
+- [អាជ្ញាបណ្ណ](LICENSE)
 
-## រចនាសម្ព័ន្ធ (Project structure)
+## គម្រោងនេះមានអ្វីខ្លះ?
 
-```text
-.
-├── .readthedocs.yaml              # Read the Docs build configuration
-├── .gitignore
-├── LICENSE                        # អាជ្ញាបណ្ណគម្រោង + Attribution
-├── CONTRIBUTING.md                # របៀបចូលរួម (រួមទាំងច្បាប់ MyST fence)
-├── docs/
-│   ├── requirements.txt           # Sphinx build dependencies
-│   ├── BUILD_REPORT.md            # របាយការណ៍ Build/Test ពេញលេញ
-│   └── source/
-│       ├── conf.py                # Sphinx configuration
-│       ├── index.md               # ទំព័រដើម + មាតិកា
-│       ├── *.md                   # មេរៀន ២២ (ឈ្មោះឯកសារអង់គ្លេស ចំណងជើងខ្មែរ)
-│       ├── examples/              # កូដឧទាហរណ៍ ៤០ — ដំណើរការពិតដោយ test runner
-│       ├── _ext/khmer_assets.py   # ចុះឈ្មោះ copy button + print CSS
-│       ├── _static/css/custom.css # Palette dark + light (CSS custom properties)
-│       ├── _static/css/print.css  # Print stylesheet
-│       ├── _static/js/copybutton.js
-│       └── _templates/searchbox.html  # Dark/Light control + inline script
-├── tests/
-│   ├── run_examples.py            # សាកល្បងឧទាហរណ៍ទាំង ៤០ (subprocess ដាច់ដោយឡែក)
-│   └── check_examples_referenced.py   # ការពារ orphan/stale references
-└── tools/
-    ├── check_markdown.py          # Markdown fence linter (report-only)
-    ├── check_contrast.py          # WCAG AA verifier (១២០ គូពណ៌)
-    ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js)
-    ├── check_contrast.py          # WCAG AA verifier (១០៤ គូពណ៌)
-    ├── make_preview.py            # បង្កើត offline preview HTML តែមួយ
-    ├── build_locale.py            # បង្កើត Khmer UI catalog (.mo + .js) ដោយ deterministic
-    ├── verify.sh                  # ដំណើរការគ្រប់ការត្រួតពិនិត្យក្នុងពាក្យបញ្ជាតែមួយ
-    └── verify_clean_clone.sh      # simulate RTD build លើ clone ស្អាតពី GitHub
-```
+- មេរៀនជាភាសាខ្មែរ ចាប់ពីការដំឡើង រហូតដល់ការបណ្ដុះបណ្ដាល និងវាយតម្លៃ Model។
+- ឧទាហរណ៍ Python នៅក្នុងឯកសារ `.py` ដាច់ដោយឡែក ហើយបញ្ចូលទៅក្នុងមេរៀនដោយ `literalinclude`។ ដូច្នេះ កូដដែលអ្នកអាន គឺជាកូដដែល Test Runner យកទៅសាកល្បង។
+- ការណែនាំអំពី CPU, GPU, Autograd, Neural Networks, DataLoader, Optimizer និងការរក្សាទុក Model។
+- គេហទំព័រគាំទ្រ Light Mode និង Dark Mode, ការស្វែងរក, ប៊ូតុងចម្លងកូដ និងទម្រង់សម្រាប់បោះពុម្ព។
+- មានស្គ្រីបសម្រាប់ពិនិត្យកូដឧទាហរណ៍, Markdown fence, ពណ៌ Contrast, Khmer UI, Sitemap និងការសាងសង់ Sphinx។
 
-### ហេតុអ្វីឈ្មោះឯកសារជាអង់គ្លេស?
+## តើគួរចាប់ផ្ដើមរៀនពីណា?
 
-ឈ្មោះឯកសារភាសាខ្មែរ (ឧ. `ចាប់ផ្ដើម.md`) បង្កើត URL ដែលត្រូវ percent-encode
-(`%E1%9E%85%E1%9E%B6%E1%9E%94...`) ដែលធ្វើឱ្យ Search, Cross-references និងការចែករំលែកតំណពិបាក។
-ដូច្នេះគម្រោងនេះប្រើ **ឈ្មោះឯកសារអង់គ្លេស + ចំណងជើងភាសាខ្មែរ**។
+| អ្នករៀន | លំដាប់ណែនាំ |
+| --- | --- |
+| អ្នកចាប់ផ្ដើម | Installation → Getting Started → Tensors → Shapes and Broadcasting → Devices |
+| អ្នកចេះ Python និង NumPy រួច | Tensors → Autograd → Neural Networks |
+| អ្នកកំពុងបង្កើត Model | Data and DataLoader → Training Loop → Evaluation and Inference |
+| អ្នកជួបបញ្ហាក្នុងកូដ | Debugging → API Quick Reference |
 
-## ការសាងសង់ឯកសារនៅក្នុងម៉ាស៊ីនរបស់អ្នក (Build locally)
+## បញ្ជីមេរៀន
 
-តម្រូវការ៖ Python 3.10+ និង PyTorch ≥ 2.0 (PyTorch ចាំបាច់សម្រាប់ **សាកល្បងកូដឧទាហរណ៍** ប៉ុណ្ណោះ — ការ build ឯកសារមិនត្រូវការវាទេ)។
+តំណខាងក្រោមនាំទៅកាន់ទំព័រមេរៀនដែលបានបង្ហោះលើ Read the Docs។
+
+| មេរៀន | ខ្លឹមសារសំខាន់ |
+| --- | --- |
+| [Installation](https://pytorch-documentation.readthedocs.io/km/latest/installation.html) | ដំឡើង PyTorch និងរៀបចំ Python Environment |
+| [Getting Started](https://pytorch-documentation.readthedocs.io/km/latest/getting-started.html) | ចាប់ផ្ដើមប្រើ Tensor និង PyTorch |
+| [Tensors](https://pytorch-documentation.readthedocs.io/km/latest/tensors.html) | បង្កើត Tensor, Indexing និង Operations |
+| [Shapes and Broadcasting](https://pytorch-documentation.readthedocs.io/km/latest/shapes-and-broadcasting.html) | Shape, Dimension, Stride និង Broadcasting |
+| [Devices](https://pytorch-documentation.readthedocs.io/km/latest/devices.html) | ប្រើ CPU, CUDA GPU និង MPS |
+| [Autograd](https://pytorch-documentation.readthedocs.io/km/latest/autograd.html) | Gradient និង Automatic Differentiation |
+| [Neural Networks](https://pytorch-documentation.readthedocs.io/km/latest/neural-networks.html) | `nn.Module`, Layers, MLP និង CNN |
+| [Loss and Optimizers](https://pytorch-documentation.readthedocs.io/km/latest/loss-and-optimizers.html) | Loss Functions, SGD, Adam និង Optimizers |
+| [Data and DataLoader](https://pytorch-documentation.readthedocs.io/km/latest/data-and-dataloader.html) | Dataset, DataLoader និងការរៀបចំទិន្នន័យ |
+| [Training Loop](https://pytorch-documentation.readthedocs.io/km/latest/training-loop.html) | វដ្ដបណ្ដុះបណ្ដាល Model |
+| [Evaluation and Inference](https://pytorch-documentation.readthedocs.io/km/latest/evaluation-and-inference.html) | វាយតម្លៃ និងទាញលទ្ធផលពី Model |
+| [Saving and Loading](https://pytorch-documentation.readthedocs.io/km/latest/saving-and-loading.html) | រក្សាទុក និងផ្ទុក Model |
+| [Checkpoints](https://pytorch-documentation.readthedocs.io/km/latest/checkpoints.html) | រក្សាទុកចំណុចបន្តការបណ្ដុះបណ្ដាល |
+| [Reproducibility](https://pytorch-documentation.readthedocs.io/km/latest/reproducibility.html) | Random Seeds និងលទ្ធផលដែលអាចធ្វើឡើងវិញ |
+| [Performance](https://pytorch-documentation.readthedocs.io/km/latest/performance.html) | វិធីកែលម្អល្បឿន និងការប្រើប្រាស់ធនធាន |
+| [Mixed Precision](https://pytorch-documentation.readthedocs.io/km/latest/mixed-precision.html) | ការគណនាដោយប្រើ Precision ច្រើនប្រភេទ |
+| [Distributed Training](https://pytorch-documentation.readthedocs.io/km/latest/distributed-training.html) | Distributed Data Parallel និងការបណ្ដុះបណ្ដាលលើច្រើន GPU |
+| [Debugging](https://pytorch-documentation.readthedocs.io/km/latest/debugging.html) | កំហុសទូទៅ និងវិធីស្វែងរកមូលហេតុ |
+| [API Quick Reference](https://pytorch-documentation.readthedocs.io/km/latest/api-quick-reference.html) | តារាងយោង API រហ័ស |
+| [Style Guide](https://pytorch-documentation.readthedocs.io/km/latest/style-guide.html) | ពណ៌ ពុម្ពអក្សរ និងធាតុ UI របស់ឯកសារ |
+| [License](https://pytorch-documentation.readthedocs.io/km/latest/license.html) | អាជ្ញាបណ្ណ និងការទទួលស្គាល់ប្រភព |
+
+## ស្ថានភាពគុណភាព និងការសាកល្បង
+
+តាមលទ្ធផលដែលបានកត់ត្រានៅក្នុង [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md)៖
+
+| ចំណុចផ្ទៀងផ្ទាត់ | លទ្ធផល |
+| --- | --- |
+| ឯកសារ Markdown | ២២ ទំព័រ |
+| ឧទាហរណ៍ Python | ៤០ ឯកសារ |
+| ឧទាហរណ៍ដែល Test បានជោគជ័យ | ៣៨ |
+| ឧទាហរណ៍ដែលត្រូវរំលង | ២ ព្រោះ Environment សាកល្បងមិនមាន CUDA GPU |
+| ឧទាហរណ៍ដែលបរាជ័យ | ០ |
+| Sphinx Build | ០ Warnings |
+| Contrast | ១២០ គូពណ៌ ឆ្លងកម្រិត WCAG AA (យ៉ាងតិច ៤.៥:១) |
+
+**ចំណាំអំពី Test៖** លទ្ធផលខាងលើមិនមានន័យថាកូដ GPU ទាំងអស់បានដំណើរការលើ GPU ពិតទេ។ ឧទាហរណ៍ពីរដែលត្រូវការ CUDA ត្រូវបានរំលងក្នុង Environment ដែលបានរាយការណ៍។ សម្រាប់ព័ត៌មានលម្អិត សូមអាន Build Report។
+
+## បង្កើតគេហទំព័រនៅលើកុំព្យូទ័ររបស់អ្នក
+
+### តម្រូវការ
+
+- Python។ កំណែដែលបានសាកល្បងមាន Python 3.11 សម្រាប់ការសាងសង់ក្នុងម៉ាស៊ីន និង Python 3.12 សម្រាប់ Read the Docs។
+- Dependencies របស់ Sphinx ដែលមាននៅក្នុង `docs/requirements.txt`។
+- PyTorch និង NumPy ត្រូវការតែពេលចង់ដំណើរការកូដឧទាហរណ៍ប៉ុណ្ណោះ មិនចាំបាច់សម្រាប់ Build ឯកសារ HTML ទេ។
+
+### ១. រៀបចំ Environment
 
 ```bash
-# 1) បង្កើត virtual environment
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
 
-# 2) ដំឡើង dependencies របស់ Sphinx
-pip install -r docs/requirements.txt
+# Linux / macOS
+source .venv/bin/activate
 
-# 3) Build ជា HTML
-sphinx-build -b html docs/source docs/_build/html
+# Windows PowerShell
+# .venv\Scripts\Activate.ps1
 
-# 4) មើលក្នុង browser
-python -m http.server -d docs/_build/html 8000
+python -m pip install -r docs/requirements.txt
 ```
 
-Build ដែលប្រើសម្រាប់ CI/ផ្ទៀងផ្ទាត់ (zero warnings)៖
+### ២. Build ឯកសារ HTML
 
 ```bash
-sphinx-build -b html docs/source docs/_build/html -q -W --keep-going
+python -m sphinx -b html docs/source docs/_build/html -q -W --keep-going
 ```
 
-## ការសាកល្បងកូដឧទាហរណ៍ (Test the code examples)
+ជម្រើស `-W` ធ្វើឱ្យ Sphinx ចាត់ទុក Warning ជាកំហុស ដើម្បីកុំឱ្យបញ្ហាក្នុងឯកសាររំលងដោយមិនដឹងខ្លួន។
 
-កូដឧទាហរណ៍ទាំងអស់ស្ថិតនៅក្នុង `docs/source/examples/` ហើយត្រូវបានបញ្ចូលទៅក្នុងឯកសារដោយ
-`literalinclude` — ដូច្នេះអ្វីដែលអ្នកអាន គឺជាអ្វីដែលត្រូវបានសាកល្បងពិត។
+### ៣. បើកមើលក្នុង Browser
 
 ```bash
-# ដំឡើង PyTorch (CPU) — សូមមើល https://pytorch.org/get-started/locally/ សម្រាប់ជម្រើស CUDA
-pip install torch --index-url https://download.pytorch.org/whl/cpu
-pip install numpy
+python -m http.server 8000 --directory docs/_build/html
+```
 
-# សាកល្បងឧទាហរណ៍ទាំងអស់
+បន្ទាប់មកបើក <http://localhost:8000>។
+
+## សាកល្បងកូដឧទាហរណ៍
+
+ការសាកល្បងឧទាហរណ៍ត្រូវការដំឡើង PyTorch និង NumPy ដាច់ដោយឡែកពី Sphinx៖
+
+```bash
+# ដំឡើង PyTorch សម្រាប់ CPU
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install numpy
+
+# ដំណើរការឧទាហរណ៍ទាំងអស់
 python tests/run_examples.py
-```
 
-ឧទាហរណ៍ដែលបង្ហាញ **កំហុសដោយចេតនា** មានសរសេរ `# EXPECTED FAILURE:` ពីលើ
-ហើយ test runner ផ្ទៀងផ្ទាត់ថាពួកវាពិតជាបរាជ័យដោយសារមូលហេតុត្រឹមត្រូវ។
-
-## ពាក្យបញ្ជាផ្ទៀងផ្ទាត់ (Verification)
-
-រត់ទាំងអស់មុន commit — ទាំងអស់ត្រូវតែ exit 0៖
-
-```bash
-# ១. កូដឧទាហរណ៍
-python tests/run_examples.py
+# ពិនិត្យថាឧទាហរណ៍ទាំងអស់មាន reference ក្នុងមេរៀន
 python tests/check_examples_referenced.py
-
-# ២. MyST fence lint (ការរំលងនេះបំផ្លាញទំព័រទាំងមូល)
-python tools/check_markdown.py
-
-# ៣. Contrast (WCAG AA ≥ 4.5:1 សម្រាប់គ្រប់គូពណ៌)
-python tools/check_contrast.py
-
-# ៣b. UI ជាភាសាខ្មែរ (ត្រូវ build ជាមុន)
-python tests/check_locale.py
-python tests/check_ui_strings.py
-
-# ៤. Sphinx build (ត្រូវតែ 0 warnings)
-sphinx-build -b html docs/source docs/_build/html -q -W --keep-going
-
-# ៥. Offline preview សម្រាប់ត្រួតពិនិត្ថដោយភ្នែក
-python tools/make_preview.py --page style-guide.html
-open preview.html        # ឬ xdg-open / start
 ```
 
-ឬដំណើរការទាំងអស់ក្នុងពាក្យបញ្ជាតែមួយ (ណែនាំមុន push)៖
+បើចង់សាកល្បងឧទាហរណ៍ដែលត្រូវការ GPU សូមប្រើម៉ាស៊ីនដែលមាន CUDA និងដំឡើង PyTorch តាមជម្រើសដែលត្រូវនឹង GPU របស់អ្នក ពី [ទំព័រដំឡើង PyTorch ផ្លូវការ](https://pytorch.org/get-started/locally/)។
+
+## ផ្ទៀងផ្ទាត់គម្រោងទាំងមូល
+
+មុនពេលបញ្ជូនការកែប្រែ សូមដំណើរការ៖
 
 ```bash
-bash tools/verify.sh      # ១១ ការត្រួតពិនិត្យ ជា ៣ ដំណាក់កាល; exit 0 លុះត្រាតែឆ្លងទាំងអស់
+bash tools/verify.sh
 ```
 
-មុន push ទៅ Read the Docs សូមរត់ការពិនិត្យលើ **clone ស្អាត** ផងដែរ៖
+ស្គ្រីបនេះដំណើរការតាមលំដាប់៖
+
+1. ពិនិត្យកូដឧទាហរណ៍ និងការភ្ជាប់ទៅមេរៀន។
+2. ពិនិត្យ Markdown fences, Contrast, JavaScript និង Read the Docs YAML។
+3. Build Sphinx ដោយបើកការពិនិត្យ Warning។
+4. ពិនិត្យ Khmer locale, UI strings, Google Search Console និង Sitemap បន្ទាប់ពី Build។
+
+ដើម្បីសាកល្បងដំណើរការ Build លើ Repository ដែល Clone ថ្មីពី GitHub សូមប្រើ៖
 
 ```bash
 bash tools/verify_clean_clone.sh
 ```
 
-វា clone ពី GitHub ហើយដំណើរការលំដាប់ RTD ពិតប្រាកដ (pre_build → sphinx ជាមួយ
-flags របស់ RTD → post_build ជាមួយ `$READTHEDOCS_OUTPUT`)។ `verify.sh` មិនអាចចាប់យក
-ការត្រួតពិនិត្យដែលពឹងលើស្ថានភាពម៉ាស៊ីនបានទេ ព្រោះវារត់លើ working tree ដែលមាន
-build directory និង mtime ជាស្រេច — នេះជាមូលហេតុដែល RTD build ពីរលើកជាប់គ្នា
-បានបរាជ័យដោយសារ check ដែលឆ្លងកាត់ក្នុងម៉ាស៊ីន។
+ស្គ្រីបទាំងនេះត្រូវបានបង្កើតសម្រាប់ Linux/macOS ឬ Environment ដែលអាចដំណើរការ Bash បាន។ សូមមើល [Build Report](docs/BUILD_REPORT.md) សម្រាប់លទ្ធផល និងដែនកំណត់ដែលបានកត់ត្រា។
 
-មើល [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md) សម្រាប់លទ្ធផលដែលបានវាស់
-និងដែនកំណត់ដែលគេស្គាល់។
-
-## Google Search Console verification (កុំលុប)
-
-គេហទំព័រនេះផ្ទៀងផ្ទាត់ម្ចាស់កម្មសិទ្ធិតាម **ពីរវិធី** ក្នុងពេលតែមួយ៖
-
-```{list-table}
-:header-rows: 1
-:widths: 20 44 36
-
-* - វិធី
-  - ឯកសារ
-  - URL ដែលបម្រើជាក់ស្ដែង
-* - **Meta tag** (វិធីដែលដំណើរការ)
-  - `_templates/layout.html` បញ្ចេញ `<meta name="google-site-verification">` លើ **គ្រប់ទំព័រ** ដោយអានតម្លៃពី `google_site_verification` ក្នុង `conf.py`
-  - `https://pytorch-documentation.readthedocs.io/` → redirect → `/km/latest/` ដែលមាន tag
-* - **HTML file**
-  - `docs/source/extra/google59471f16170f14f0.html` ចម្លងដោយ `html_extra_path`
-  - ⚠️ `/km/latest/google59471f16170f14f0.html` តែប៉ុណ្ណោះ — **មិនមែន** domain root
-```
-
-````{admonition} ហេតុអ្វី HTML-file method បរាជ័យលើ Read the Docs
-:class: important
-Read the Docs mount build នៅ `/<language>/<version>/`។ គម្រោងនេះកំណត់
-`language = "km"` ដូច្នេះ site ស្ថិតនៅ `/km/latest/`។ **គ្មានអ្វីដែល Sphinx បង្កើត
-អាចបម្រើនៅ domain root បានទេ** មិនថា `html_extra_path` មានអ្វីក៏ដោយ៖
+## រចនាសម្ព័ន្ធ Repository
 
 ```text
-/google59471f16170f14f0.html            -> 404
-/km/latest/google59471f16170f14f0.html  -> 200 (53 bytes)
-/en/latest/                             -> 404 (ភាសាគឺ km មិនមែន en)
+Pytorch-Documentation/
+├── .readthedocs.yaml          # ការកំណត់ Build របស់ Read the Docs
+├── CONTRIBUTING.md            # គោលការណ៍សម្រាប់អ្នកចូលរួម
+├── LICENSE                    # អាជ្ញាបណ្ណ និង Attribution
+├── README.md                  # ឯកសារណែនាំ Repository
+├── docs/
+│   ├── BUILD_REPORT.md        # របាយការណ៍ Build និង Test
+│   ├── requirements.txt       # Dependencies សម្រាប់ Sphinx
+│   └── source/
+│       ├── index.md           # ទំព័រដើម និងតារាងមាតិកា
+│       ├── *.md               # មេរៀន និងឯកសារយោង
+│       ├── examples/          # កូដ Python ដែលអាច Test បាន
+│       ├── _ext/              # Sphinx extensions របស់គម្រោង
+│       ├── _static/            # CSS និង JavaScript
+│       ├── _templates/         # HTML templates
+│       ├── locale/             # Khmer translation catalog
+│       └── extra/              # ឯកសារបន្ថែមសម្រាប់គេហទំព័រ
+├── tests/                      # ស្គ្រីបផ្ទៀងផ្ទាត់ និង Test
+└── tools/                      # ឧបករណ៍ Build និង Verify
 ```
 
-ដូច្នេះ Google ត្រូវផ្ទៀងផ្ទាត់ដោយ **meta tag** ឬអ្នកត្រូវចុះឈ្មោះ property
-ជា URL-prefix `https://pytorch-documentation.readthedocs.io/km/latest/`។
-````
+## Read the Docs
 
-ឯកសារ HTML នៅតែត្រូវបានរក្សាទុក ព្រោះវាដំណើរការសម្រាប់ URL-prefix property។
+គម្រោងនេះប្រើ [Read the Docs](https://readthedocs.org/) ដើម្បី Build និងបង្ហោះឯកសារ។ ការកំណត់ស្ថិតនៅក្នុង `.readthedocs.yaml`៖
 
-### Sitemap
+- `pre_build` ពិនិត្យឯកសារយោងរបស់ឧទាហរណ៍ និង Markdown fences។
+- Sphinx Build ប្រើ `fail_on_warning: true`។
+- `post_build` ពិនិត្យ Khmer locale, UI strings, Google Search Console និង Sitemap។
+- PyTorch មិនត្រូវបានដំឡើងក្នុង RTD Build ទេ ព្រោះវាចាំបាច់សម្រាប់ដំណើរការឧទាហរណ៍ មិនមែនសម្រាប់ Render ឯកសារទេ។
 
-`_ext/khmer_sitemap.py` បង្កើត `sitemap.xml` នៅឫស build output ដូច្នេះវាបម្រើនៅ៖
+## ចូលរួមកែលម្អ
 
-```text
-https://pytorch-documentation.readthedocs.io/km/latest/sitemap.xml
-```
+សូមអាន [CONTRIBUTING.md](CONTRIBUTING.md) មុនពេលកែប្រែ។ ចំណុចសំខាន់ៗ៖
 
-នេះជា URL ដែលត្រូវ **submit ក្នុង Google Search Console**។ RTD បម្រើ `/sitemap.xml`
-របស់វាផ្ទាល់នៅ domain root ប៉ុន្តែវាមានតែ **១ URL** (version landing page) —
-វាមិនបញ្ចេញទំព័រមាតិកាទាំង ២២ ទេ។
+- រក្សាឈ្មោះ PyTorch API ដូចដើម ដូចជា `torch.Tensor`, `nn.Module`, `DataLoader` និង `backward()`។
+- ដាក់កូដឧទាហរណ៍ក្នុង `docs/source/examples/` ហើយប្រើ `literalinclude` ដើម្បីបញ្ចូលវាទៅក្នុងមេរៀន។
+- កុំអះអាងលទ្ធផល Benchmark ឬ GPU ដែលមិនបានសាកល្បងពិត។
+- ដំណើរការ `bash tools/verify.sh` មុនបញ្ជូន Pull Request។
 
-`tests/check_sitemap.py` ផ្ទៀងផ្ទាត់ថាវា well-formed, គ្របដណ្ដប់គ្រប់ទំព័រដែល
-indexable និងមិន submit URL ណាដែល 404។
+## អាជ្ញាបណ្ណ
 
-`tests/check_search_console.py` ការពារវិធីទាំងពីរ — ព្រោះ Google ត្រួតពិនិត្យជាប្រចាំ
-ហើយបើឯកសារ ឬ tag បាត់ property នឹងត្រូវដកការផ្ទៀងផ្ទាត់ដោយស្ងាត់ ដោយគ្មាន
-អ្វីក្នុង build បង្ហាញថាមានបញ្ហា (Sphinx នៅតែ exit 0)។
+- ខ្លឹមសារឯកសារ៖ **CC BY 4.0**។
+- កូដឧទាហរណ៍៖ **BSD 3-Clause**។
+- PyTorch និងរូបសញ្ញា PyTorch ជាស្លាកសញ្ញារបស់ PyTorch Foundation។
 
-```{admonition} google-site-verification token មិនមែនជា secret ទេ
-:class: note
-តម្លៃនេះត្រូវតែលេចឡើងក្នុង HTML ដែលបម្រើ ព្រោះ Google អានវាពីទីនោះ។
-ការ commit វាគឺត្រឹមត្រូវ ហើយមិនមែនជាការលេចធ្លាយ credential ទេ — វាមិនផ្ដល់
-សិទ្ធិចូលដំណើរការអ្វីទាំងអស់។ កុំ "rotate" វាដូចជា secret។
-```
-
-## Light Mode និង Dark Mode## Light Mode និង Dark Mode
-
-គេហទំព័រនេះគាំទ្រពណ៌ទាំងពីរ៖
-
-- ដោយស្វ័យប្រវត្តិតាមប្រព័ន្ធ (`prefers-color-scheme`)
-- ឬជ្រើសរើសដោយផ្ទាល់តាមការគ្រប់គ្រង **ពណ៌បង្ហាញ → ងងឹត / ភ្លឺ** នៅ Sidebar
-  (ជម្រើសសកម្មត្រូវបានបំពេញពណ៌ ហើយការជ្រើសរើសត្រូវបានរក្សាទុកក្នុង `localStorage`)
-
-Palette ទាំងមូលស្ថិតនៅក្នុង `docs/source/_static/css/custom.css` ជា CSS custom properties
-(`--kh-page-bg`, `--kh-text` ។ល។) — ពណ៌ទាំងអស់ឆ្លងកាត់កម្រិត Contrast **≥ 4.5:1** (WCAG AA)។
-
-## ចូលរួម (Contributing)
-
-សូមអាន [CONTRIBUTING.md](CONTRIBUTING.md) ជាមុនសិន — វាមានច្បាប់ស្ដីពី
-ការបកប្រែ ការរក្សាឈ្មោះ API និងរបៀបសាកល្បងកូដ។
-
-## អាជ្ញាបណ្ណ (License)
-
-ខ្លឹមសារឯកសារ៖ **CC BY 4.0**។ កូដឧទាហរណ៍៖ **BSD 3-Clause** (ដូច PyTorch)។
-PyTorch និងរូបសញ្ញា PyTorch គឺជាស្លាកសញ្ញារបស់ PyTorch Foundation។
-មើល [LICENSE](LICENSE)។
+សូមមើល [LICENSE](LICENSE) និង [docs/source/license.md](docs/source/license.md) សម្រាប់លក្ខខណ្ឌ និង Attribution ពេញលេញ។
