@@ -172,6 +172,7 @@ Pytorch-Documentation/
 ├── CONTRIBUTING.md            # គោលការណ៍សម្រាប់អ្នកចូលរួម
 ├── LICENSE                    # អាជ្ញាបណ្ណ និង Attribution
 ├── README.md                  # ឯកសារណែនាំ Repository
+├── prompts/                    # Prompt សម្រាប់ AI Agent
 ├── docs/
 │   ├── BUILD_REPORT.md        # របាយការណ៍ Build និង Test
 │   ├── requirements.txt       # Dependencies សម្រាប់ Sphinx
