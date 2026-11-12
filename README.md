@@ -91,7 +91,7 @@ python -m venv .venv
 source .venv/bin/activate
 
 # Windows PowerShell
-# .venv\\Scripts\\Activate.ps1
+# .venv\Scripts\Activate.ps1
 
 python -m pip install -r docs/requirements.txt
 ```
