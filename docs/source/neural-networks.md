@@ -45,9 +45,7 @@ out = model(x)              # ✓ ត្រឹមត្រូវ
 out = model.forward(x)      # ⚠️ ដំណើរការ ប៉ុន្តែរំលង hooks
 ```
 
-`nn.Module.__call__()` រត់ forward hooks, backward hooks និង logic ផ្សេងទៀត
-មុនហៅ `forward()`។ បើអ្នកហៅ `forward()` ដោយផ្ទាល់ hooks ទាំងនោះមិនដំណើរការទេ
-ហើយ `torch.compile`, profiler និងឧបករណ៍ជាច្រើននឹងខូច។
+`nn.Module.__call__()` គ្រប់គ្រង hooks និង logic របស់ Module មុនហៅ `forward()`។ បើអ្នកហៅ `forward()` ដោយផ្ទាល់ អ្នករំលង hooks និង wrapper behavior មួយចំនួន។ ដូច្នេះ សូមហៅ `model(x)` ជាទម្លាប់។
 
 ## ១. MLP (Multi-Layer Perceptron)
 
@@ -449,7 +447,7 @@ Parameter ទាំងអស់ **មិនត្រូវបានចុះប�
 
 ```python
 self.layers = nn.ModuleList([nn.Linear(4, 4) for _ in range(3)])
-print(sum(p.numel() for p in Good().parameters()))  # 75  ✓
+print(sum(p.numel() for p in Good().parameters()))  # 60  ✓ (3 × (4×4 + 4))
 ```
 
 បញ្ហានេះមិនបង្ហាញ error ណាមួយឡើយ — ម៉ូដែលគ្រាន់តែមិនរៀន។

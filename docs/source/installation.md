@@ -2,7 +2,7 @@
 
 ```{admonition} តម្រូវការ
 :class: note
-- **Python** 3.9 ឬខ្ពស់ជាង (ណែនាំ 3.11 ឬ 3.12)
+- **Python** 3.11 ឬខ្ពស់ជាង សម្រាប់ PyTorch 2.15។ PyTorch 2.14 ជាកំណែចុងក្រោយដែលគាំទ្រ Python 3.10។
 - **pip** ឬ **conda**
 - 🖥️ CPU គ្រប់គ្រាន់សម្រាប់រាល់មេរៀនក្នុងឯកសារនេះ។ GPU មានប្រយោជន៍តែសម្រាប់ {doc}`mixed-precision` និង {doc}`distributed-training` ប៉ុណ្ណោះ។
 ```
@@ -52,7 +52,7 @@ conda activate pt
 
 ## ជំហានទី ២៖ ជ្រើសរើសកំណែ PyTorch ត្រឹមត្រូវ
 
-PyTorch ផ្ដល់ wheel ផ្សេងគ្នាសម្រាប់ CPU និង CUDA។ **ការជ្រើសរើសខុសគឺជាបញ្ហាទូទៅបំផុត**។
+PyTorch មាន wheel ផ្សេងគ្នាតាម OS, Python, hardware និង release។ **កុំយក CUDA index URL ចាស់មកប្រើដោយសន្មតថាវាជា wheel ថ្មីបំផុត**។ សម្រាប់ PyTorch 2.15.0 CUDA 13.2 ជា wheel លំនាំដើម និងមាន CUDA 13.4 wheels សម្រាប់ platform ដែលគាំទ្រ។ ROCm 10.0 និង 7.14 មានសម្រាប់ Linux។ សូមបង្កើត command តាម [PyTorch Installation Selector](https://pytorch.org/get-started/locally/)។
 
 ```{list-table} ជម្រើសដំឡើង
 :header-rows: 1
@@ -64,13 +64,13 @@ PyTorch ផ្ដល់ wheel ផ្សេងគ្នាសម្រាប់ C
 * - 🖥️ CPU តែប៉ុណ្ណោះ
   - `pip install torch --index-url https://download.pytorch.org/whl/cpu`
   - ~200 MB
-* - 🎮 NVIDIA GPU + CUDA 12.8
-  - `pip install torch --index-url https://download.pytorch.org/whl/cu128`
+* - 🎮 NVIDIA GPU — latest supported wheel
+  - [បង្កើត command តាម Official Selector](https://pytorch.org/get-started/locally/)
   - ~2.5 GB
-* - 🎮 NVIDIA GPU + CUDA 12.6
-  - `pip install torch --index-url https://download.pytorch.org/whl/cu126`
+* - 🎮 AMD GPU (Linux)
+  - [ពិនិត្យ ROCm wheel តាម Official Selector](https://pytorch.org/get-started/locally/)
   - ~2.5 GB
-* - 🍎 Apple Silicon (M1/M2/M3/M4)
+* - 🍎 Apple Silicon (M1/M2/M3/M4) — MPS លើ macOS 15+
   - `pip install torch`
   - ~70 MB (MPS backend មានស្រាប់)
 ```
@@ -83,9 +83,7 @@ PyTorch wheel មាន CUDA runtime របស់វាផ្ទាល់។ អ
 1. **NVIDIA driver** ដែលបានដំឡើងរួច (ពិនិត្យដោយ `nvidia-smi`)
 2. Driver នោះគាំទ្រ CUDA version ដែល wheel ត្រូវការ
 
-`nvidia-smi` បង្ហាញ "CUDA Version" ដែលជា **កំណែអតិបរមា** ដែល driver របស់អ្នកគាំទ្រ
-មិនមែនកំណែដែលបានដំឡើងទេ។ បើវាបង្ហាញ `12.4` អ្នកអាចប្រើ wheel `cu121` បាន
-ប៉ុន្តែមិនអាចប្រើ `cu128` ទេ។
+`nvidia-smi` បង្ហាញ CUDA capability ដែល driver គាំទ្រ មិនមែនបញ្ជាក់ថា CUDA Toolkit ត្រូវបានដំឡើងក្នុង Python environment ទេ។ កុំសម្រេច wheel ដោយប្រៀបធៀបលេខនេះតែមួយមុខ។ ពិនិត្យ minimum driver និង compatibility តាម [PyTorch Installation Selector](https://pytorch.org/get-started/locally/)។
 ```
 
 ### ពិនិត្យ driver GPU (បើមាន)
@@ -136,7 +134,7 @@ pip install torch torchvision torchaudio
 - **`torchaudio`** — សម្រាប់សំឡេង។
 
 ឯកសារនេះ **មិនពឹងលើ torchvision ឬ torchaudio ទេ** ដើម្បីឱ្យអ្នកអាចរៀន
-ដោយដំឡើងតិចបំផុត។ កំណែទាំងបីត្រូវតែត្រូវគ្នា (ឧ. torch 2.14 + torchvision 0.24)។
+ដោយដំឡើងតិចបំផុត។ កំណែត្រូវតែត្រូវនឹង compatibility matrix របស់ release នោះ។ ឧទាហរណ៍ PyTorch 2.14.1 ត្រូវនឹង torchvision 0.29.1; torchvision 0.29.2 ត្រូវបានប្រកាសថាអាចប្រើជាមួយ PyTorch 2.14 និងខ្ពស់ជាងនេះ។ សម្រាប់ការដំឡើងថ្មី សូមប្រើ command ពី Official Installation Selector។
 ```
 
 ## ជំហានទី ៤៖ ផ្ទៀងផ្ទាត់ការដំឡើង
