@@ -11,6 +11,7 @@
 - **[អានមេរៀនតាមគេហទំព័រ](https://pytorch-documentation.readthedocs.io/km/latest/)**
 - [របាយការណ៍ Build និង Test](docs/BUILD_REPORT.md)
 - [របៀបចូលរួមកែលម្អឯកសារ](CONTRIBUTING.md)
+- [Prompt ពិនិត្យគុណភាព និងផ្ទៀងផ្ទាត់ជាមួយ PyTorch ផ្លូវការ](prompts/PYTORCH_DOCS_QUALITY_AND_PARITY_REVIEW_KM.md)
 - [អាជ្ញាបណ្ណ](LICENSE)
 
 ## គម្រោងនេះមានអ្វីខ្លះ?
@@ -185,6 +186,10 @@ Pytorch-Documentation/
 - Sphinx Build ប្រើ `fail_on_warning: true`។
 - `post_build` ពិនិត្យ Khmer locale, UI strings, Google Search Console និង Sitemap។
 - PyTorch មិនត្រូវបានដំឡើងក្នុង RTD Build ទេ ព្រោះវាចាំបាច់សម្រាប់ដំណើរការឧទាហរណ៍ មិនមែនសម្រាប់ Render ឯកសារទេ។
+
+## ពិនិត្យភាពត្រឹមត្រូវជាមួយ PyTorch ផ្លូវការ
+
+គម្រោងនេះមាន [Prompt សម្រាប់ AI Agent](prompts/PYTORCH_DOCS_QUALITY_AND_PARITY_REVIEW_KM.md) ដើម្បី Audit គ្រប់មេរៀន និងឧទាហរណ៍ ប្រៀបធៀប API/behavior ជាមួយ Official Documentation និង Release Notes រក version mismatch, deprecated API, code errors និងចំណុចខ្វះក្នុងការបង្រៀន។ Prompt នេះក៏កំណត់វិធីសាកល្បង និងទម្រង់របាយការណ៍ ដើម្បីមិនអះអាងលទ្ធផលដែលមិនបានផ្ទៀងផ្ទាត់។
 
 ## ចូលរួមកែលម្អ
 
