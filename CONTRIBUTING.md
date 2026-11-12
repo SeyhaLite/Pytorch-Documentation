@@ -155,6 +155,19 @@ Palette ទាំងមូលស្ថិតនៅ `docs/source/_static/css/cust
 ownership token — ការលុបវានឹងធ្វើឱ្យគេហទំព័របាត់ការផ្ទៀងផ្ទាត់ដោយស្ងាត់។
 `tests/check_search_console.py` ការពារចំណុចនេះ។
 
+## ពិនិត្យភាពត្រឹមត្រូវជាមួយ PyTorch ផ្លូវការ
+
+មុនពេលបន្ថែម ឬកែខ្លឹមសារបច្ចេកទេស សូមផ្ទៀងផ្ទាត់ API និង behavior ជាមួយ Official PyTorch Documentation និង Release Notes ដែលត្រូវនឹង version គោលដៅ។ កុំយកតែ Search Snippet, blog អ្នកទីបី ឬ code ដែលមិនបាន Run មកធ្វើជាភស្តុតាង។
+
+សូមប្រើ [Prompt ពិនិត្យគុណភាព និង PyTorch Official Parity](prompts/PYTORCH_DOCS_QUALITY_AND_PARITY_REVIEW_KM.md) នៅពេលធ្វើ Audit ធំ ឬពេលពិនិត្យមេរៀនជាច្រើន។ Prompt នេះកំណត់ការផ្ទៀងផ្ទាត់ version, API signatures, deprecations, installation/hardware support, code examples, Khmer teaching quality និងការសរសេរ Audit Report។
+
+សម្រាប់ Pull Request ដែលប៉ះ API ឬការណែនាំបច្ចេកទេស៖
+
+- ដាក់ Official source URL និង version ដែលបានពិនិត្យក្នុង PR description ឬ Audit Report។
+- បែងចែក latest stable version, project-tested version និង supported version range ឱ្យច្បាស់។
+- កុំប្ដូរ PyTorch/Python dependency ដោយមិន Test និងកែតម្រូវ version information ក្នុង README, index និង BUILD_REPORT។
+- បើ hardware មិនមាន ត្រូវសម្គាល់ GPU/ROCm/MPS/XPU/distributed test ជា NOT RUN ឬ SKIPPED តាមលទ្ធផលពិត។
+
 ## ទម្រង់ Commit Message
 
 ប្រើ [Conventional Commits](https://www.conventionalcommits.org/) ជាភាសាអង់គ្លេស ខ្លី និងច្បាស់៖
@@ -168,9 +181,10 @@ test(examples): make training loop deterministic
 
 ## Pull Request Checklist
 
-- [ ] `bash tools/verify.sh` ឆ្លងកាត់ទាំង ១១ ការត្រួតពិនិត្យ
+- [ ] `bash tools/verify.sh` ឆ្លងកាត់ការត្រួតពិនិត្យទាំងអស់ដែលមានក្នុង script
 - [ ] កូដឧទាហរណ៍ទាំងអស់ pass ដោយ `python tests/run_examples.py`
 - [ ] `sphinx-build -b html docs/source docs/_build/html -W --keep-going` exit 0 (zero warnings)
+- [ ] API/technical claims មាន Official source និង version scope នៅពេលពាក់ព័ន្ធ
 - [ ] ឈ្មោះ API មិនត្រូវបានបកប្រែ
 - [ ] គ្មាន Secret ឬ credential ក្នុង diff
 - [ ] បានបន្ថែមទំព័រទៅក្នុង `toctree` នៃ `docs/source/index.md`
