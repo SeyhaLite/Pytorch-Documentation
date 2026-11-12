@@ -169,9 +169,12 @@ x[1, 2, 3]  ->  memory[1*12 + 2*4 + 3]  =  memory[23]  =  23
 * - ប្រតិបត្តិការ
   - Memory
   - ចំណាំ
-* - `view()`, `reshape()`, `.T`, `transpose()`, `t[1:3]`, `squeeze()`, `unsqueeze()`, `expand()`, `permute()`
-  - **ចែករួម** (view)
+* - `view()`, `.T`, `transpose()`, `t[1:3]`, `squeeze()`, `unsqueeze()`, `expand()`, `permute()`
+  - ជាទូទៅ **ចែករួម** (view)
   - កែ view → កែ tensor ដើម
+* - `reshape()`
+  - View ឬ copy
+  - ចែក memory បើ stride អនុញ្ញាត; បើមិនអាច វាចម្លងទិន្នន័យ
 * - `clone()`
   - **ចម្លង**
   - ដាច់ដោយឡែកទាំងស្រុង ប៉ុន្តែរក្សា `requires_grad`
@@ -185,8 +188,7 @@ x[1, 2, 3]  ->  memory[1*12 + 2*4 + 3]  =  memory[23]  =  23
 
 ````{admonition} ពេលណាត្រូវប្រើ contiguous()?
 :class: tip
-`transpose()`, `permute()` និង slicing មួយចំនួនបង្កើត tensor **មិន contiguous**
-(stride មិនចុះលំដាប់)។ `view()` ទាមទារ contiguous tensor ដូច្នេះវានឹងបរាជ័យ៖
+`transpose()`, `permute()` និង slicing មួយចំនួនបង្កើត tensor ដែលមាន stride មិនសមនឹង shape ថ្មី។ `view()` ទាមទារ **stride pattern ដែលអាចតំណាងជា view បាន**។ Contiguous គឺជាករណីទូទៅមួយដែលអនុញ្ញាត ប៉ុន្តែ tensor មិន contiguous មួយចំនួនក៏អាចប្រើ `view()` បានដែរ។
 
 ```text
 RuntimeError: view size is not compatible with input tensor's size and stride
@@ -194,10 +196,10 @@ RuntimeError: view size is not compatible with input tensor's size and stride
 
 ដំណោះស្រាយពីរ៖
 
-- `t.contiguous().view(...)` — ចម្លង memory ជាលំដាប់បន្ទាប់មក view
-- `t.reshape(...)` — PyTorch ធ្វើវាដោយស្វ័យប្រវត្តិ
+- `t.contiguous().view(...)` — បង្កើត layout contiguous ជាមុន បន្ទាប់មក view។ វាអាចចម្លងទិន្នន័យ។
+- `t.reshape(...)` — ប្រើ view បើ stride អនុញ្ញាត; បើមិនអនុញ្ញាត វាចម្លងទិន្នន័យដោយស្វ័យប្រវត្តិ។
 
-ប្រើ `reshape()` ជាលំនាំដើម លុះត្រាតែអ្នក **ចង់** ឱ្យវាបរាជ័យលើ tensor មិន contiguous។
+ប្រើ `reshape()` បើអ្នកមិនចង់គ្រប់គ្រង stride ដោយដៃ។ កុំសន្មតថា `reshape()` តែងតែចម្លង ឬតែងតែជា view។
 ````
 
 ## ៣. Indexing និង Slicing
@@ -385,8 +387,8 @@ modified by an inplace operation
   - `(4, 2, 3)`
   - រៀបវិមាត្រទាំងអស់ឡើងវិញ
 * - `.T`
-  - —
-  - តែសម្រាប់ tensor ≤ 2D ប៉ុណ្ណោះ
+  - បញ្ច្រាសលំដាប់ dimension ទាំងអស់
+  - ណែនាំសម្រាប់ 2D; លើ tensor ដែលមានច្រើនជាង 2D ប្រើ `.mT` បើចង់ប្ដូរ matrix dimensions ចុងក្រោយពីរ
 * - `.unsqueeze(0)`
   - `(1, 2, 3, 4)`
   - បន្ថែមវិមាត្រទំហំ ១ (ជាទូទៅ batch dim)
@@ -438,11 +440,11 @@ t.squeeze(-1)         # ដកតែវិមាត្រចុងក្រោ�
 
 ```python
 acc = torch.full((10,), 0.1).sum()      # បូក 0.1 ចំនួន 10 ដង
-acc == torch.tensor(1.0)                # tensor([False])  ⚠️
+acc == torch.tensor(1.0)                # tensor(False)  ⚠️
 torch.allclose(acc, torch.tensor(1.0))  # True  ✓
 
 diff = torch.tensor(0.3) - torch.tensor(0.1)
-diff == torch.tensor(0.2)               # tensor([False])  ⚠️
+diff == torch.tensor(0.2)               # tensor(False)  ⚠️
 torch.allclose(diff, torch.tensor(0.2)) # True  ✓
 ```
 
