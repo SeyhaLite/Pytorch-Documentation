@@ -14,6 +14,16 @@
 - [Prompt ពិនិត្យគុណភាព និងផ្ទៀងផ្ទាត់ជាមួយ PyTorch ផ្លូវការ](prompts/PYTORCH_DOCS_QUALITY_AND_PARITY_REVIEW_KM.md)
 - [អាជ្ញាបណ្ណ](LICENSE)
 
+## ស្ថានភាព Version របស់ PyTorch
+
+គួរបែងចែករវាង **កំណែ PyTorch ផ្លូវការថ្មីបំផុត** និង **កំណែដែលគម្រោងនេះបាន Test ពិត**៖
+
+- PyTorch ផ្លូវការបានចេញ **2.15.0** នៅថ្ងៃទី 28 តុលា 2026 ([Release Notes](https://github.com/pytorch/pytorch/releases/tag/v2.15.0))។
+- Build Report របស់ Repository បច្ចុប្បន្នកត់ត្រា code examples ដែលបាន Test លើ **2.14.1+cpu** ([មើលលទ្ធផល](docs/BUILD_REPORT.md))។
+- ដូច្នេះ កុំសន្មតថាគ្រប់មេរៀន និង code example បាន Test លើ 2.15.0 រួចហើយ។ ត្រូវរង់ចាំការផ្ទៀងផ្ទាត់ version/API និង test ជាក់ស្ដែង។
+
+សម្រាប់ការត្រួតពិនិត្យភាពត្រឹមត្រូវ និង Version compatibility សូមប្រើ [Prompt PyTorch Official Parity Audit](prompts/PYTORCH_DOCS_QUALITY_AND_PARITY_REVIEW_KM.md)។
+
 ## គម្រោងនេះមានអ្វីខ្លះ?
 
 - មេរៀនជាភាសាខ្មែរ ចាប់ពីការដំឡើង រហូតដល់ការបណ្ដុះបណ្ដាល និងវាយតម្លៃ Model។
